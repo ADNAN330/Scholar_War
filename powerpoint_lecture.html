@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاضرة Microsoft PowerPoint - الشرح الكامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #c0392b;
+    --red-dark: #8e1a10;
+    --red-light: #fdecea;
+    --red-mid: #e57373;
+    --dark: #1a0a08;
+    --text: #2c1810;
+    --text-light: #6d4c41;
+    --white: #ffffff;
+    --bg: #fff8f6;
+    --accent: #f39c12;
+    --accent-light: #fef9e7;
+    --blue: #1565c0;
+    --blue-light: #e3f2fd;
+    --green: #2e7d32;
+    --green-light: #e8f5e9;
+    --border: #ffcdd2;
+    --shadow: 0 4px 20px rgba(192,57,43,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #8e1a10 0%, #c0392b 55%, #e74c3c 100%);
+    color:white; padding:60px 40px 50px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; top:-60px; left:-60px; width:280px; height:280px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .hero::after { content:''; position:absolute; bottom:-80px; right:-40px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.04); }
+  .hero-icon { font-size:70px; margin-bottom:16px; display:block; animation:float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hero h1 { font-size:2.2rem; font-weight:900; margin-bottom:8px; }
+  .hero p { opacity:.82; font-size:1rem; }
+  .hero .badge { display:inline-block; background:var(--accent); color:var(--dark); border-radius:20px; padding:4px 18px; font-size:.85rem; font-weight:700; margin-top:12px; }
+
+  /* NAV */
+  .nav-tabs { display:flex; background:var(--dark); overflow-x:auto; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.2); }
+  .nav-tabs button { flex:1; min-width:110px; padding:13px 8px; background:transparent; color:rgba(255,255,255,.6); border:none; font-family:'Cairo',sans-serif; font-size:.82rem; font-weight:700; cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; transition:all .2s; }
+  .nav-tabs button.active, .nav-tabs button:hover { color:var(--accent); border-bottom-color:var(--accent); background:rgba(255,255,255,.05); }
+
+  /* CONTENT */
+  .content { max-width:920px; margin:0 auto; padding:30px 20px 60px; }
+  .section { display:none; animation:fadeIn .4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* SEC HEADER */
+  .sec-header { font-size:1.3rem; font-weight:900; color:var(--dark); margin-bottom:18px; padding-bottom:10px; border-bottom:3px solid var(--red-mid); display:flex; align-items:center; gap:10px; }
+
+  /* CARD */
+  .card { background:white; border-radius:14px; box-shadow:var(--shadow); padding:22px 26px; margin-bottom:20px; border-right:5px solid var(--red); }
+  .card.blue { border-right-color:var(--blue); }
+  .card.green { border-right-color:var(--green); }
+  .card.accent { border-right-color:var(--accent); }
+  .card-title { font-size:1.1rem; font-weight:800; color:var(--red); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .card.blue .card-title { color:var(--blue); }
+  .card.green .card-title { color:var(--green); }
+  .card.accent .card-title { color:#b7770d; }
+
+  /* TABLE */
+  .tbl { width:100%; border-collapse:collapse; font-size:.92rem; margin-top:8px; }
+  .tbl th { background:var(--red); color:white; padding:9px 14px; text-align:right; font-weight:700; }
+  .tbl.blue th { background:var(--blue); }
+  .tbl.green th { background:var(--green); }
+  .tbl.accent th { background:var(--accent); color:var(--dark); }
+  .tbl td { padding:8px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+  .tbl tr:nth-child(even) td { background:var(--red-light); }
+  .tbl.blue tr:nth-child(even) td { background:var(--blue-light); }
+  .tbl.green tr:nth-child(even) td { background:var(--green-light); }
+
+  /* STEPS */
+  .step { display:flex; gap:14px; margin-bottom:14px; align-items:flex-start; }
+  .step-num { min-width:34px; height:34px; border-radius:50%; background:var(--red); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.9rem; flex-shrink:0; }
+  .card.blue .step-num { background:var(--blue); }
+  .card.green .step-num { background:var(--green); }
+  .card.accent .step-num { background:var(--accent); color:var(--dark); }
+  .step-body { padding-top:5px; font-size:.93rem; line-height:1.75; }
+  .step-body strong { color:var(--red); }
+  .card.blue .step-body strong { color:var(--blue); }
+  .card.green .step-body strong { color:var(--green); }
+
+  /* TAGS */
+  .tag { display:inline-block; padding:2px 12px; border-radius:12px; font-size:.78rem; font-weight:700; margin:2px; }
+  .tag-red { background:var(--red-light); color:var(--red); }
+  .tag-blue { background:var(--blue-light); color:var(--blue); }
+  .tag-green { background:var(--green-light); color:var(--green); }
+  .tag-accent { background:var(--accent-light); color:#8a5900; }
+
+  /* HIGHLIGHT BOX */
+  .note-box { background:var(--accent-light); border-right:4px solid var(--accent); border-radius:10px; padding:12px 18px; margin:12px 0; font-size:.93rem; line-height:1.7; }
+  .note-box strong { color:#8a5900; }
+  .info-box { background:var(--blue-light); border-right:4px solid var(--blue); border-radius:10px; padding:12px 18px; margin:12px 0; font-size:.93rem; }
+
+  /* PATH BOX */
+  .path { background:var(--dark); color:#ffb3a7; border-radius:8px; padding:10px 18px; font-family:monospace; font-size:.93rem; margin:8px 0; border-right:3px solid var(--accent); letter-spacing:.3px; }
+
+  /* QUIZ */
+  .quiz-q { background:white; border-radius:12px; box-shadow:var(--shadow); padding:18px 22px; margin-bottom:16px; border-top:4px solid var(--red); }
+  .quiz-q.blue { border-top-color:var(--blue); }
+  .quiz-q.green { border-top-color:var(--green); }
+  .q-text { font-size:1rem; font-weight:700; margin-bottom:12px; line-height:1.6; }
+  .q-num { background:var(--red); color:white; border-radius:8px; padding:1px 10px; font-size:.78rem; font-weight:800; margin-left:8px; }
+  .quiz-q.blue .q-num { background:var(--blue); }
+  .quiz-q.green .q-num { background:var(--green); }
+  .options { display:grid; gap:8px; }
+  .option { display:flex; align-items:center; gap:10px; padding:9px 14px; border:2px solid var(--border); border-radius:9px; cursor:pointer; font-size:.92rem; transition:all .2s; background:var(--bg); user-select:none; }
+  .option:hover { border-color:var(--red); background:var(--red-light); }
+  .option.correct { border-color:#2e7d32; background:#e8f5e9; }
+  .option.wrong { border-color:var(--red); background:var(--red-light); }
+  .option .letter { min-width:26px; height:26px; border-radius:50%; background:var(--red); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem; }
+  .option.correct .letter { background:#2e7d32; }
+  .option.wrong .letter { background:var(--red-dark); }
+  .answer-reveal { margin-top:10px; padding:10px 16px; background:var(--green-light); border-radius:8px; font-size:.9rem; color:var(--green); font-weight:600; display:none; }
+  .answer-reveal.show { display:block; }
+
+  /* SCORE */
+  .score-bar { background:var(--dark); color:white; border-radius:14px; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:14px; }
+  .score-val { font-size:2rem; font-weight:900; color:var(--accent); }
+  .score-label { font-size:.88rem; opacity:.7; }
+  .btn-reset { background:var(--red); color:white; border:none; border-radius:9px; padding:10px 22px; font-family:'Cairo',sans-serif; font-weight:700; font-size:.9rem; cursor:pointer; }
+  .btn-reset:hover { background:var(--red-dark); }
+
+  /* SHORTCUT GRID */
+  .sc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; margin-top:10px; }
+  .sc-item { background:var(--dark); color:white; border-radius:10px; padding:12px 14px; }
+  .sc-key { font-family:monospace; font-size:1rem; color:var(--accent); font-weight:800; }
+  .sc-desc { font-size:.82rem; opacity:.8; margin-top:4px; }
+
+  /* DIVIDER */
+  .divider { height:3px; background:linear-gradient(to left,var(--red),var(--accent),var(--red)); border-radius:2px; margin:18px 0; }
+
+  /* FOOTER */
+  .footer { text-align:center; padding:30px; color:var(--text-light); font-size:.85rem; border-top:1px solid var(--border); margin-top:40px; }
+
+  @media(max-width:600px){
+    .hero h1{font-size:1.5rem}
+    .content{padding:18px 12px 40px}
+    .sc-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-icon">📊</span>
+  <h1>محاضرة Microsoft PowerPoint</h1>
+  <p>الشرح الكامل والمفصل لجميع المحتوى</p>
+  <span class="badge">جامعة قاسيون — د.م. إيميل جرجس روميّه — 2025/2026</span>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="active" onclick="showTab('intro',this)">🏠 المقدمة</button>
+  <button onclick="showTab('interface',this)">🖥️ الواجهة</button>
+  <button onclick="showTab('file',this)">📁 File</button>
+  <button onclick="showTab('slides',this)">📋 الشرائح</button>
+  <button onclick="showTab('text',this)">✍️ النصوص</button>
+  <button onclick="showTab('insert',this)">➕ Insert</button>
+  <button onclick="showTab('design',this)">🎨 Design</button>
+  <button onclick="showTab('effects',this)">✨ التأثيرات</button>
+  <button onclick="showTab('quiz',this)">🎯 أسئلة</button>
+</div>
+
+<div class="content">
+
+<!-- ===== INTRO ===== -->
+<div id="intro" class="section active">
+  <div class="sec-header">🏠 مقدمة عن برنامج PowerPoint</div>
+
+  <div class="card">
+    <div class="card-title">📌 ما هو PowerPoint؟</div>
+    <p style="line-height:1.85;font-size:.95rem">
+      برنامج <strong>Microsoft PowerPoint</strong> هو أحد البرامج الهامة ضمن مجموعة <strong>Microsoft Office</strong>، يُستخدم لإنشاء عروض تقديمية (Presentations) تحتوي على مجموعة من الشرائح (Slides) التي يمكن أن تضم نصوصاً أو جداول أو رسوماً متحركة أو مخططات بيانية. يُعرض المحتوى بواسطة شاشة الحاسوب أو كصفحة ويب (Web Page) أو باستخدام جهاز العرض (Data Show).
+    </p>
+    <div class="note-box" style="margin-top:14px">
+      <strong>💡 ملاحظة:</strong> امتداد ملفات PowerPoint هو <strong>.ppt</strong> أو <strong>.pptx</strong>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🚀 طرق تشغيل البرنامج الثلاث</div>
+    <table class="tbl blue">
+      <tr><th>الطريقة</th><th>الخطوات</th></tr>
+      <tr><td><strong>الطريقة الأولى</strong></td><td>من قائمة Start ← All Applications ← Microsoft Office ← Microsoft PowerPoint</td></tr>
+      <tr><td><strong>الطريقة الثانية</strong></td><td>باستخدام شريط البحث: نكتب PowerPoint فيتفتح مباشرةً</td></tr>
+      <tr><td><strong>الطريقة الثالثة</strong></td><td>نقر بالزر الأيمن على سطح المكتب ← قائمة New ← نختار Microsoft PowerPoint Presentation</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🪟 نافذة البرنامج الأولى</div>
+    <p style="font-size:.93rem;line-height:1.8">
+      عند فتح البرنامج تظهر نافذة تعرض <strong>قوالب جاهزة</strong> من شركة Microsoft يمكن الاستفادة منها لإنشاء عروض تقديمية احترافية. عند النقر على <strong>Blank Presentation</strong> تظهر نافذة البرنامج الفارغة وتحتوي على منطقة "Click to add title" و"Click to add subtitle".
+    </p>
+    <div class="info-box">يمكن الحصول على قوالب إضافية من موقع مايكروسوفت عبر الإنترنت.</div>
+  </div>
+</div>
+
+<!-- ===== INTERFACE ===== -->
+<div id="interface" class="section">
+  <div class="sec-header">🖥️ العناصر الأساسية لنافذة PowerPoint</div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ شريط العنوان (Title Bar)</div>
+    <p style="font-size:.93rem;line-height:1.8">يتضمن عنوان العرض المفتوح. عند فتح عرض جديد يُعطى اسم <strong>Presentation1</strong> مؤقتاً. يحتوي على:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+      <span class="tag tag-red">أيقونات الإغلاق والتصغير والتكبير</span>
+      <span class="tag tag-red">خيارات عرض الشريط (Ribbon Display Options)</span>
+      <span class="tag tag-red">شريط أدوات الوصول السريع (Quick Access Toolbar)</span>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">2️⃣ الشريط (Ribbon)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">الظاهر في أعلى العرض، مشابه للشريط في إصدارات 2007 وما بعده. يحتوي على ثلاثة أجزاء:</p>
+    <table class="tbl blue">
+      <tr><th>الجزء</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Tab (علامة التبويب)</strong></td><td>تكون في أعلى الشريط للوصول إلى الأوامر المتعلقة بها</td></tr>
+      <tr><td><strong>Commands (الأوامر)</strong></td><td>الأوامر التي تكون مرتبة في مجموعة منفصلة</td></tr>
+      <tr><td><strong>Groups (المجموعات)</strong></td><td>عبارة عن مجموعة من الأوامر المتعلقة ببعضها لتنفيذ مهام محددة. يوجد سهم صغير في الزاوية اليمنى السفلى للمجموعة يُظهر خيارات إضافية</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:12px">
+      <strong>💡 النقر على علامة التبويب:</strong> يُطوي الشريط لتوفير مساحة. النقر مرة أخرى يُظهره مجدداً.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3️⃣ الشريحة (Slide)</div>
+    <p style="font-size:.93rem;line-height:1.8">المنطقة التي يتم إدخال العناصر المكونة للعرض التقديمي فيها مثل العنوان أو النصوص أو الصور أو الجداول أو المخططات أو غيرها.</p>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">4️⃣ لوحة الشرائح (Slide Panel)</div>
+    <p style="font-size:.93rem;line-height:1.8">تعرض الشرائح بشكل مصغر للتمكن من إعادة ترتيبها والتنقل بينها.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">5️⃣ شريط الحالة (Status Bar)</div>
+    <p style="font-size:.93rem;line-height:1.8">يعطي معلومات عن العرض التقديمي ويحدد طريقة عرض الشريحة وتحديد نسبة التكبير.</p>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">6️⃣ الملاحظات (Notes Panel)</div>
+    <p style="font-size:.93rem;line-height:1.8">يتمكن المعلق من خلاله من إدخال الملاحظات الخاصة بالشريحة المعروضة.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">7️⃣ قائمة الملف (File Menu)</div>
+    <p style="font-size:.93rem;line-height:1.8">قائمة تحتوي على عدد من الأوامر الموضحة بأيقونات مثل Save وSave As وتحتوي أيضاً على أوامر أخرى.</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">8️⃣ Sky Drive (OneDrive)</div>
+    <p style="font-size:.93rem;line-height:1.8">ميزة جديدة تتيح التخزين السحابي المجاني بمقدار <strong>25 Giga Byte</strong> لتخزين الملفات الخاصة بالمستخدم ومشاركتها مع الآخرين بشرط توفر حساب Hotmail. يمكن الدخول من أيقونة <strong>Share</strong> في أعلى يمين الواجهة.</p>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">⚙️ تخصيص شريط أدوات الأقلاع السريع</div>
+    <div class="step">
+      <div class="step-num">+</div>
+      <div class="step-body"><strong>لإضافة أداة:</strong> نقر بالزر الأيمن على الأداة ← Add to Quick Access Tool bar</div>
+    </div>
+    <div class="step">
+      <div class="step-num">-</div>
+      <div class="step-body"><strong>لإزالة أداة:</strong> نقر بالزر الأيمن على الأداة في الشريط ← Remove From Quick Access Tool bar</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILE ===== -->
+<div id="file" class="section">
+  <div class="sec-header">📁 قائمة الملف (File Menu)</div>
+
+  <div class="card">
+    <div class="card-title">📂 1. فتح ملف (Open)</div>
+    <p style="font-size:.93rem;line-height:1.8">تُستخدم لفتح ملفات تم إنشاؤها سابقاً. يمكن فتح الملفات من:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Recent:</strong> العروض التقديمية التي تم التعامل معها مؤخراً</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><strong>One Drive Personal:</strong> الملفات المخزنة في Sky Drive</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><strong>This PC:</strong> الملفات الموجودة في مواقع التخزين على الحاسب</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Add a Place:</strong> الوصول إلى ملفات في مواقع أخرى</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">💾 2. الحفظ (Save & Save As)</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">File ← Save ← نافذة حوار Save As</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">عند الحفظ على OneDrive تظهر معلومات عن عملية التخزين السحابي</div></div>
+    <div class="note-box" style="margin-top:10px"><strong>ملاحظة:</strong> العرض التقديمي في PowerPoint يأخذ الامتداد <strong>.ppt</strong> أو <strong>.pptx</strong></div>
+
+    <p style="margin-top:16px;font-weight:700;color:var(--blue);margin-bottom:8px">📄 أنواع تنسيقات الحفظ:</p>
+    <table class="tbl blue">
+      <tr><th>التنسيق</th><th>الاستخدام</th></tr>
+      <tr><td>PowerPoint Presentation (.pptx)</td><td>التنسيق الافتراضي الأحدث، يفتح في كل إصدارات PowerPoint</td></tr>
+      <tr><td>PowerPoint 97-2003 (.ppt)</td><td>للتوافق مع الإصدارات القديمة</td></tr>
+      <tr><td>Outline/RTF</td><td>نص غني يُفتح بـ Microsoft Word أو Word Pad</td></tr>
+      <tr><td>JPEG File Interchange Format</td><td>يحفظ كل شريحة كصورة مستقلة نوع JPG</td></tr>
+      <tr><td>GIF Graphics Interchange Format</td><td>يحفظ كل شريحة كصورة GIF (أصغر حجماً)</td></tr>
+      <tr><td>PowerPoint Template</td><td>حفظ كقالب للاستخدام في عروض أخرى</td></tr>
+      <tr><td>PowerPoint Show</td><td>ملف تشغيل مباشر بالنقر المزدوج عليه</td></tr>
+      <tr><td>PDF Portable Document File</td><td>يُقرأ ببرنامج Adobe Acrobat Reader</td></tr>
+      <tr><td>MPEG-4 Video</td><td>يحفظ العرض كملف فيديو</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🖨️ 3. الطباعة (Print)</div>
+    <table class="tbl">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Print</td><td>بدء الطباعة</td></tr>
+      <tr><td>Copies</td><td>عدد النسخ المطلوبة</td></tr>
+      <tr><td>Printer</td><td>اختيار الطابعة</td></tr>
+      <tr><td>Print Active Sheet</td><td>طباعة ورقة العمل الفعلية</td></tr>
+      <tr><td>Print Entire Workbook</td><td>طباعة المصنف بالكامل</td></tr>
+      <tr><td>Print Selection</td><td>طباعة البيانات المحددة</td></tr>
+      <tr><td>Pages</td><td>تحديد عدد الصفحات للطباعة</td></tr>
+      <tr><td>Portrait / Landscape Orientation</td><td>اتجاه الطباعة (عمودي/أفقي)</td></tr>
+    </table>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔗 4. المشاركة (Share)</div>
+    <p style="font-size:.93rem;line-height:1.8">تتيح مشاركة الملفات مع الآخرين عن طريق:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-blue">البريد الإلكتروني</span>
+      <span class="tag tag-blue">مشاركة على الإنترنت (On Line Internet)</span>
+      <span class="tag tag-blue">تحديد الأشخاص المسموح لهم</span>
+      <span class="tag tag-blue">وضعها كمنشور على الموقع (Post)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📤 5. تصدير الملفات (Export)</div>
+    <p style="font-size:.93rem;line-height:1.8">تغيير نوع الملف وتخزينه بصيغة مختلفة مثل:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-red">Create Adobe PDF</span>
+      <span class="tag tag-red">Create PDF/XPS Document</span>
+      <span class="tag tag-red">Create a Video</span>
+      <span class="tag tag-red">Package Presentation for CD</span>
+      <span class="tag tag-red">Create Handouts</span>
+      <span class="tag tag-red">Change File Type</span>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">👤 6. الحساب (Account)</div>
+    <p style="font-size:.93rem;line-height:1.8">تُمكن من الدخول إلى حساب Hotmail بالضغط على Sign in وتكوين الحساب الذي يمكن تخزين الملفات على Sky Drive من خلاله.</p>
+  </div>
+</div>
+
+<!-- ===== SLIDES ===== -->
+<div id="slides" class="section">
+  <div class="sec-header">📋 إدارة الشرائح</div>
+
+  <div class="card">
+    <div class="card-title">➕ إنشاء عرض تقديمي جديد</div>
+    <div class="path">File ← New ← اختيار القالب أو Blank Presentation</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:10px">تظهر قوالب فنية جاهزة يمكن الاستفادة منها. يمكن الحصول على قوالب إضافية من موقع مايكروسوفت.</p>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">📄 إضافة شريحة جديدة</div>
+    <div class="path">Home ← مجموعة Slides ← New Slide</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نحدد الشريحة التي نريد إضافة شريحة جديدة بعدها</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">نذهب إلى Home ← مجموعة Slides ← ننقر New Slide</div></div>
+    <p style="font-size:.93rem;margin-top:10px">تظهر الشريحة الجديدة تحت الشريحة الحالية وتتضمن منطقتين: <strong>للعنوان</strong> وأخرى <strong>للنص</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗂️ تغيير تخطيط الشريحة (Layout)</div>
+    <div class="path">Home ← مجموعة Slides ← Layout</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">تظهر تخطيطات متنوعة يمكن تطبيقها على الشريحة. بعد ظهور التخطيطات يمكن تطبيق التخطيط المطلوب بوساطة مؤشر الفأرة والنقر عليه.</p>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔢 التعداد النقطي والرقمي (Bullets & Numbering)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">لإعداد شريحة ذات تعداد رقمي أو نقطي:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body">Home ← مجموعة Slides ← New Slides ← نختار شريحة Title And Contents</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">ننقر مربع نص Click to add text لإضافة النص المطلوب</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">نحدد النص المطلوب</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">Home ← مجموعة Paragraph ← ننقر <strong>Numbering</strong> للتعداد الرقمي أو <strong>Bullets</strong> للتعداد النقطي</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔌 فتح عرض موجود في الحاسوب</div>
+    <div class="path">File ← Open</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">تظهر نافذة الفتح. يمكن الوصول إلى:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-red">Recent Presentation — العروض الأخيرة</span>
+      <span class="tag tag-red">One Drive Personal — التخزين السحابي</span>
+      <span class="tag tag-red">This PC — الحاسب المحلي</span>
+      <span class="tag tag-red">Add a Place — مواقع أخرى</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TEXT ===== -->
+<div id="text" class="section">
+  <div class="sec-header">✍️ إدخال النصوص وتنسيقها</div>
+
+  <div class="card">
+    <div class="card-title">📝 إضافة نص إلى الشريحة</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">ننقر مربع <strong>Click to add title</strong> لإضافة العنوان</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">ننقر مربع <strong>Click to add subtitle</strong> للعنوان الثانوي</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">ننقر مربع <strong>Click to add text</strong> لإضافة النص العام</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔤 تغيير مظهر النص (Font)</div>
+    <div class="path">Home ← مجموعة Font</div>
+    <table class="tbl blue">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td>Font</td><td>اختيار نوع الخط من قائمة الخطوط</td></tr>
+      <tr><td>Font Size</td><td>تحديد حجم الخط أو كتابته مباشرةً</td></tr>
+      <tr><td>Bold (Ctrl+B)</td><td>تغليظ النص</td></tr>
+      <tr><td>Italic (Ctrl+I)</td><td>تمييل النص</td></tr>
+      <tr><td>Underline (Ctrl+U)</td><td>وضع خط تحت النص</td></tr>
+      <tr><td>Increase Font Size (A↑)</td><td>تكبير الخط</td></tr>
+      <tr><td>Decrease Font Size (A↓)</td><td>تصغير الخط</td></tr>
+      <tr><td>Font Color</td><td>تغيير لون الخط</td></tr>
+      <tr><td>Change Case (Aa)</td><td>تغيير حالة الأحرف في اللغة الأنكليزية</td></tr>
+      <tr><td>Clear All Formatting</td><td>رفع جميع التنسيقات وإعادة الشريحة للحالة الافتراضية</td></tr>
+      <tr><td>Strike through (abc)</td><td>وضع خط في منتصف العبارة المكتوبة</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px">
+      <strong>Character Spacing:</strong> يمكن التحكم بالتباعد بين الأحرف من نافذة الخط ← الضغط على السهم الصغير في مجموعة Font
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🖊️ نسخ التنسيق (Format Painter)</div>
+    <div class="path">Home ← مجموعة Clipboard ← أيقونة Format Painter</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نحدد النص الذي نريد نسخ تنسيقه</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">ننقر على أيقونة Format Painter (الفرشاة) — يتغير شكل المؤشر</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">نظلل النص المطلوب لنسخ التنسيق عليه، ثم ننقر Esc للإنهاء</div></div>
+    <div class="note-box"><strong>💡 نقر مزدوج</strong> على الفرشاة يتيح تطبيق التنسيق على أكثر من موضع</div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">📐 المحاذاة (Alignment)</div>
+    <div class="path">Home ← مجموعة Paragraph ← Align Text</div>
+    <table class="tbl blue">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Top</td><td>محاذاة النص إلى أعلى مربع النص</td></tr>
+      <tr><td>Middle</td><td>محاذاة النص إلى منتصف مربع النص</td></tr>
+      <tr><td>Bottom</td><td>محاذاة النص إلى أسفل مربع النص</td></tr>
+      <tr><td>Align Right</td><td>محاذاة النص إلى اليمين</td></tr>
+      <tr><td>Center</td><td>توسيط النص في المنتصف</td></tr>
+      <tr><td>Align Left</td><td>محاذاة النص إلى اليسار</td></tr>
+      <tr><td>Justify</td><td>ضبط النص على مستوى واحد من الاتجاهين</td></tr>
+      <tr><td>Line Spacing</td><td>تغيير المسافة بين الأسطر في الشريحة</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🌑 إضافة ظل للنص (Text Shadow)</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نحدد النص المطلوب تظليله</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Home ← مجموعة Font ← ننقر Text Shadow</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">من تبويب Format ← Drawing tools ← Word Art Styles ← Text Effects ← Shadow تظهر أنواع الظلال مع خيارات إضافية (Shadow Options)</div></div>
+    <div class="note-box"><strong>كذلك الحال عند:</strong> Reflection (انعكاس) — Glow (توهج) — Bevel (حواف ناعمة) — 3-D Rotation — Transform (تحويل النص لأشكال)</div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🎨 تلوين النص</div>
+    <div class="path">Home ← مجموعة Font ← Font Color ← نحدد اللون المطلوب</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">نحدد النص المطلوب تلوينه ثم نختار اللون من لوحة الألوان الظاهرة.</p>
+  </div>
+</div>
+
+<!-- ===== INSERT ===== -->
+<div id="insert" class="section">
+  <div class="sec-header">➕ قائمة Insert — الإدراج</div>
+
+  <div class="card">
+    <div class="card-title">🖼️ إدراج صورة (Insert Picture)</div>
+    <div class="path">Insert ← مجموعة Images ← Picture</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نضع مؤشر الفأرة في الموقع المطلوب لإدراج الصورة</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Insert ← Images ← Picture ← Insert Picture From</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><strong>This device:</strong> لإدراج صورة من الحاسب المحفوظة</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Online Picture's:</strong> لإدراج صورة من الصور الموجودة على شبكة الإنترنت</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Screen Shot:</strong> يسمح بأخذ صورة طاهرة على سطح المكتب أو الاقتصاص من النافذة</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔊 إدراج صوت (Insert Audio)</div>
+    <div class="path">Insert ← مجموعة Media ← Audio</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">يمكن إدراج ملف صوتي في إحدى شرائح العرض التقديمي من:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-blue">Audio on My PC — من الحاسبة الشخصية</span>
+      <span class="tag tag-blue">Record Audio — تسجيل ملف صوتي خاص</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎬 إدراج فيديو (Insert Video Film)</div>
+    <div class="path">Insert ← مجموعة Media ← Video</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">يمكن إدراج فلم في إحدى شرائح العرض التقديمي من:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-red">Online Video — من منشيكة الأنترنت</span>
+      <span class="tag tag-red">Video on My PC — من الحاساية الشخصية</span>
+    </div>
+    <div class="note-box" style="margin-top:10px"><strong>ملاحظة:</strong> لتشغيل الفيلم في برنامج PowerPoint يجب تحويله إلى صيغة <strong>WMV</strong></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">📅 الرأس والتذييل (Header & Footer)</div>
+    <div class="path">Insert ← مجموعة Text ← Header & Footer</div>
+    <table class="tbl blue" style="margin-top:8px">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Date and time</td><td>إضافة التاريخ والوقت إلى الرأس</td></tr>
+      <tr><td>Update automatically</td><td>التحديث التلقائي للتاريخ والوقت</td></tr>
+      <tr><td>Fixed</td><td>إضافة وقت وتاريخ ثابتين</td></tr>
+      <tr><td>Footer</td><td>إضافة نص إلى تذييل الصفحة</td></tr>
+      <tr><td>Apply to All</td><td>إضافة المعلومات لجميع الشرائح</td></tr>
+      <tr><td>Apply</td><td>إضافة المعلومات لشريحة محددة</td></tr>
+      <tr><td>Don't show on title slide</td><td>إظهار المعلومات على جميع الشرائح باستثناء الشريحة الأولى</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 إضافة جدول (Insert Table)</div>
+    <div class="path">Insert ← مجموعة Tables ← Table</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نحدد الشريحة المطلوب إضافة جدول إليها</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Insert ← Tables ← Table ← تحديد عدد الصفوف والأعمدة بالسحب</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">لإضافة نص: ننقر على الخلية وندخل النص، عند الانتهاء ننقر خارج الجدول</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">عند إنشاء الجدول يظهر تبويب Table Tools (مجموعتا Design وLayout) لتنسيق الجدول</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔷 إضافة كائنات هندسية (Shapes)</div>
+    <div class="path">Insert ← مجموعة Illustrations ← Shapes</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نختار الشكل المطلوب من القائمة</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">ننتقل إلى الشريحة — يتغير شكل المؤشر إلى علامة صليب (+)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">نضغط الأيسر باستمرار ونرسم الشكل بالاتجاه والحجم المطلوب (يمكن الاستعانة بـ Shift للرسم بخطوط مستقيمة)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">لتغيير الحجم: نضع مؤشر الفأرة فوق أحد المقابض المحيطة وعندها يتغير شكل المؤشر إلى سهمين</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 روابط تشعبية (Hyperlinks)</div>
+    <div class="path">Insert ← مجموعة Links ← Link</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">أداة لإدراج ارتباط تشعبي، هو رابط بين برنامج وبرنامج آخر مثل: Word, Power Point, Access, Auto cad</p>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🔣 الرموز والمعادلات (Symbols & Equation)</div>
+    <div class="path">Insert ← مجموعة Symbols</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px"><strong>Symbols:</strong> لإدراج أنواع الرموز الموجودة في مجموعة Symbols المدرجة في تبويب Insert.<br><strong>Equation:</strong> عند الضغط على الرمز ستظهر على الشاشة المعادلات والعمليات التي يمكن الاستعانة بها لكتابة المعادلات الرياضية.</p>
+  </div>
+</div>
+
+<!-- ===== DESIGN ===== -->
+<div id="design" class="section">
+  <div class="sec-header">🎨 التصميم والمظهر</div>
+
+  <div class="card">
+    <div class="card-title">🎭 السمات (Themes)</div>
+    <div class="path">Design ← مجموعة Themes</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">السمات هي مجموعة الخصائص التي تُطبق على الشريحة بما تحتويه من تصميم ومخططات وألوان. يمكن تغييرها حسب الرغبة من حيث تحديد لون الخلفية وحجم النص ولونه.</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body">Design ← Themes ← نفتح قائمة السمات</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">نقر بالزر الأيمن فوق السمة ← قائمة فرعية تظهر الاحتمالات:</div></div>
+    <table class="tbl" style="margin-top:8px">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Apply To All Slides</td><td>تطبيق السمة على جميع شرائح العرض</td></tr>
+      <tr><td>Apply To Selected Slides</td><td>تطبيق السمة على شرائح محددة</td></tr>
+      <tr><td>Set As Default Theme</td><td>جعل السمة ضمن الافتراضيات</td></tr>
+      <tr><td>Add Gallery To Quick Access Toolbar</td><td>إضافة معرض العرض إلى شريط الأقلاع السريع</td></tr>
+    </table>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🖌️ خلفيات الشرائح (Slide Backgrounds)</div>
+    <div class="path">Design ← مجموعة Variants ← Background Styles</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">ننقر الشريحة المطلوب تغيير لون خلفيتها</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Design ← مجموعة Variants ← السهم ← Background Styles</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">نختار أحد أنماط الخلفية من القائمة المنسدلة ← تطبيقها:</div></div>
+    <table class="tbl blue" style="margin-top:8px">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Apply to all slides</td><td>التطبيق على جميع شرائح العرض</td></tr>
+      <tr><td>Apply to selected slides</td><td>التطبيق على الشرائح المحددة فقط</td></tr>
+      <tr><td>Add Gallery to Quick Access Tool bar</td><td>نقل هذا الاختيار إلى شريط الأقلاع السريع</td></tr>
+      <tr><td>Format Background</td><td>خيارات تنسيق أكثر (لون واحد، تدرج، صورة، نمط...)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🖍️ تغيير لون خلفية الشريحة</div>
+    <div class="path">Design ← مجموعة Customize ← Format Background</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-top:8px">تظهر لوحة في أقصى اليمين تحتوي على خيارات:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="tag tag-red">Fill — تعبئة</span>
+      <span class="tag tag-red">Solid fill — لون صلب</span>
+      <span class="tag tag-red">Gradient fill — تدرج لوني</span>
+      <span class="tag tag-red">Picture or texture fill — صورة أو نسيج</span>
+      <span class="tag tag-red">Pattern fill — نمط</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EFFECTS ===== -->
+<div id="effects" class="section">
+  <div class="sec-header">✨ التأثيرات والحركات</div>
+
+  <div class="card">
+    <div class="card-title">🔄 تأثيرات الأنتقال (Transition Effects)</div>
+    <div class="path">Transitions ← مجموعة Transition To This Slide</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">عند إجراء العرض يمكن إضافة تأثيرات عند الأنتقال من شريحة إلى أخرى كأن تظهر الشريحة من اليمين أو اليسار أو من الأعلى أو من الأسفل.</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body">ننقر الشريحة المطلوب وضع التأثير عليها</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Transitions ← مجموعة Transition To This Slide ← ننقر تأثير الأنتقال المطلوب</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">يمكن تطبيق التأثير المناسب لكل شريحة على حدة</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">Effect Options ← المزيد من التأثيرات الظاهرة أعلاه</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">⏱️ زمن الأنتقال (Transition Time)</div>
+    <div class="path">Transitions ← مجموعة Timing</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">يمكن تحديد زمن الأنتقال بين الشرائح من مجموعة Timing ← <strong>Duration</strong> لتحديد الوقت</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">يمكن <strong>إضافة صوت</strong> أثناء الأنتقال بالنقر على قائمة Sound</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Apply To All:</strong> تطبيق الأجراءات السابقة على جميع الشرائح</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><strong>On Mouse Click:</strong> الأنتقال من شريحة إلى أخرى عند النقر بالفأرة</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><strong>After:</strong> الأنتقال بعد زمن معين محدد</div></div>
+    <div class="note-box" style="margin-top:10px"><strong>🔖 علامة ★</strong> إلى جانب الشريحة تدل على إضافة مرحلة انتقالية إليها</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🌟 إضافة تأثيرات حركية إلى الكائنات (Animation Effects)</div>
+    <div class="path">Animations ← مجموعة Animation ← Animate</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">أثناء إجراء العرض يمكن إضافة تأثيرات حركية على النصوص لتركيز المشاهد عليها:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body">نحدد النص أو الكائن المطلوب تحريكه</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">Animations ← مجموعة Animations ← ننقر السهم الخاص التحريك Animate ← تظهر قائمة الحركات الجاهزة</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">لرفع تأثير الحركة: ننقر <strong>None</strong></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">نوجه مؤشر الفأرة إلى أنواع الحركات ونلاحظ تأثيرها ← النقر على الحركة المطلوبة لتطبيقها</div></div>
+
+    <table class="tbl" style="margin-top:12px">
+      <tr><th>نوع الحركة</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Entrance</strong></td><td>حركة دخول النص إلى الشريحة</td></tr>
+      <tr><td><strong>Emphasis</strong></td><td>حركة التوكيد على النص</td></tr>
+      <tr><td><strong>Exit</strong></td><td>حركة خروج النص من الشريحة</td></tr>
+    </table>
+
+    <div class="step" style="margin-top:12px"><div class="step-num">5</div><div class="step-body">يمكن إدخال العديد من الحركات الإضافية على النص من قائمة Add Animation ← المجموعة Advanced Animation</div></div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-title">🗓️ الرأس والتذييل — ملاحظات إضافية</div>
+    <div class="path">Insert ← مجموعة Text ← Header & Footer</div>
+    <table class="tbl blue">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Slide</td><td>تبويب الشرائح</td></tr>
+      <tr><td>Notes and Handouts</td><td>الملاحظات والمستندات</td></tr>
+      <tr><td>Slide Number</td><td>إضافة رقم الشريحة</td></tr>
+      <tr><td>Footer</td><td>إضافة نص إلى تذييل الصفحة</td></tr>
+      <tr><td>Don't show on title slide</td><td>إظهار على جميع الشرائح باستثناء الأولى</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="sec-header">🎯 أسئلة تدريبية على محاضرة PowerPoint</div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-val" id="scoreVal">0 / 15</div>
+      <div class="score-label">نتيجتك الحالية</div>
+    </div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 إعادة المحاولة</button>
+  </div>
+
+  <div class="quiz-q" id="q1">
+    <div class="q-text"><span class="q-num">1</span> ما هو امتداد ملفات PowerPoint الافتراضي في الإصدارات الحديثة؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">أ</span> .docx</div>
+      <div class="option" onclick="answer(this,'q1',true)"><span class="letter">ب</span> .pptx</div>
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">ج</span> .xlsx</div>
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">د</span> .wmv</div>
+    </div>
+    <div class="answer-reveal" id="ans-q1">✅ الإجابة: .pptx هو الامتداد الافتراضي لملفات PowerPoint في الإصدارات الحديثة</div>
+  </div>
+
+  <div class="quiz-q blue" id="q2">
+    <div class="q-text"><span class="q-num" style="background:var(--blue)">2</span> من أين يمكن إضافة تأثيرات الأنتقال بين الشرائح؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">أ</span> Animations</div>
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">ب</span> Design</div>
+      <div class="option" onclick="answer(this,'q2',true)"><span class="letter" style="background:var(--blue)">ج</span> Transitions</div>
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">د</span> View</div>
+    </div>
+    <div class="answer-reveal" id="ans-q2">✅ الإجابة: تبويب Transitions يحتوي على جميع تأثيرات الأنتقال بين الشرائح</div>
+  </div>
+
+  <div class="quiz-q green" id="q3">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">3</span> ما الفرق بين Entrance وExit في تأثيرات الحركة؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--green)">أ</span> لا فرق بينهما</div>
+      <div class="option" onclick="answer(this,'q3',true)"><span class="letter" style="background:var(--green)">ب</span> Entrance = دخول النص إلى الشريحة — Exit = خروج النص منها</div>
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--green)">ج</span> Entrance = خروج النص — Exit = دخوله</div>
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--green)">د</span> كلاهما يختص بحركة التوكيد</div>
+    </div>
+    <div class="answer-reveal" id="ans-q3">✅ الإجابة: Entrance = دخول الكائن إلى الشريحة، Emphasis = التوكيد عليه، Exit = خروجه من الشريحة</div>
+  </div>
+
+  <div class="quiz-q" id="q4">
+    <div class="q-text"><span class="q-num">4</span> أي تنسيق حفظ يحول العرض التقديمي إلى ملف يُشغَّل مباشرةً بالنقر المزدوج عليه؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">أ</span> PowerPoint Template</div>
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">ب</span> PowerPoint 97-2003</div>
+      <div class="option" onclick="answer(this,'q4',true)"><span class="letter">ج</span> PowerPoint Show</div>
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">د</span> PDF</div>
+    </div>
+    <div class="answer-reveal" id="ans-q4">✅ الإجابة: PowerPoint Show يحفظ العرض كملف تشغيل مباشر عند النقر المزدوج عليه</div>
+  </div>
+
+  <div class="quiz-q blue" id="q5">
+    <div class="q-text"><span class="q-num" style="background:var(--blue)">5</span> من أين يمكن إضافة رقم الشريحة (Slide Number) في الرأس والتذييل؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">أ</span> Design ← Themes</div>
+      <div class="option" onclick="answer(this,'q5',true)"><span class="letter" style="background:var(--blue)">ب</span> Insert ← Text ← Header & Footer</div>
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">ج</span> Home ← Paragraph</div>
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">د</span> View ← Slide Show</div>
+    </div>
+    <div class="answer-reveal" id="ans-q5">✅ الإجابة: Insert ← Text ← Header & Footer تفتح نافذة تضم خيار إضافة رقم الشريحة</div>
+  </div>
+
+  <div class="quiz-q green" id="q6">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">6</span> ما الأداة التي تُتيح نسخ تنسيق النص من موضع وتطبيقه على موضع آخر؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:var(--green)">أ</span> Copy & Paste</div>
+      <div class="option" onclick="answer(this,'q6',true)"><span class="letter" style="background:var(--green)">ب</span> Format Painter</div>
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:var(--green)">ج</span> Clear All Formatting</div>
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:var(--green)">د</span> Change Case</div>
+    </div>
+    <div class="answer-reveal" id="ans-q6">✅ الإجابة: Format Painter (الفرشاة) توجد في مجموعة Clipboard ضمن Home</div>
+  </div>
+
+  <div class="quiz-q" id="q7">
+    <div class="q-text"><span class="q-num">7</span> ما الخطوة الأولى لإدراج فيديو في شريحة PowerPoint؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter">أ</span> Design ← Media</div>
+      <div class="option" onclick="answer(this,'q7',true)"><span class="letter">ب</span> Insert ← Media ← Video</div>
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter">ج</span> Animations ← Insert Video</div>
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter">د</span> Home ← Illustrations</div>
+    </div>
+    <div class="answer-reveal" id="ans-q7">✅ الإجابة: Insert ← مجموعة Media ← Video. ملاحظة: يجب تحويل الفيلم إلى صيغة WMV لتشغيله</div>
+  </div>
+
+  <div class="quiz-q blue" id="q8">
+    <div class="q-text"><span class="q-num" style="background:var(--blue)">8</span> ما وظيفة Apply to All Slides في تأثيرات الأنتقال؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">أ</span> تطبيق التأثير على الشريحة الحالية فقط</div>
+      <div class="option" onclick="answer(this,'q8',true)"><span class="letter" style="background:var(--blue)">ب</span> تطبيق نفس تأثير الأنتقال على جميع الشرائح</div>
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">ج</span> حذف جميع التأثيرات</div>
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">د</span> حفظ التأثير كافتراضي</div>
+    </div>
+    <div class="answer-reveal" id="ans-q8">✅ الإجابة: Apply to All تُطبق نفس تأثير الأنتقال على جميع شرائح العرض التقديمي</div>
+  </div>
+
+  <div class="quiz-q green" id="q9">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">9</span> ما العناصر التي يمكن إضافتها عبر مجموعة Illustrations في Insert؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:var(--green)">أ</span> جداول ورسوم بيانية فقط</div>
+      <div class="option" onclick="answer(this,'q9',true)"><span class="letter" style="background:var(--green)">ب</span> صور، أشكال هندسية (Shapes)، SmartArt، رسوم بيانية (Charts)</div>
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:var(--green)">ج</span> نصوص وروابط فقط</div>
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:var(--green)">د</span> صوت وفيديو فقط</div>
+    </div>
+    <div class="answer-reveal" id="ans-q9">✅ الإجابة: مجموعة Illustrations تحتوي على Shapes وSmartArt وCharts إلى جانب أدوات الصور</div>
+  </div>
+
+  <div class="quiz-q" id="q10">
+    <div class="q-text"><span class="q-num">10</span> ما المقصود بـ "Sky Drive" في PowerPoint؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter">أ</span> أداة لتشغيل الفيديو في العرض</div>
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter">ب</span> برنامج مستقل لتحرير الصور</div>
+      <div class="option" onclick="answer(this,'q10',true)"><span class="letter">ج</span> خدمة تخزين سحابي مجاني بمقدار 25 GB مرتبطة بحساب Hotmail</div>
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter">د</span> وضع عرض الشرائح في وضع ملء الشاشة</div>
+    </div>
+    <div class="answer-reveal" id="ans-q10">✅ الإجابة: Sky Drive (OneDrive) هو خدمة التخزين السحابي المجاني بحجم 25 GB بشرط وجود حساب Hotmail</div>
+  </div>
+
+  <div class="quiz-q blue" id="q11">
+    <div class="q-text"><span class="q-num" style="background:var(--blue)">11</span> ما الأداة التي تُعيد شريحة النص إلى الحالة الافتراضية بدون أي تنسيق؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">أ</span> Format Painter</div>
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">ب</span> Change Case</div>
+      <div class="option" onclick="answer(this,'q11',true)"><span class="letter" style="background:var(--blue)">ج</span> Clear All Formatting</div>
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">د</span> Strike Through</div>
+    </div>
+    <div class="answer-reveal" id="ans-q11">✅ الإجابة: Clear All Formatting تُزيل جميع التنسيقات وتُعيد النص إلى حالته الافتراضية</div>
+  </div>
+
+  <div class="quiz-q green" id="q12">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">12</span> ما الإجراء للانتقال من شريحة إلى أخرى بالنقر على الفأرة في تأثير الأنتقال؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:var(--green)">أ</span> تفعيل خيار After</div>
+      <div class="option" onclick="answer(this,'q12',true)"><span class="letter" style="background:var(--green)">ب</span> تفعيل خيار On Mouse Click</div>
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:var(--green)">ج</span> تفعيل Apply To All</div>
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:var(--green)">د</span> تفعيل Duration</div>
+    </div>
+    <div class="answer-reveal" id="ans-q12">✅ الإجابة: On Mouse Click يجعل الأنتقال يحدث عند النقر بالفأرة على الشريحة</div>
+  </div>
+
+  <div class="quiz-q" id="q13">
+    <div class="q-text"><span class="q-num">13</span> ما وظيفة Justify في محاذاة النص؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter">أ</span> محاذاة النص إلى اليمين فقط</div>
+      <div class="option" onclick="answer(this,'q13',true)"><span class="letter">ب</span> ضبط النص على مستوى واحد من الاتجاهين (يمين ويسار)</div>
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter">ج</span> توسيط النص في المنتصف</div>
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter">د</span> محاذاة النص إلى أعلى المربع</div>
+    </div>
+    <div class="answer-reveal" id="ans-q13">✅ الإجابة: Justify تضبط النص على مستوى واحد من الاتجاهين اليمين واليسار معاً</div>
+  </div>
+
+  <div class="quiz-q blue" id="q14">
+    <div class="q-text"><span class="q-num" style="background:var(--blue)">14</span> ما الذي يحدث عند تفعيل "Apply To Selected Slides" في السمات (Themes)؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">أ</span> تُطبق السمة على جميع الشرائح</div>
+      <div class="option" onclick="answer(this,'q14',true)"><span class="letter" style="background:var(--blue)">ب</span> تُطبق السمة على الشرائح المحددة في العرض التقديمي فقط</div>
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">ج</span> تُحفظ السمة كافتراضية</div>
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">د</span> تُضاف السمة إلى شريط الأقلاع السريع</div>
+    </div>
+    <div class="answer-reveal" id="ans-q14">✅ الإجابة: Apply To Selected Slides تُطبق السمة على الشرائح المحددة فقط، بينما Apply To All تُطبقها على جميع الشرائح</div>
+  </div>
+
+  <div class="quiz-q green" id="q15">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">15</span> ما الأداة التي تُتيح تسجيل ملف صوتي مباشرة في العرض التقديمي؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:var(--green)">أ</span> Audio on My PC</div>
+      <div class="option" onclick="answer(this,'q15',true)"><span class="letter" style="background:var(--green)">ب</span> Record Audio</div>
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:var(--green)">ج</span> Online Video</div>
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:var(--green)">د</span> Screen Shot</div>
+    </div>
+    <div class="answer-reveal" id="ans-q15">✅ الإجابة: Record Audio تُمكن من تسجيل ملف صوتي خاص مباشرةً للتعليق على موضوع العرض</div>
+  </div>
+
+</div><!-- end quiz -->
+
+</div><!-- end content -->
+
+<div class="footer">
+  جامعة قاسيون الخاصة للعلوم والتكنولوجيا — د.م. إيميل جرجس روميّه — PowerPoint 2025/2026
+</div>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  let score = 0, answered = {};
+
+  function answer(el, qId, isCorrect) {
+    if (answered[qId]) return;
+    answered[qId] = true;
+    const opts = el.parentElement.querySelectorAll('.option');
+    opts.forEach(o => { o.style.pointerEvents='none'; o.style.opacity='.7'; });
+    if (isCorrect) {
+      el.classList.add('correct'); el.style.opacity='1'; score++;
+    } else {
+      el.classList.add('wrong'); el.style.opacity='1';
+      opts.forEach(o => { if ((o.getAttribute('onclick')||'').includes('true')) { o.classList.add('correct'); o.style.opacity='1'; } });
+    }
+    document.getElementById('ans-'+qId).classList.add('show');
+    document.getElementById('scoreVal').textContent = score + ' / 15';
+  }
+
+  function resetQuiz() {
+    score = 0; answered = {};
+    document.querySelectorAll('.option').forEach(o => { o.classList.remove('correct','wrong'); o.style.pointerEvents=''; o.style.opacity=''; });
+    document.querySelectorAll('.answer-reveal').forEach(a => a.classList.remove('show'));
+    document.getElementById('scoreVal').textContent = '0 / 15';
+  }
+</script>
+</body>
+</html>

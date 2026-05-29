@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل دراسة Microsoft Excel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1d7a4f;
+    --green-light: #27ae60;
+    --green-pale: #e8f5ee;
+    --green-mid: #a8d5b8;
+    --dark: #0f1f17;
+    --text: #1a2e22;
+    --text-light: #4a6355;
+    --white: #ffffff;
+    --bg: #f4faf6;
+    --accent: #f0a500;
+    --accent-light: #fff3d4;
+    --border: #c8e6d4;
+    --red: #c0392b;
+    --blue: #1a6b9a;
+    --blue-light: #e8f4fb;
+    --shadow: 0 4px 24px rgba(29,122,79,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0f1f17 0%, #1d7a4f 60%, #27ae60 100%);
+    color: white;
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    opacity: 0.82;
+    font-weight: 300;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--dark);
+    border-radius: 20px;
+    padding: 4px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 14px;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--dark);
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .nav-tabs button {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 10px;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-tabs button.active, .nav-tabs button:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* CONTENT */
+  .content { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 22px;
+    border-right: 5px solid var(--green);
+  }
+  .card.blue { border-right-color: var(--blue); }
+  .card.accent { border-right-color: var(--accent); }
+  .card.red { border-right-color: var(--red); }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--green);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card.blue .card-title { color: var(--blue); }
+  .card.accent .card-title { color: #c47d00; }
+  .card.red .card-title { color: var(--red); }
+
+  /* TABLE */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.93rem;
+    margin-top: 8px;
+  }
+  .tbl th {
+    background: var(--green);
+    color: white;
+    padding: 10px 14px;
+    text-align: right;
+    font-weight: 700;
+  }
+  .tbl.blue th { background: var(--blue); }
+  .tbl.accent th { background: var(--accent); color: var(--dark); }
+  .tbl td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .tbl tr:nth-child(even) td { background: var(--green-pale); }
+  .tbl.blue tr:nth-child(even) td { background: var(--blue-light); }
+  .tbl code {
+    background: var(--dark);
+    color: #7fffb0;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 0.88em;
+  }
+
+  /* SECTION HEADER */
+  .sec-header {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--green-mid);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* TAGS / BADGES */
+  .tag {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin: 2px;
+  }
+  .tag-green { background: var(--green-pale); color: var(--green); }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-accent { background: var(--accent-light); color: #8a5900; }
+  .tag-red { background: #fdecea; color: var(--red); }
+
+  /* STEPS */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .step-body { padding-top: 5px; font-size: 0.95rem; line-height: 1.7; }
+  .step-body strong { color: var(--green); }
+
+  /* QUIZ */
+  .quiz-q {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 18px;
+    border-top: 4px solid var(--green);
+  }
+  .quiz-q.blue { border-top-color: var(--blue); }
+  .quiz-q.accent { border-top-color: var(--accent); }
+  .q-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .q-num {
+    display: inline-block;
+    background: var(--green);
+    color: white;
+    border-radius: 8px;
+    padding: 1px 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-left: 8px;
+  }
+  .quiz-q.blue .q-num { background: var(--blue); }
+  .quiz-q.accent .q-num { background: var(--accent); color: var(--dark); }
+  .options { display: grid; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 2px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 0.93rem;
+    transition: all 0.2s;
+    background: var(--bg);
+    user-select: none;
+  }
+  .option:hover { border-color: var(--green); background: var(--green-pale); }
+  .option.correct { border-color: var(--green-light); background: #d4f0e0; color: var(--dark); }
+  .option.wrong { border-color: var(--red); background: #fdecea; }
+  .option .letter {
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+  }
+  .option.correct .letter { background: var(--green-light); }
+  .option.wrong .letter { background: var(--red); }
+  .answer-reveal {
+    margin-top: 10px;
+    padding: 10px 16px;
+    background: var(--green-pale);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--green);
+    font-weight: 600;
+    display: none;
+  }
+  .answer-reveal.show { display: block; }
+
+  /* SCORE */
+  .score-bar {
+    background: var(--dark);
+    color: white;
+    border-radius: 14px;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .score-val { font-size: 2rem; font-weight: 900; color: var(--accent); }
+  .score-label { font-size: 0.9rem; opacity: 0.7; }
+  .btn-reset {
+    background: var(--green-light);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 22px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-reset:hover { background: var(--green); }
+
+  /* SHORTCUT GRID */
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .shortcut-item {
+    background: var(--dark);
+    color: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .shortcut-key {
+    font-family: monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .shortcut-desc { font-size: 0.83rem; opacity: 0.8; }
+
+  /* PLAN */
+  .plan-day {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .plan-day-header {
+    background: var(--green);
+    color: white;
+    padding: 12px 20px;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .plan-day.blue .plan-day-header { background: var(--blue); }
+  .plan-day.accent .plan-day-header { background: #c47d00; }
+  .plan-day-body { padding: 16px 20px; }
+  .plan-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 0.93rem;
+  }
+  .plan-item:last-child { border-bottom: none; }
+  .plan-time {
+    min-width: 80px;
+    font-weight: 700;
+    color: var(--green);
+    font-size: 0.85rem;
+  }
+  .plan-day.blue .plan-time { color: var(--blue); }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--dark);
+    color: #7fffb0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-family: monospace;
+    font-size: 1rem;
+    margin: 10px 0;
+    letter-spacing: 0.5px;
+    border-right: 4px solid var(--accent);
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* RESPONSIVE */
+  @media(max-width:600px){
+    .hero h1{font-size:1.6rem}
+    .content{padding:20px 12px 40px}
+    .shortcut-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-icon">📊</span>
+  <h1>دليل دراسة Microsoft Excel</h1>
+  <p>ملخص شامل + أسئلة تدريبية + خطة الدراسة</p>
+  <span class="badge">للعام الدراسي 2025 / 2026 — د.م. إيميل جرجس روميّه</span>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="active" onclick="showTab('summary',this)">📋 الملخص</button>
+  <button onclick="showTab('functions',this)">🔢 الدوال</button>
+  <button onclick="showTab('shortcuts',this)">⚡ الاختصارات</button>
+  <button onclick="showTab('plan',this)">📅 خطة الدراسة</button>
+  <button onclick="showTab('quiz',this)">🎯 أسئلة تدريبية</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ==================== SUMMARY ==================== -->
+  <div id="summary" class="section active">
+    <div class="sec-header">📋 الملخص الشامل لمحاضرة Excel</div>
+
+    <!-- Interface -->
+    <div class="card">
+      <div class="card-title">🖥️ 1. واجهة البرنامج (Interface)</div>
+      <table class="tbl">
+        <tr><th>العنصر</th><th>الوظيفة</th></tr>
+        <tr><td><strong>Title Bar</strong></td><td>يعرض اسم الملف (BOOK1) واسم البرنامج Excel</td></tr>
+        <tr><td><strong>Ribbon</strong></td><td>شريط الأدوات الرئيسي المقسّم إلى تبويبات</td></tr>
+        <tr><td><strong>Formula Bar</strong></td><td>يعرض محتوى الخلية النشطة أو الدالة المكتوبة</td></tr>
+        <tr><td><strong>Status Bar</strong></td><td>يعرض معلومات ورقة العمل وأدوات Zoom</td></tr>
+        <tr><td><strong>Menu Bar</strong></td><td>القوائم الرئيسية: File, Home, Insert, Page Layout, Formulas, Data, Review, View</td></tr>
+      </table>
+    </div>
+
+    <!-- Worksheet -->
+    <div class="card blue">
+      <div class="card-title">📄 2. ورقة العمل (Worksheet)</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">الورقة تتكون من <strong>صفوف (Rows) وأعمدة (Columns)</strong> — تقاطعهما يسمى <strong>خلية (Cell)</strong></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">الأعمدة من <strong>A إلى XFD</strong> — الصفوف حتى <strong>1,048,576</strong></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">اسم كل خلية = حرف العمود + رقم الصف مثل <strong>A1, B3, C10</strong></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">الفرق: <strong>Workbook</strong> = الملف كله (.xlsx) — <strong>Worksheet</strong> = الورقة الواحدة داخله</div></div>
+      </div>
+      <table class="tbl blue" style="margin-top:14px">
+        <tr><th>أمر على الورقة</th><th>الوظيفة</th></tr>
+        <tr><td>Insert</td><td>إضافة ورقة جديدة (Shift+F11)</td></tr>
+        <tr><td>Delete</td><td>حذف الورقة نهائياً</td></tr>
+        <tr><td>Rename</td><td>تغيير اسم الورقة</td></tr>
+        <tr><td>Hide / Unhide</td><td>إخفاء وإظهار الورقة</td></tr>
+        <tr><td>Move or Copy</td><td>نقل أو نسخ الورقة</td></tr>
+        <tr><td>Tab Color</td><td>تلوين تبويب الورقة</td></tr>
+        <tr><td>Protect Sheet</td><td>حماية الورقة بكلمة مرور</td></tr>
+      </table>
+    </div>
+
+    <!-- Ribbon Tabs -->
+    <div class="card accent">
+      <div class="card-title">🎛️ 3. قوائم الـ Ribbon الأساسية</div>
+
+      <p style="font-weight:700;color:#8a5900;margin-bottom:10px">🏠 Home — الأكثر استخداماً</p>
+      <table class="tbl accent">
+        <tr><th>المجموعة</th><th>ما تحتوي عليه</th></tr>
+        <tr><td><strong>Clipboard</strong></td><td>Cut (Ctrl+X) — Copy (Ctrl+C) — Paste (Ctrl+V) — Format Painter</td></tr>
+        <tr><td><strong>Font</strong></td><td>نوع الخط، الحجم، Bold/Italic/Underline، لون الخط والخلفية</td></tr>
+        <tr><td><strong>Alignment</strong></td><td>محاذاة النص، Wrap Text، Merge & Center</td></tr>
+        <tr><td><strong>Number</strong></td><td>تنسيق الأرقام: General, Number, Currency, Date, Percentage...</td></tr>
+        <tr><td><strong>Styles</strong></td><td>Conditional Formatting — Format as Table — Cell Styles</td></tr>
+        <tr><td><strong>Cells</strong></td><td>Insert/Delete/Format الصفوف والأعمدة</td></tr>
+        <tr><td><strong>Editing</strong></td><td>AutoSum — Fill — Sort & Filter — Find & Select</td></tr>
+      </table>
+
+      <p style="font-weight:700;color:#8a5900;margin:16px 0 10px">📥 Insert — الإدراج</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag tag-accent">Tables — جداول</span>
+        <span class="tag tag-accent">Charts — رسوم بيانية</span>
+        <span class="tag tag-accent">Pictures — صور</span>
+        <span class="tag tag-accent">SmartArt — أشكال ذكية</span>
+        <span class="tag tag-accent">Links — روابط Hyperlink</span>
+        <span class="tag tag-accent">Header & Footer</span>
+        <span class="tag tag-accent">WordArt — نصوص فنية</span>
+        <span class="tag tag-accent">Symbols — رموز</span>
+      </div>
+
+      <p style="font-weight:700;color:#8a5900;margin:16px 0 10px">📐 Page Layout — تخطيط الصفحة</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag tag-green">Margins — هوامش</span>
+        <span class="tag tag-green">Orientation — اتجاه الطباعة</span>
+        <span class="tag tag-green">Size — حجم الورق A4/A3</span>
+        <span class="tag tag-green">Gridlines — خطوط الشبكة</span>
+        <span class="tag tag-green">Headings — عناوين الصفوف/الأعمدة</span>
+      </div>
+
+      <p style="font-weight:700;color:#8a5900;margin:16px 0 10px">📊 Data — البيانات</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag tag-blue">Get Data</span>
+        <span class="tag tag-blue">Refresh All</span>
+        <span class="tag tag-blue">Sort & Filter</span>
+        <span class="tag tag-blue">Group / Ungroup</span>
+        <span class="tag tag-blue">Subtotal</span>
+      </div>
+
+      <p style="font-weight:700;color:#8a5900;margin:16px 0 10px">👁️ View — العرض</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag tag-green">Normal</span>
+        <span class="tag tag-green">Page Layout</span>
+        <span class="tag tag-green">Page Break Preview</span>
+        <span class="tag tag-green">Freeze Panes</span>
+        <span class="tag tag-green">Split</span>
+        <span class="tag tag-green">Zoom</span>
+        <span class="tag tag-green">New Window</span>
+        <span class="tag tag-green">View Side by Side</span>
+      </div>
+    </div>
+
+    <!-- Number Format -->
+    <div class="card">
+      <div class="card-title">🔢 4. تنسيقات الأرقام (Number Format)</div>
+      <table class="tbl">
+        <tr><th>النوع</th><th>الاستخدام</th><th>مثال</th></tr>
+        <tr><td>General</td><td>افتراضي بدون تنسيق محدد</td><td>250</td></tr>
+        <tr><td>Number</td><td>أرقام مع خانات عشرية</td><td>250.00</td></tr>
+        <tr><td>Currency</td><td>عملة مع رمز $</td><td>$250.00</td></tr>
+        <tr><td>Accounting</td><td>محاسبة مع محاذاة رمز العملة</td><td>$ 250.00</td></tr>
+        <tr><td>Short Date</td><td>تاريخ قصير</td><td>26/10/2021</td></tr>
+        <tr><td>Long Date</td><td>تاريخ طويل</td><td>26 November 2021</td></tr>
+        <tr><td>Percentage</td><td>نسبة مئوية</td><td>25%</td></tr>
+        <tr><td>Fraction</td><td>كسور</td><td>1/4</td></tr>
+        <tr><td>Scientific</td><td>تدوين علمي</td><td>6.00E+02</td></tr>
+        <tr><td>Text</td><td>نص</td><td>250 كنص</td></tr>
+      </table>
+    </div>
+
+    <!-- Charts -->
+    <div class="card blue">
+      <div class="card-title">📈 5. الرسوم البيانية (Charts)</div>
+      <table class="tbl blue">
+        <tr><th>النوع</th><th>الاستخدام الأنسب</th></tr>
+        <tr><td>Bar Chart عمودي</td><td>مقارنة قيم متعددة مع بعضها</td></tr>
+        <tr><td>Line Chart خطي</td><td>إظهار الاتجاهات عبر الزمن</td></tr>
+        <tr><td>Pie Chart دائري</td><td>إظهار النسب والأجزاء من الكل</td></tr>
+      </table>
+      <p style="margin-top:12px;font-size:0.9rem;color:var(--text-light)">لإنشاء رسم بياني: حدد البيانات ← Insert ← Charts ← اختر النوع ← OK</p>
+    </div>
+
+    <!-- Data Entry -->
+    <div class="card accent">
+      <div class="card-title">✏️ 6. إدخال البيانات</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">انقر على الخلية واكتب — اضغط <strong>Enter</strong> للانتقال للأسفل أو <strong>Tab</strong> لليسار</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">لإدخال أكثر من سطر في خلية واحدة: <strong>Alt + Enter</strong></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">لتحديد نطاق متتالي: انقر أول خلية ← Shift ← انقر آخر خلية <strong>(A1:A22)</strong></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">لتحديد خلايا متفرقة: Ctrl + النقر على كل خلية</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body">Fill Handle: السحب من الزاوية السفلية اليمنى للخلية لنسخ البيانات أو إكمال التسلسل</div></div>
+      </div>
+    </div>
+
+  </div><!-- end summary -->
+
+  <!-- ==================== FUNCTIONS ==================== -->
+  <div id="functions" class="section">
+    <div class="sec-header">🔢 الدوال الأساسية في Excel</div>
+
+    <div class="card">
+      <div class="card-title">➕ دالة SUM — الجمع</div>
+      <div class="formula-box">=SUM(number1, [number2], ...)<br>=SUM(A1:A10)</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تجمع مجموعة من الأرقام أو نطاق من الخلايا. يمكن إدراجها من AutoSum أو كتابتها مباشرة في Formula Bar. تستخدم لإجراء الجمع التلقائي.</p>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">📊 دالة AVERAGE — المتوسط الحسابي</div>
+      <div class="formula-box" style="border-right-color:var(--blue)">=AVERAGE(number1, [number2], ...)<br>=AVERAGE(A1:A10)</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تحسب المتوسط الحسابي لمجموعة من الأرقام. تقسم المجموع على عدد القيم تلقائياً.</p>
+    </div>
+
+    <div class="card accent">
+      <div class="card-title">🔼 دالة MAX — القيمة القصوى</div>
+      <div class="formula-box" style="border-right-color:var(--accent)">=MAX(number1, [number2], ...)<br>=MAX(A1:A10)</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تُرجع أكبر قيمة في النطاق المحدد. مفيدة لإيجاد أعلى درجة أو أعلى رقم مبيعات.</p>
+    </div>
+
+    <div class="card red">
+      <div class="card-title">🔽 دالة MIN — القيمة الدنيا</div>
+      <div class="formula-box" style="border-right-color:var(--red)">=MIN(number1, [number2], ...)<br>=MIN(A1:A10)</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تُرجع أصغر قيمة في النطاق المحدد. مفيدة لإيجاد أدنى درجة أو أقل قيمة.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔢 دالة COUNT — العد</div>
+      <div class="formula-box">=COUNT(value1, [value2], ...)<br>=COUNT(A1:A10)</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تعد الخلايا التي تحتوي على أرقام أو تواريخ في النطاق المحدد. لا تعد الخلايا الفارغة أو النصية.</p>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">🔀 دالة IF — الشرط المنطقي</div>
+      <div class="formula-box" style="border-right-color:var(--blue)">=IF(logical_expression; true; false)<br>=IF(A1&gt;=50; "ناجح"; "راسب")</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تتحقق من شرط معين: إذا تحقق الشرط تُرجع القيمة الأولى، وإذا لم يتحقق تُرجع الثانية. من أهم الدوال وأكثرها استخداماً.</p>
+      <table class="tbl blue" style="margin-top:12px">
+        <tr><th>المثال</th><th>المعنى</th></tr>
+        <tr><td><code>=IF(A1&gt;100;"كبير";"صغير")</code></td><td>إذا كانت A1 أكبر من 100 اكتب "كبير" وإلا "صغير"</td></tr>
+        <tr><td><code>=IF(B2="ذكر";"Mr";"Mrs")</code></td><td>إذا كانت القيمة "ذكر" اكتب Mr وإلا Mrs</td></tr>
+      </table>
+    </div>
+
+    <div class="card accent">
+      <div class="card-title">🕐 دالة NOW — الوقت والتاريخ</div>
+      <div class="formula-box" style="border-right-color:var(--accent)">=NOW()</div>
+      <p style="font-size:0.93rem;line-height:1.7;margin-top:8px">تُرجع التاريخ والوقت الحالي تلقائياً. تتحدث عند فتح الملف أو إعادة الحساب. لا تحتاج إلى معاملات.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💡 ملاحظات مهمة على الدوال</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">كل دالة تبدأ بعلامة <strong>=</strong> قبلها</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">النطاق يُكتب بعلامة <strong>:</strong> مثل A1:A10 (من A1 إلى A10)</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">الخطأ <strong>######</strong> يعني أن الخلية ضيقة — وسّع العمود</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">الخطأ <strong>#NAME?</strong> يعني أن اسم الدالة مكتوب خطأ</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body">الخطأ <strong>#VALUE?</strong> يعني أن نوع البيانات غير صحيح</div></div>
+      </div>
+    </div>
+
+  </div><!-- end functions -->
+
+  <!-- ==================== SHORTCUTS ==================== -->
+  <div id="shortcuts" class="section">
+    <div class="sec-header">⚡ الاختصارات الأساسية</div>
+
+    <div class="card">
+      <div class="card-title">📁 اختصارات الملف والتحرير</div>
+      <div class="shortcut-grid">
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + S</span><span class="shortcut-desc">حفظ الملف</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + Z</span><span class="shortcut-desc">تراجع عن آخر إجراء</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + Y</span><span class="shortcut-desc">إعادة الإجراء</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + C</span><span class="shortcut-desc">نسخ</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + X</span><span class="shortcut-desc">قص</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + V</span><span class="shortcut-desc">لصق</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + A</span><span class="shortcut-desc">تحديد الكل</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + P</span><span class="shortcut-desc">طباعة</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + F</span><span class="shortcut-desc">بحث</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl + H</span><span class="shortcut-desc">بحث واستبدال</span></div>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">🧭 اختصارات التنقل</div>
+      <div class="shortcut-grid">
+        <div class="shortcut-item"><span class="shortcut-key">Enter</span><span class="shortcut-desc">انتقال للأسفل</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Tab</span><span class="shortcut-desc">انتقال لليسار</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Shift+Tab</span><span class="shortcut-desc">انتقال لليمين</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+Home</span><span class="shortcut-desc">الخلية A1</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+End</span><span class="shortcut-desc">آخر خلية بها بيانات</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Page Up</span><span class="shortcut-desc">لأعلى بمقدار صفحة</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Page Down</span><span class="shortcut-desc">لأسفل بمقدار صفحة</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+PgUp</span><span class="shortcut-desc">ورقة العمل السابقة</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+PgDn</span><span class="shortcut-desc">ورقة العمل التالية</span></div>
+      </div>
+    </div>
+
+    <div class="card accent">
+      <div class="card-title">📋 اختصارات ورقة العمل</div>
+      <div class="shortcut-grid">
+        <div class="shortcut-item"><span class="shortcut-key">Shift+F11</span><span class="shortcut-desc">إضافة ورقة جديدة</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Alt+Enter</span><span class="shortcut-desc">سطر جديد في الخلية</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+B</span><span class="shortcut-desc">نص عريض Bold</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+I</span><span class="shortcut-desc">نص مائل Italic</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+U</span><span class="shortcut-desc">خط تحت النص</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+1</span><span class="shortcut-desc">فتح نافذة تنسيق الخلايا</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Ctrl+Shift+%</span><span class="shortcut-desc">تنسيق نسبة مئوية</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">F2</span><span class="shortcut-desc">تعديل محتوى الخلية</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Delete</span><span class="shortcut-desc">حذف محتوى الخلية</span></div>
+        <div class="shortcut-item"><span class="shortcut-key">Esc</span><span class="shortcut-desc">إلغاء الإدخال</span></div>
+      </div>
+    </div>
+
+  </div><!-- end shortcuts -->
+
+  <!-- ==================== PLAN ==================== -->
+  <div id="plan" class="section">
+    <div class="sec-header">📅 خطة الدراسة المكثفة</div>
+
+    <div class="card" style="background:linear-gradient(135deg,#0f1f17,#1d7a4f);color:white;border:none">
+      <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">⏱️ إجمالي الوقت المقترح للـ Excel فقط</div>
+      <div style="font-size:2rem;font-weight:900;color:var(--accent)">5 ساعات</div>
+      <div style="opacity:0.75;font-size:0.9rem;margin-top:6px">موزعة على يومين أو في يوم واحد مكثف</div>
+    </div>
+
+    <div class="plan-day">
+      <div class="plan-day-header">📖 المرحلة الأولى — الفهم والقراءة (ساعة واحدة)</div>
+      <div class="plan-day-body">
+        <div class="plan-item"><span class="plan-time">15 دقيقة</span><span>اقرأ العناوين الكبيرة فقط (واجهة البرنامج، الـ Ribbons)</span></div>
+        <div class="plan-item"><span class="plan-time">15 دقيقة</span><span>اقرأ قسم ورقة العمل وأوامر الـ Sheet</span></div>
+        <div class="plan-item"><span class="plan-time">15 دقيقة</span><span>اقرأ قسم تنسيق الأرقام والجدول</span></div>
+        <div class="plan-item"><span class="plan-time">15 دقيقة</span><span>اقرأ الدوال الأساسية SUM, AVERAGE, MAX, MIN, COUNT, IF</span></div>
+      </div>
+    </div>
+
+    <div class="plan-day blue">
+      <div class="plan-day-header">💻 المرحلة الثانية — التطبيق العملي (ساعتان)</div>
+      <div class="plan-day-body">
+        <div class="plan-item"><span class="plan-time" style="color:var(--blue)">30 دقيقة</span><span>افتح Excel وتعرف على كل أجزاء الواجهة بيدك</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:var(--blue)">30 دقيقة</span><span>أنشئ ورقة عمل جديدة، أضف بيانات، وجرّب أوامر Sheet</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:var(--blue)">30 دقيقة</span><span>طبّق الدوال الست على بيانات حقيقية</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:var(--blue)">30 دقيقة</span><span>جرّب تنسيق الأرقام وإنشاء رسم بياني بسيط</span></div>
+      </div>
+    </div>
+
+    <div class="plan-day accent">
+      <div class="plan-day-header">🧠 المرحلة الثالثة — الحفظ والمراجعة (ساعتان)</div>
+      <div class="plan-day-body">
+        <div class="plan-item"><span class="plan-time" style="color:#c47d00">30 دقيقة</span><span>احفظ الاختصارات الأساسية (10 اختصارات على الأقل)</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:#c47d00">30 دقيقة</span><span>راجع التعريفات الأساسية: Cell, Workbook, Worksheet, Ribbon</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:#c47d00">30 دقيقة</span><span>حل الأسئلة التدريبية في هذا الملف</span></div>
+        <div class="plan-item"><span class="plan-time" style="color:#c47d00">30 دقيقة</span><span>مراجعة سريعة نهائية للنقاط التي تعثرت فيها</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 أهم نقاط الامتحان النظري</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>تعريف Excel:</strong> جدول إلكتروني لتخزين البيانات وإجراء العمليات الحسابية والتحليلية</div></div>
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>الفرق بين Workbook و Worksheet:</strong> الـ Workbook = الملف كله (.xlsx) — الـ Worksheet = الورقة الواحدة</div></div>
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>صيغة IF:</strong> =IF(الشرط; القيمة إذا صح; القيمة إذا خطأ)</div></div>
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>AutoSum:</strong> يجمع تلقائياً ويمكنه Average, Max, Min, Count</div></div>
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>Conditional Formatting:</strong> يغير تنسيق الخلية تلقائياً بناءً على قيمتها</div></div>
+        <div class="step"><div class="step-num">⭐</div><div class="step-body"><strong>Freeze Panes:</strong> لتثبيت الصفوف أو الأعمدة عند التمرير</div></div>
+      </div>
+    </div>
+
+  </div><!-- end plan -->
+
+  <!-- ==================== QUIZ ==================== -->
+  <div id="quiz" class="section">
+    <div class="sec-header">🎯 أسئلة تدريبية متوقعة</div>
+
+    <div class="score-bar">
+      <div>
+        <div class="score-val" id="scoreVal">0 / 15</div>
+        <div class="score-label">نتيجتك الحالية</div>
+      </div>
+      <button class="btn-reset" onclick="resetQuiz()">🔄 إعادة المحاولة</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="quiz-q" id="q1">
+      <div class="q-text"><span class="q-num">1</span> ما هو الامتداد الافتراضي لملفات Excel 2019؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q1',false)"><span class="letter">أ</span> .doc</div>
+        <div class="option" onclick="answer(this,'q1',true)"><span class="letter">ب</span> .xlsx</div>
+        <div class="option" onclick="answer(this,'q1',false)"><span class="letter">ج</span> .pptx</div>
+        <div class="option" onclick="answer(this,'q1',false)"><span class="letter">د</span> .xls فقط</div>
+      </div>
+      <div class="answer-reveal" id="ans-q1">✅ الإجابة الصحيحة: .xlsx هو الامتداد الافتراضي لملفات Excel منذ الإصدار 2007</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q blue" id="q2">
+      <div class="q-text"><span class="q-num blue" style="background:var(--blue)">2</span> ما هو الاختصار لإضافة ورقة عمل جديدة؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">أ</span> Ctrl + N</div>
+        <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">ب</span> Ctrl + W</div>
+        <div class="option" onclick="answer(this,'q2',true)"><span class="letter" style="background:var(--blue)">ج</span> Shift + F11</div>
+        <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--blue)">د</span> Alt + N</div>
+      </div>
+      <div class="answer-reveal" id="ans-q2">✅ الإجابة: Shift + F11 يضيف ورقة عمل جديدة مباشرةً</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q accent" id="q3">
+      <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">3</span> ما هي وظيفة دالة IF في Excel؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:#c47d00">أ</span> جمع الأرقام في نطاق محدد</div>
+        <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:#c47d00">ب</span> حساب المتوسط الحسابي</div>
+        <div class="option" onclick="answer(this,'q3',true)"><span class="letter" style="background:#c47d00">ج</span> التحقق من شرط وإرجاع قيمة بناءً على نتيجته</div>
+        <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:#c47d00">د</span> إيجاد أكبر قيمة في النطاق</div>
+      </div>
+      <div class="answer-reveal" id="ans-q3">✅ الإجابة: IF تتحقق من شرط، فإذا تحقق أرجعت القيمة الأولى، وإلا أرجعت الثانية</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-q" id="q4">
+      <div class="q-text"><span class="q-num">4</span> ماذا يعني خطأ ###### في Excel؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q4',false)"><span class="letter">أ</span> الدالة مكتوبة بشكل خاطئ</div>
+        <div class="option" onclick="answer(this,'q4',false)"><span class="letter">ب</span> نوع البيانات غير صحيح</div>
+        <div class="option" onclick="answer(this,'q4',true)"><span class="letter">ج</span> عرض الخلية أصغر من حجم الرقم</div>
+        <div class="option" onclick="answer(this,'q4',false)"><span class="letter">د</span> الخلية فارغة</div>
+      </div>
+      <div class="answer-reveal" id="ans-q4">✅ الإجابة: ###### يظهر عندما يكون عرض الخلية أضيق من الرقم — الحل: توسيع العمود</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q blue" id="q5">
+      <div class="q-text"><span class="q-num" style="background:var(--blue)">5</span> أي من الدوال التالية تُرجع التاريخ والوقت الحالي؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">أ</span> =TODAY()</div>
+        <div class="option" onclick="answer(this,'q5',true)"><span class="letter" style="background:var(--blue)">ب</span> =NOW()</div>
+        <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">ج</span> =DATE()</div>
+        <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--blue)">د</span> =TIME()</div>
+      </div>
+      <div class="answer-reveal" id="ans-q5">✅ الإجابة: =NOW() تُرجع التاريخ والوقت معاً. أما =TODAY() فتُرجع التاريخ فقط</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q accent" id="q6">
+      <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">6</span> ما الفرق بين Workbook و Worksheet؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:#c47d00">أ</span> لا فرق بينهما، كلاهما بنفس المعنى</div>
+        <div class="option" onclick="answer(this,'q6',true)"><span class="letter" style="background:#c47d00">ب</span> Workbook = الملف كله — Worksheet = الورقة الواحدة داخله</div>
+        <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:#c47d00">ج</span> Workbook = الورقة — Worksheet = الملف</div>
+        <div class="option" onclick="answer(this,'q6',false)"><span class="letter" style="background:#c47d00">د</span> Workbook هو اسم الخلية النشطة</div>
+      </div>
+      <div class="answer-reveal" id="ans-q6">✅ الإجابة: الـ Workbook هو الملف بأكمله (.xlsx)، ويحتوي على عدة Worksheets (أوراق عمل)</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-q" id="q7">
+      <div class="q-text"><span class="q-num">7</span> ما هو الاختصار للانتقال إلى الخلية A1 مباشرةً؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q7',false)"><span class="letter">أ</span> Ctrl + End</div>
+        <div class="option" onclick="answer(this,'q7',true)"><span class="letter">ب</span> Ctrl + Home</div>
+        <div class="option" onclick="answer(this,'q7',false)"><span class="letter">ج</span> Ctrl + A</div>
+        <div class="option" onclick="answer(this,'q7',false)"><span class="letter">د</span> Alt + Home</div>
+      </div>
+      <div class="answer-reveal" id="ans-q7">✅ الإجابة: Ctrl + Home يأخذك مباشرةً إلى الخلية A1. أما Ctrl + End فيأخذك لآخر خلية بها بيانات</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-q blue" id="q8">
+      <div class="q-text"><span class="q-num" style="background:var(--blue)">8</span> ما وظيفة Freeze Panes في قائمة View؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">أ</span> تجميد البيانات ومنع التعديل عليها</div>
+        <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">ب</span> تحويل الورقة إلى صورة ثابتة</div>
+        <div class="option" onclick="answer(this,'q8',true)"><span class="letter" style="background:var(--blue)">ج</span> تثبيت الصفوف أو الأعمدة لتبقى ظاهرة عند التمرير</div>
+        <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--blue)">د</span> حماية الورقة بكلمة مرور</div>
+      </div>
+      <div class="answer-reveal" id="ans-q8">✅ الإجابة: Freeze Panes تثبّت صفاً أو عموداً (عادةً السطر الأول) ليبقى ظاهراً عند التمرير للأسفل</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="quiz-q accent" id="q9">
+      <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">9</span> ما تنسيق الرقم المناسب لعرض القيمة 0.25 كـ 25%؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:#c47d00">أ</span> Number</div>
+        <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:#c47d00">ب</span> Currency</div>
+        <div class="option" onclick="answer(this,'q9',true)"><span class="letter" style="background:#c47d00">ج</span> Percentage</div>
+        <div class="option" onclick="answer(this,'q9',false)"><span class="letter" style="background:#c47d00">د</span> Fraction</div>
+      </div>
+      <div class="answer-reveal" id="ans-q9">✅ الإجابة: Percentage يضرب القيمة في 100 ويضيف علامة % — لذا 0.25 تصبح 25%</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="quiz-q" id="q10">
+      <div class="q-text"><span class="q-num">10</span> أيُّ المعادلات التالية صحيحة لجمع الخلايا من A1 إلى A5؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q10',false)"><span class="letter">أ</span> =ADD(A1,A5)</div>
+        <div class="option" onclick="answer(this,'q10',true)"><span class="letter">ب</span> =SUM(A1:A5)</div>
+        <div class="option" onclick="answer(this,'q10',false)"><span class="letter">ج</span> =TOTAL(A1-A5)</div>
+        <div class="option" onclick="answer(this,'q10',false)"><span class="letter">د</span> SUM(A1:A5) بدون =</div>
+      </div>
+      <div class="answer-reveal" id="ans-q10">✅ الإجابة: =SUM(A1:A5) — لاحظ أن الصيغة لا بد أن تبدأ بعلامة = والنطاق يُكتب بـ :</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="quiz-q blue" id="q11">
+      <div class="q-text"><span class="q-num" style="background:var(--blue)">11</span> لإدخال سطر جديد داخل نفس الخلية، نستخدم:</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">أ</span> Enter فقط</div>
+        <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">ب</span> Shift + Enter</div>
+        <div class="option" onclick="answer(this,'q11',true)"><span class="letter" style="background:var(--blue)">ج</span> Alt + Enter</div>
+        <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--blue)">د</span> Ctrl + Enter</div>
+      </div>
+      <div class="answer-reveal" id="ans-q11">✅ الإجابة: Alt + Enter ينشئ سطراً جديداً داخل نفس الخلية دون الانتقال للخلية التالية</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="quiz-q accent" id="q12">
+      <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">12</span> ما وظيفة Conditional Formatting؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:#c47d00">أ</span> تطبيق شرط IF في الدوال</div>
+        <div class="option" onclick="answer(this,'q12',true)"><span class="letter" style="background:#c47d00">ب</span> تغيير تنسيق الخلية تلقائياً بناءً على قيمتها</div>
+        <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:#c47d00">ج</span> تصفية البيانات حسب شروط معينة</div>
+        <div class="option" onclick="answer(this,'q12',false)"><span class="letter" style="background:#c47d00">د</span> حماية الخلايا المحددة فقط</div>
+      </div>
+      <div class="answer-reveal" id="ans-q12">✅ الإجابة: Conditional Formatting يغير لون أو تنسيق الخلية تلقائياً عندما تستوفي شرطاً محدداً</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="quiz-q" id="q13">
+      <div class="q-text"><span class="q-num">13</span> ما الرسم البياني الأنسب لعرض نسبة مبيعات كل منتج من إجمالي المبيعات؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q13',false)"><span class="letter">أ</span> Line Chart خطي</div>
+        <div class="option" onclick="answer(this,'q13',false)"><span class="letter">ب</span> Bar Chart عمودي</div>
+        <div class="option" onclick="answer(this,'q13',true)"><span class="letter">ج</span> Pie Chart دائري</div>
+        <div class="option" onclick="answer(this,'q13',false)"><span class="letter">د</span> Scatter Chart</div>
+      </div>
+      <div class="answer-reveal" id="ans-q13">✅ الإجابة: Pie Chart دائري هو الأنسب لعرض الأجزاء من الكل ونسبة كل جزء من الإجمالي</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-q blue" id="q14">
+      <div class="q-text"><span class="q-num" style="background:var(--blue)">14</span> أين تجد أداة Sort & Filter في Excel؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">أ</span> قائمة Insert</div>
+        <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">ب</span> قائمة View</div>
+        <div class="option" onclick="answer(this,'q14',true)"><span class="letter" style="background:var(--blue)">ج</span> قائمة Home (مجموعة Editing) أو قائمة Data</div>
+        <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--blue)">د</span> قائمة Formulas</div>
+      </div>
+      <div class="answer-reveal" id="ans-q14">✅ الإجابة: Sort & Filter موجودة في Home (مجموعة Editing) وأيضاً في قائمة Data بخيارات أوسع</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-q accent" id="q15">
+      <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">15</span> ما صيغة دالة IF الصحيحة لإظهار "ممتاز" إذا كانت الدرجة في A1 أكبر من أو تساوي 90؟</div>
+      <div class="options">
+        <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:#c47d00">أ</span> =IF(A1=90,"ممتاز","غير ذلك")</div>
+        <div class="option" onclick="answer(this,'q15',true)"><span class="letter" style="background:#c47d00">ب</span> =IF(A1>=90,"ممتاز","غير ذلك")</div>
+        <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:#c47d00">ج</span> IF(A1>=90;"ممتاز")</div>
+        <div class="option" onclick="answer(this,'q15',false)"><span class="letter" style="background:#c47d00">د</span> =IF[A1>=90,"ممتاز","غير ذلك"]</div>
+      </div>
+      <div class="answer-reveal" id="ans-q15">✅ الإجابة: =IF(A1>=90,"ممتاز","غير ذلك") — لاحظ استخدام >= لأكبر من أو يساوي، والأقواس الصحيحة</div>
+    </div>
+
+  </div><!-- end quiz -->
+
+</div><!-- end content -->
+
+<div class="footer">
+  د.م. إيميل جرجس روميّه — MS Excel 2025/2026 — جميع الحقوق محفوظة
+</div>
+
+<script>
+  // TAB SWITCHING
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // QUIZ LOGIC
+  let score = 0;
+  let answered = {};
+
+  function answer(el, qId, isCorrect) {
+    if (answered[qId]) return;
+    answered[qId] = true;
+
+    const opts = el.parentElement.querySelectorAll('.option');
+    opts.forEach(o => {
+      o.style.pointerEvents = 'none';
+      o.style.opacity = '0.7';
+    });
+
+    if (isCorrect) {
+      el.classList.add('correct');
+      el.style.opacity = '1';
+      score++;
+    } else {
+      el.classList.add('wrong');
+      el.style.opacity = '1';
+      // Show correct one
+      opts.forEach(o => {
+        const fn = o.getAttribute('onclick');
+        if (fn && fn.includes('true')) {
+          o.classList.add('correct');
+          o.style.opacity = '1';
+        }
+      });
+    }
+
+    document.getElementById('ans-' + qId).classList.add('show');
+    updateScore();
+  }
+
+  function updateScore() {
+    const total = 15;
+    document.getElementById('scoreVal').textContent = score + ' / ' + total;
+  }
+
+  function resetQuiz() {
+    score = 0;
+    answered = {};
+    document.querySelectorAll('.option').forEach(o => {
+      o.classList.remove('correct','wrong');
+      o.style.pointerEvents = '';
+      o.style.opacity = '';
+    });
+    document.querySelectorAll('.answer-reveal').forEach(a => a.classList.remove('show'));
+    updateScore();
+  }
+</script>
+</body>
+</html>

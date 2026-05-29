@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاضرة Microsoft Word - الشرح الكامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1565c0;
+    --blue-dark: #0d47a1;
+    --blue-light: #e3f2fd;
+    --blue-mid: #64b5f6;
+    --dark: #0a1929;
+    --text: #0d2137;
+    --text-light: #455a64;
+    --white: #ffffff;
+    --bg: #f0f7ff;
+    --accent: #f39c12;
+    --accent-light: #fef9e7;
+    --green: #2e7d32;
+    --green-light: #e8f5e9;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --border: #bbdefb;
+    --shadow: 0 4px 20px rgba(21,101,192,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); }
+
+  .hero {
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 55%, #1976d2 100%);
+    color:white; padding:60px 40px 50px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; top:-60px; left:-60px; width:280px; height:280px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .hero::after { content:''; position:absolute; bottom:-80px; right:-40px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.04); }
+  .hero-icon { font-size:70px; margin-bottom:16px; display:block; animation:float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hero h1 { font-size:2.2rem; font-weight:900; margin-bottom:8px; }
+  .hero p { opacity:.82; font-size:1rem; }
+  .hero .badge { display:inline-block; background:var(--accent); color:var(--dark); border-radius:20px; padding:4px 18px; font-size:.85rem; font-weight:700; margin-top:12px; }
+
+  .nav-tabs { display:flex; background:var(--dark); overflow-x:auto; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.2); }
+  .nav-tabs button { flex:1; min-width:100px; padding:13px 8px; background:transparent; color:rgba(255,255,255,.6); border:none; font-family:'Cairo',sans-serif; font-size:.82rem; font-weight:700; cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; transition:all .2s; }
+  .nav-tabs button.active, .nav-tabs button:hover { color:var(--accent); border-bottom-color:var(--accent); background:rgba(255,255,255,.05); }
+
+  .content { max-width:920px; margin:0 auto; padding:30px 20px 60px; }
+  .section { display:none; animation:fadeIn .4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  .sec-header { font-size:1.3rem; font-weight:900; color:var(--dark); margin-bottom:18px; padding-bottom:10px; border-bottom:3px solid var(--blue-mid); display:flex; align-items:center; gap:10px; }
+
+  .card { background:white; border-radius:14px; box-shadow:var(--shadow); padding:22px 26px; margin-bottom:20px; border-right:5px solid var(--blue); }
+  .card.green { border-right-color:var(--green); }
+  .card.accent { border-right-color:var(--accent); }
+  .card.red { border-right-color:var(--red); }
+  .card-title { font-size:1.1rem; font-weight:800; color:var(--blue); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .card.green .card-title { color:var(--green); }
+  .card.accent .card-title { color:#b7770d; }
+  .card.red .card-title { color:var(--red); }
+
+  .tbl { width:100%; border-collapse:collapse; font-size:.92rem; margin-top:8px; }
+  .tbl th { background:var(--blue); color:white; padding:9px 14px; text-align:right; font-weight:700; }
+  .tbl.green th { background:var(--green); }
+  .tbl.accent th { background:var(--accent); color:var(--dark); }
+  .tbl.red th { background:var(--red); }
+  .tbl td { padding:8px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+  .tbl tr:nth-child(even) td { background:var(--blue-light); }
+  .tbl.green tr:nth-child(even) td { background:var(--green-light); }
+  .tbl.red tr:nth-child(even) td { background:var(--red-light); }
+
+  .step { display:flex; gap:14px; margin-bottom:14px; align-items:flex-start; }
+  .step-num { min-width:34px; height:34px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.9rem; flex-shrink:0; }
+  .card.green .step-num { background:var(--green); }
+  .card.accent .step-num { background:var(--accent); color:var(--dark); }
+  .step-body { padding-top:5px; font-size:.93rem; line-height:1.75; }
+  .step-body strong { color:var(--blue); }
+  .card.green .step-body strong { color:var(--green); }
+
+  .tag { display:inline-block; padding:2px 12px; border-radius:12px; font-size:.78rem; font-weight:700; margin:2px; }
+  .tag-blue { background:var(--blue-light); color:var(--blue); }
+  .tag-green { background:var(--green-light); color:var(--green); }
+  .tag-accent { background:var(--accent-light); color:#8a5900; }
+  .tag-red { background:var(--red-light); color:var(--red); }
+
+  .note-box { background:var(--accent-light); border-right:4px solid var(--accent); border-radius:10px; padding:12px 18px; margin:12px 0; font-size:.93rem; line-height:1.7; }
+  .note-box strong { color:#8a5900; }
+  .info-box { background:var(--blue-light); border-right:4px solid var(--blue); border-radius:10px; padding:12px 18px; margin:12px 0; font-size:.93rem; }
+  .green-box { background:var(--green-light); border-right:4px solid var(--green); border-radius:10px; padding:12px 18px; margin:12px 0; font-size:.93rem; }
+
+  .path { background:var(--dark); color:#90caf9; border-radius:8px; padding:10px 18px; font-family:monospace; font-size:.93rem; margin:8px 0; border-right:3px solid var(--accent); letter-spacing:.3px; direction:ltr; text-align:left; }
+
+  .sc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; margin-top:10px; }
+  .sc-item { background:var(--dark); color:white; border-radius:10px; padding:12px 14px; }
+  .sc-key { font-family:monospace; font-size:1rem; color:var(--accent); font-weight:800; }
+  .sc-desc { font-size:.82rem; opacity:.8; margin-top:4px; }
+
+  .divider { height:3px; background:linear-gradient(to left,var(--blue),var(--accent),var(--blue)); border-radius:2px; margin:18px 0; }
+
+  /* QUIZ */
+  .quiz-q { background:white; border-radius:12px; box-shadow:var(--shadow); padding:18px 22px; margin-bottom:16px; border-top:4px solid var(--blue); }
+  .quiz-q.green { border-top-color:var(--green); }
+  .quiz-q.accent { border-top-color:var(--accent); }
+  .q-text { font-size:1rem; font-weight:700; margin-bottom:12px; line-height:1.6; }
+  .q-num { background:var(--blue); color:white; border-radius:8px; padding:1px 10px; font-size:.78rem; font-weight:800; margin-left:8px; }
+  .quiz-q.green .q-num { background:var(--green); }
+  .quiz-q.accent .q-num { background:var(--accent); color:var(--dark); }
+  .options { display:grid; gap:8px; }
+  .option { display:flex; align-items:center; gap:10px; padding:9px 14px; border:2px solid var(--border); border-radius:9px; cursor:pointer; font-size:.92rem; transition:all .2s; background:var(--bg); user-select:none; }
+  .option:hover { border-color:var(--blue); background:var(--blue-light); }
+  .option.correct { border-color:#2e7d32; background:#e8f5e9; }
+  .option.wrong { border-color:var(--red); background:var(--red-light); }
+  .option .letter { min-width:26px; height:26px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem; flex-shrink:0; }
+  .option.correct .letter { background:#2e7d32; }
+  .option.wrong .letter { background:var(--red); }
+  .answer-reveal { margin-top:10px; padding:10px 16px; background:var(--green-light); border-radius:8px; font-size:.9rem; color:var(--green); font-weight:600; display:none; }
+  .answer-reveal.show { display:block; }
+  .score-bar { background:var(--dark); color:white; border-radius:14px; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:14px; }
+  .score-val { font-size:2rem; font-weight:900; color:var(--accent); }
+  .score-label { font-size:.88rem; opacity:.7; }
+  .btn-reset { background:var(--blue); color:white; border:none; border-radius:9px; padding:10px 22px; font-family:'Cairo',sans-serif; font-weight:700; font-size:.9rem; cursor:pointer; }
+  .btn-reset:hover { background:var(--blue-dark); }
+
+  .footer { text-align:center; padding:30px; color:var(--text-light); font-size:.85rem; border-top:1px solid var(--border); margin-top:40px; }
+
+  @media(max-width:600px){
+    .hero h1{font-size:1.5rem}
+    .content{padding:18px 12px 40px}
+    .sc-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-icon">📝</span>
+  <h1>محاضرة Microsoft Word</h1>
+  <p>الشرح الكامل والمفصل — محرر النصوص</p>
+  <span class="badge">جامعة قاسيون — د.م. إيميل جرجس روميّه — 2025/2026</span>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="active" onclick="showTab('intro',this)">🏠 المقدمة</button>
+  <button onclick="showTab('shortcuts',this)">⌨️ الاختصارات</button>
+  <button onclick="showTab('interface',this)">🖥️ الواجهة</button>
+  <button onclick="showTab('file',this)">📁 File</button>
+  <button onclick="showTab('home',this)">🏷️ Home</button>
+  <button onclick="showTab('insert',this)">➕ Insert</button>
+  <button onclick="showTab('design',this)">🎨 Design</button>
+  <button onclick="showTab('layout',this)">📐 Layout</button>
+  <button onclick="showTab('review',this)">✅ Review</button>
+  <button onclick="showTab('view',this)">👁️ View</button>
+  <button onclick="showTab('quiz',this)">🎯 أسئلة</button>
+</div>
+
+<div class="content">
+
+<!-- ===== INTRO ===== -->
+<div id="intro" class="section active">
+  <div class="sec-header">🏠 مقدمة عن برنامج Microsoft Word</div>
+
+  <div class="card">
+    <div class="card-title">📌 ما هو Microsoft Word؟</div>
+    <p style="line-height:1.85;font-size:.95rem">
+      يُعتبر <strong>معالج النصوص Microsoft Word</strong> من أهم البرامج المكتبية لإنشاء وتحرير وطباعة المستندات وتخزينها. يتم إنشاء النصوص باستخدام لوحة المفاتيح، ويدعم البرنامج طيفاً واسعاً من إمكانيات التنسيق والإدراج والتدقيق اللغوي.
+    </p>
+    <div class="note-box" style="margin-top:14px">
+      <strong>💡 ملاحظة:</strong> امتداد ملفات Word في الإصدارات الحديثة هو <strong>.docx</strong>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">✨ خصائص محرر النصوص MS Word</div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">إمكانية الكتابة بلغات متعددة</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><strong>التدقيق اللغوي والإملائي</strong> (Spelling &amp; Grammar)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">استخدام <strong>قوالب جاهزة (Template)</strong> لنماذج كتابة معينة توفر الجهد والوقت، أو إنشاء قوالب تناسب طبيعة عمل المستخدم</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">إعداد صفحات الكتابة بما يناسب المستخدم وتنسيق النصوص وإضافة الجداول والصور والأشكال</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body">إمكانية <strong>البحث والاستبدال</strong> لبعض الكلمات أو النصوص دون الحاجة لتعديل كل منها على حدى</div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-body">حفظ المستندات بصيغ مختلفة تناسب طريقة استخدامها (PDF, Web...)</div></div>
+    <div class="step"><div class="step-num">7</div><div class="step-body"><strong>تأمين المستند</strong> وحمايته باستخدام كلمة مرور تجنباً للعبث به من قِبَل مستخدمين آخرين</div></div>
+    <div class="step"><div class="step-num">8</div><div class="step-body">معاينة المستندات قبل الطباعة وطباعتها لمختلف الاستخدامات</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 طرق الوصول إلى البرنامج</div>
+    <table class="tbl">
+      <tr><th>الطريقة</th><th>المسار</th></tr>
+      <tr><td><strong>1</strong></td><td>Start – All App – MS Office – Word</td></tr>
+      <tr><td><strong>2</strong></td><td>Start – MS Office – Word</td></tr>
+      <tr><td><strong>3</strong></td><td>Start – Search – Word</td></tr>
+      <tr><td><strong>4</strong></td><td>Taskbar – Word (من شريط المهام)</td></tr>
+      <tr><td><strong>5</strong></td><td>Desktop – Word (من اختصار سطح المكتب)</td></tr>
+    </table>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">🪟 نافذة البرنامج الأولى</div>
+    <p style="font-size:.93rem;line-height:1.8">عند فتح البرنامج تظهر النافذة الرئيسية وتتضمن:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+      <span class="tag tag-blue">الصفحة الأساسية (Home)</span>
+      <span class="tag tag-blue">إنشاء مستند جديد (New)</span>
+      <span class="tag tag-blue">فتح مستند موجود (Open)</span>
+      <span class="tag tag-accent">المستندات الأخيرة (Recent)</span>
+      <span class="tag tag-accent">المستندات المثبّتة (Pinned)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHORTCUTS ===== -->
+<div id="shortcuts" class="section">
+  <div class="sec-header">⌨️ اختصارات لوحة المفاتيح الكاملة</div>
+
+  <div class="card">
+    <div class="card-title">🔑 اختصارات Ctrl</div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-key">Ctrl + A</div><div class="sc-desc">تحديد كامل المستند</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + B</div><div class="sc-desc">الكتابة بالخط الغامق</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + C</div><div class="sc-desc">نسخ عنصر أو نص</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + D</div><div class="sc-desc">مربع حوار تنسيق النص</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + E</div><div class="sc-desc">توسيط الكتابة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + F</div><div class="sc-desc">بحث عن كلمة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + G</div><div class="sc-desc">الانتقال بين الصفحات</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + H</div><div class="sc-desc">استبدال كلمة أو نص بآخر</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + I</div><div class="sc-desc">الكتابة بخط مائل</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + J</div><div class="sc-desc">ضبط الكتابة ضمن الفقرة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + L</div><div class="sc-desc">الكتابة من جهة اليسار</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + M</div><div class="sc-desc">تحريك نص إلى اليمين</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + N</div><div class="sc-desc">إنشاء مستند جديد</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + O</div><div class="sc-desc">فتح مستند موجود</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + P</div><div class="sc-desc">طباعة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + R</div><div class="sc-desc">الكتابة من جهة اليمين</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + S</div><div class="sc-desc">حفظ الملف أو المستند</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + U</div><div class="sc-desc">خط تحت الكتابة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + V</div><div class="sc-desc">لصق عنصر منسوخ</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + W</div><div class="sc-desc">إغلاق برنامج Word</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + X</div><div class="sc-desc">قص عنصر أو نص</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + Y</div><div class="sc-desc">تكرار آخر عملية</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + Z</div><div class="sc-desc">تراجع عن آخر عملية</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + Enter</div><div class="sc-desc">إدراج فاصل بين الصفحات</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + ج</div><div class="sc-desc">تصغير النص المحدد</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + د</div><div class="sc-desc">تكبير النص المحدد</div></div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🔑 اختصارات أخرى</div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-key">Enter</div><div class="sc-desc">الانتقال للسطر التالي</div></div>
+      <div class="sc-item"><div class="sc-key">Alt + F4</div><div class="sc-desc">إغلاق النافذة المفتوحة</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + Shift →</div><div class="sc-desc">ضبط الكتابة من اليمين</div></div>
+      <div class="sc-item"><div class="sc-key">Ctrl + Shift ←</div><div class="sc-desc">ضبط الكتابة من اليسار</div></div>
+      <div class="sc-item"><div class="sc-key">Alt + Shift →</div><div class="sc-desc">الكتابة باللغة العربية</div></div>
+      <div class="sc-item"><div class="sc-key">Alt + Shift ←</div><div class="sc-desc">الكتابة باللغة الإنكليزية</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERFACE ===== -->
+<div id="interface" class="section">
+  <div class="sec-header">🖥️ عناصر نافذة البرنامج</div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ شريط العنوان (Title Bar)</div>
+    <p style="font-size:.93rem;line-height:1.8">يتضمن اسم المستند. عند فتح مستند جديد يُعطى الاسم المؤقت <strong>Document1</strong>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2️⃣ شريط أدوات الوصول السريع (Quick Access Toolbar)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:10px">يحتوي على أزرار صغيرة للأوامر المتكررة:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-blue">حفظ مستند</span>
+      <span class="tag tag-blue">التراجع عن الإجراء الأخير</span>
+      <span class="tag tag-blue">تكرار الإجراء الأخير</span>
+      <span class="tag tag-blue">طباعة سريعة</span>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">تخصيص الشريط:</p>
+    <div class="step"><div class="step-num">+</div><div class="step-body"><strong>لإضافة أوامر:</strong> زر التخصيص Customize ← More Commands ← نحدد الأمر ← ADD ← OK</div></div>
+    <div class="step"><div class="step-num">–</div><div class="step-body"><strong>لإزالة أوامر:</strong> زر أيمن على الأمر ← Remove from Quick Access Toolbar</div></div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">3️⃣ شريط الشريط (Ribbon)</div>
+    <p style="font-size:.93rem;line-height:1.8">مجموعة من أشرطة الأدوات ضمن علامات التبويب، يقع أعلى مساحة العمل وينقسم إلى مجموعات من الأوامر.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4️⃣ نقطة الإدراج (مؤشر الكتابة)</div>
+    <p style="font-size:.93rem;line-height:1.8">المكان الذي يتم فيه البدء بكتابة النصوص أو إدراج الصور والرسومات أو الجداول وغيرها من العناصر.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">5️⃣ منطقة العمل (Work Space)</div>
+    <p style="font-size:.93rem;line-height:1.8">المساحة البيضاء — منطقة الكتابة وإدراج العناصر.</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">6️⃣ أشرطة التمرير (Scroll Bars)</div>
+    <table class="tbl green">
+      <tr><th>النوع</th><th>الوظيفة</th></tr>
+      <tr><td>الشريط الرأسي</td><td>تحريك المستند إلى الأعلى والأسفل</td></tr>
+      <tr><td>الشريط الأفقي</td><td>تحريك المستند إلى اليمين واليسار</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">7️⃣ شريط الحالة (Status Bar)</div>
+    <table class="tbl">
+      <tr><th>الجهة</th><th>المحتوى</th></tr>
+      <tr><td>اليسرى</td><td>عدد الصفحات — عدد كلمات المستند — اللغة</td></tr>
+      <tr><td>اليمنى</td><td>طرق العرض (Print Layout / Full Screen / Web Layout) + شريط التكبير والتصغير</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== FILE ===== -->
+<div id="file" class="section">
+  <div class="sec-header">📁 علامة التبويب File</div>
+
+  <div class="card">
+    <div class="card-title">📋 خيارات قائمة File</div>
+    <table class="tbl">
+      <tr><th>الخيار</th><th>الاختصار</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Home</strong></td><td>—</td><td>الصفحة البداية</td></tr>
+      <tr><td><strong>New</strong></td><td>Ctrl+N</td><td>إنشاء مستند جديد فارغ</td></tr>
+      <tr><td><strong>Open</strong></td><td>Ctrl+O</td><td>فتح مستند موجود أو محفوظ</td></tr>
+      <tr><td><strong>Save</strong></td><td>Ctrl+S</td><td>حفظ المستند والتعديلات</td></tr>
+      <tr><td><strong>Save As</strong></td><td>—</td><td>تغيير مكان واسم ونوع المستند</td></tr>
+      <tr><td><strong>Print</strong></td><td>Ctrl+P</td><td>طباعة المستند</td></tr>
+      <tr><td><strong>Share</strong></td><td>—</td><td>مشاركة المستند</td></tr>
+      <tr><td><strong>Export</strong></td><td>—</td><td>تصدير الملف</td></tr>
+      <tr><td><strong>Close</strong></td><td>—</td><td>إغلاق المستند</td></tr>
+      <tr><td><strong>Options</strong></td><td>—</td><td>خصائص برنامج Word</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:12px">
+      <strong>💡 ملاحظة مهمة:</strong> عند الرغبة بحفظ تعديلات على مستند نختار <strong>Save</strong> — وعند الرغبة بتغيير مكان واسم ونوع المستند نختار <strong>Save As</strong>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">📂 خيارات Open التفصيلية</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="tag tag-green">Recent — المستندات الأخيرة</span>
+      <span class="tag tag-green">Shared with Me — المشتركة</span>
+      <span class="tag tag-green">OneDrive — التخزين السحابي</span>
+      <span class="tag tag-green">This PC — جهاز الحاسوب</span>
+      <span class="tag tag-green">Add a Place — إضافة مكان</span>
+      <span class="tag tag-green">Browse — بحث في المجلدات</span>
+    </div>
+    <div class="path">File → Open → Browse → (اسم المستند) → (مكان المستند) → Open</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💾 خيار Save As التفصيلي</div>
+    <div class="path">File → Save As → Browse → (اسم المستند) → (مكان الحفظ) → Save</div>
+    <div class="info-box" style="margin-top:10px">الإصدارات الحديثة لبرنامج Word تحفظ بصيغة <strong>.docx</strong></div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🖨️ خيار Print التفصيلي</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-green">عدد النسخ</span>
+      <span class="tag tag-green">اسم الطابعة</span>
+      <span class="tag tag-green">تحديد الصفحات المراد طباعتها</span>
+      <span class="tag tag-green">طباعة الصفحات الفردية أو الزوجية</span>
+      <span class="tag tag-green">اتجاه الطباعة</span>
+      <span class="tag tag-green">قياس الورق</span>
+      <span class="tag tag-green">هوامش الطباعة</span>
+      <span class="tag tag-green">عدد الصفحات ضمن الورقة الواحدة</span>
+      <span class="tag tag-green">معاينة صفحة الطباعة</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOME ===== -->
+<div id="home" class="section">
+  <div class="sec-header">🏷️ علامة التبويب الرئيسية Home</div>
+
+  <div class="card accent">
+    <div class="card-title">📊 مجموعات تبويب Home الخمس</div>
+    <table class="tbl accent">
+      <tr><th>المجموعة</th><th>الوصف</th></tr>
+      <tr><td><strong>Clipboard — الحافظة</strong></td><td>قص – نسخ – لصق – نسخ التنسيق</td></tr>
+      <tr><td><strong>Font — الخط</strong></td><td>خيارات تنسيق الخط كاملة</td></tr>
+      <tr><td><strong>Paragraph — فقرة</strong></td><td>خيارات تنسيق الفقرات</td></tr>
+      <tr><td><strong>Styles — الأنماط</strong></td><td>تنسيقات محددة مسبقاً</td></tr>
+      <tr><td><strong>Editing — تحرير النص</strong></td><td>بحث واستبدال وتحديد</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ مجموعة الحافظة (Clipboard)</div>
+    <table class="tbl">
+      <tr><th>الأمر</th><th>الاختصار</th><th>الوظيفة</th></tr>
+      <tr><td>Cut</td><td>Ctrl+X</td><td>قص</td></tr>
+      <tr><td>Copy</td><td>Ctrl+C</td><td>نسخ</td></tr>
+      <tr><td>Paste</td><td>Ctrl+V</td><td>لصق</td></tr>
+      <tr><td>Format Painter</td><td>—</td><td>نسخ التنسيق من نص لآخر</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px"><strong>💡 نقر مزدوج</strong> على Format Painter يتيح تطبيق التنسيق على أكثر من موضع</div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">2️⃣ مجموعة الخط (Font Group)</div>
+    <table class="tbl green">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td>نوع الخط</td><td>Arial, Times New Roman, Calibri...</td></tr>
+      <tr><td>قياس الخط</td><td>8, 9, 10, 11, 12, 14, 16, 18, 20...</td></tr>
+      <tr><td>A↑ تكبير الخط</td><td>تكبير بمقدار خطوة</td></tr>
+      <tr><td>A↓ تصغير الخط</td><td>تصغير بمقدار خطوة</td></tr>
+      <tr><td>Bold (B) — Ctrl+B</td><td>الكتابة بخط عريض</td></tr>
+      <tr><td>Italic (I) — Ctrl+I</td><td>الكتابة بخط مائل</td></tr>
+      <tr><td>Underline (U) — Ctrl+U</td><td>إضافة سطر تحت الكتابة</td></tr>
+      <tr><td>Strikethrough (abc)</td><td>خط على منتصف الكلمة</td></tr>
+      <tr><td>Subscript (X₂)</td><td>كتابة رمز في الأسفل — مثال: H₂O</td></tr>
+      <tr><td>Superscript (X²)</td><td>كتابة رمز في الأعلى — مثال: (A+B)²</td></tr>
+      <tr><td>Change Case (Aa)</td><td>تغيير حالة الأحرف (صغير/كبير)</td></tr>
+      <tr><td>Clear All Formatting</td><td>حذف جميع تنسيقات النص</td></tr>
+      <tr><td>Font Color</td><td>تغيير لون الخط</td></tr>
+      <tr><td>Text Highlight Color</td><td>لون خلفية الكلمة (تظليل)</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px">
+      <strong>💡 مربع حوار ضبط الخط (Ctrl+D):</strong> يحتوي على كامل خيارات التنسيق بما فيها Small caps, All caps, Hidden, Double Strikethrough. يجب تحديد النص أولاً قبل التطبيق.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3️⃣ مجموعة الفقرة (Paragraph Group)</div>
+    <table class="tbl">
+      <tr><th>الأداة</th><th>الخيارات / الوصف</th></tr>
+      <tr><td><strong>المحاذاة Alignment</strong></td><td>يسار Left — توسيط Centre — يمين Right — ضبط Justify</td></tr>
+      <tr><td><strong>المسافة البادئة Indentation</strong></td><td>تحريك الفقرة نحو اليسار أو اليمين</td></tr>
+      <tr><td><strong>تباعد الأسطر Line Spacing</strong></td><td>1.0, 1.15, 1.5, 2.0, 2.5, 3.0 + إضافة/إزالة مسافة قبل/بعد الفقرة</td></tr>
+      <tr><td><strong>الحدود Borders</strong></td><td>إضافة حدود وإطارات للنص</td></tr>
+      <tr><td><strong>التظليل Shading</strong></td><td>تلوين خلفية النص بألوان من Theme Colors</td></tr>
+      <tr><td><strong>التعداد النقطي Bullets</strong></td><td>تعداد نقطي — يُخصص من Define New Bullet</td></tr>
+      <tr><td><strong>التعداد الرقمي Numbering</strong></td><td>تعداد رقمي — يُخصص من Define New Number Format</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px">
+      <strong>💡 صندوق حوار الفقرة</strong> يحتوي على: Alignment, Direction, Indentation (Before/After text, Special), Spacing (Before/After, Line spacing), معاينة Preview
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">4️⃣ مجموعة الأنماط (Styles Group)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:10px">تنسيقات مخصصة تطبق تنسيقاً شاملاً يتضمن الخط والفقرات:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-green">Normal</span>
+      <span class="tag tag-green">No Spacing</span>
+      <span class="tag tag-green">Heading 1</span>
+      <span class="tag tag-green">Heading 2</span>
+      <span class="tag tag-green">Title</span>
+      <span class="tag tag-green">Subtitle</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">5️⃣ مجموعة التعديل (Editing Group)</div>
+    <table class="tbl">
+      <tr><th>الأمر</th><th>الاختصار</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Find — البحث</strong></td><td>Ctrl+F</td><td>البحث عن كلمة أو جملة ضمن المستند</td></tr>
+      <tr><td><strong>Replace — الاستبدال</strong></td><td>Ctrl+H</td><td>استبدال عبارة مكان عبارة أخرى</td></tr>
+      <tr><td><strong>Select — التحديد</strong></td><td>—</td><td>Select All / Select Objects / Select All Text With Similar Formatting / Selection Pane</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== INSERT ===== -->
+<div id="insert" class="section">
+  <div class="sec-header">➕ علامة التبويب Insert — الإدراج</div>
+
+  <div class="card accent">
+    <div class="card-title">📦 مجموعات تبويب Insert</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-accent">📄 Pages — الصفحات</span>
+      <span class="tag tag-accent">📊 Tables — الجداول</span>
+      <span class="tag tag-accent">🖼️ Illustrations — الرسوميات</span>
+      <span class="tag tag-accent">📑 Header &amp; Footer</span>
+      <span class="tag tag-accent">📝 Text — النصوص</span>
+      <span class="tag tag-accent">🔣 Symbols — الرموز</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ مجموعة الصفحات (Pages)</div>
+    <table class="tbl">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Cover Page</strong></td><td>إدراج صفحة غلاف — تظهر قائمة بالأغلفة المقترحة نختار منها المناسب</td></tr>
+      <tr><td><strong>Blank Page</strong></td><td>إدراج صفحة فارغة</td></tr>
+      <tr><td><strong>Page Break</strong></td><td>إدراج فاصل بين الصفحات</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">2️⃣ إدراج الجداول (Tables)</div>
+    <div class="path">Insert → Table</div>
+    <table class="tbl green" style="margin-top:12px">
+      <tr><th>الطريقة</th><th>الوصف</th></tr>
+      <tr><td><strong>السحب على الشبكة</strong></td><td>تحديد عدد الخلايا بشكل مباشر</td></tr>
+      <tr><td><strong>Insert Table...</strong></td><td>إدخال عدد الصفوف والأعمدة يدوياً</td></tr>
+      <tr><td><strong>Draw Table</strong></td><td>رسم الجدول يدوياً</td></tr>
+      <tr><td><strong>Convert Text to Table</strong></td><td>تحويل نص إلى جدول</td></tr>
+      <tr><td><strong>Excel Spreadsheet</strong></td><td>إدراج جدول Excel داخل Word</td></tr>
+      <tr><td><strong>Quick Tables</strong></td><td>قوالب جداول جاهزة (Calendar, Matrix, Tabular List...)</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px">
+      <strong>خيارات AutoFit عند Insert Table:</strong> Fixed column width (عرض ثابت) — AutoFit to contents (حسب المحتوى) — AutoFit to window (حسب النافذة)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔧 تنسيق الجدول — Table Tools Design</div>
+    <table class="tbl">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Table Styles</td><td>نماذج جدول جاهزة</td></tr>
+      <tr><td>Borders</td><td>تنسيق حدود الجدول</td></tr>
+      <tr><td>Header Row / Total Row</td><td>تمييز صف العنوان / الإجمالي</td></tr>
+      <tr><td>Banded Rows / Columns</td><td>تلوين الصفوف/الأعمدة بالتناوب</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🔧 تعديل الجدول بالزر الأيمن</div>
+    <table class="tbl green">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Insert Above / Below</td><td>إضافة سطر في الأعلى / الأسفل</td></tr>
+      <tr><td>Insert Left / Right</td><td>إضافة عمود إلى اليسار / اليمين</td></tr>
+      <tr><td>Delete Cells / Rows / Columns / Table</td><td>حذف خلايا / صفوف / أعمدة / الجدول</td></tr>
+      <tr><td>Merge Cells</td><td>دمج الخلايا</td></tr>
+      <tr><td>Split Cells</td><td>تقسيم الخلايا</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔧 Table Tools — Layout (ضبط متقدم)</div>
+    <table class="tbl">
+      <tr><th>المجموعة</th><th>المحتوى</th></tr>
+      <tr><td>Table</td><td>Select, View Gridlines, Properties</td></tr>
+      <tr><td>Draw</td><td>Draw Table, Eraser, Delete</td></tr>
+      <tr><td>Rows &amp; Columns</td><td>Insert Above, Below, Left, Right</td></tr>
+      <tr><td>Merge</td><td>Merge Cells, Split Cells, Split Table</td></tr>
+      <tr><td>Cell Size</td><td>Height, Width, AutoFit, Distribute Rows/Columns</td></tr>
+      <tr><td>Alignment</td><td>Text Direction, Cell Margins, Sort</td></tr>
+      <tr><td>Data</td><td>Repeat Header Rows, Convert to Text, Formula</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">3️⃣ إدراج الرسوميات (Illustrations)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+      <span class="tag tag-green">🖼️ Pictures — صور</span>
+      <span class="tag tag-green">🔷 Shapes — أشكال هندسية</span>
+      <span class="tag tag-green">📊 Chart — رسوم بيانية</span>
+      <span class="tag tag-green">🔹 SmartArt</span>
+      <span class="tag tag-green">📦 3D Models</span>
+      <span class="tag tag-green">🔣 Icons — أيقونات</span>
+      <span class="tag tag-green">📸 Screenshot — لقطة شاشة</span>
+    </div>
+
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">A. إدراج صورة — أدوات Format:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="tag tag-blue">Adjust (تصحيح — ألوان — ضغط)</span>
+      <span class="tag tag-blue">Picture Styles (إطارات وتأثيرات)</span>
+      <span class="tag tag-blue">Arrange (موضع ومحاذاة)</span>
+      <span class="tag tag-blue">Size (قص — ارتفاع — عرض)</span>
+    </div>
+
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">B. إدراج شكل هندسي — أنواع:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="tag tag-accent">Lines — خطوط</span>
+      <span class="tag tag-accent">Rectangles — مستطيلات</span>
+      <span class="tag tag-accent">Basic Shapes — أشكال أساسية</span>
+      <span class="tag tag-accent">Block Arrows — أسهم</span>
+    </div>
+
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">C. إدراج SmartArt — الأنواع:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="tag tag-green">List — قائمة</span>
+      <span class="tag tag-green">Process — عملية</span>
+      <span class="tag tag-green">Cycle — دورة</span>
+      <span class="tag tag-green">Hierarchy — تسلسل هرمي</span>
+      <span class="tag tag-green">Relationship — علاقة</span>
+      <span class="tag tag-green">Matrix — مصفوفة</span>
+      <span class="tag tag-green">Pyramid — هرم</span>
+    </div>
+
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">D. إدراج رسم بياني Chart — الأنواع:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-blue">Column</span>
+      <span class="tag tag-blue">Line</span>
+      <span class="tag tag-blue">Pie</span>
+      <span class="tag tag-blue">Bar</span>
+      <span class="tag tag-blue">Area</span>
+      <span class="tag tag-blue">Scatter</span>
+      <span class="tag tag-blue">Radar</span>
+      <span class="tag tag-blue">Histogram</span>
+      <span class="tag tag-blue">Waterfall</span>
+      <span class="tag tag-blue">Combo</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4️⃣ رأس وتذييل الصفحة (Header &amp; Footer)</div>
+
+    <p style="font-size:.93rem;font-weight:700;margin:0 0 10px">رأس الصفحة (Header):</p>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:10px">جزء يظهر في الهامش العلوي في كل صفحات المستند — يُكتب فيه المؤلف أو عنوان المستند. يمكن إدراجه بـ <strong>نقر مزدوج في الهامش العلوي</strong>.</p>
+    <table class="tbl" style="margin-bottom:14px">
+      <tr><th>خيار التصميم</th><th>الوظيفة</th></tr>
+      <tr><td>Different First Page</td><td>رأس الصفحة الأولى مختلف (عادةً مفعّل للأغلفة)</td></tr>
+      <tr><td>Different Odd &amp; Even Pages</td><td>رأس مختلف للصفحات الفردية والزوجية</td></tr>
+      <tr><td>Header from Top</td><td>المسافة من أعلى الصفحة (0.5")</td></tr>
+      <tr><td>Remove Header</td><td>لإزالة رأس الصفحة</td></tr>
+    </table>
+
+    <p style="font-size:.93rem;font-weight:700;margin:0 0 10px">تذييل الصفحة (Footer):</p>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:10px">جزء يظهر في الهامش السفلي — يُكتب فيه المؤلف أو رقم الصفحة. يمكن إدراجه بـ <strong>نقر مزدوج في الهامش السفلي</strong>.</p>
+
+    <p style="font-size:.93rem;font-weight:700;margin:0 0 10px">أرقام الصفحات (Page Number):</p>
+    <div class="path">Insert → Page Number</div>
+    <table class="tbl" style="margin-top:10px">
+      <tr><th>الخيار</th><th>الموضع</th></tr>
+      <tr><td>Top of Page</td><td>أعلى المستند</td></tr>
+      <tr><td>Bottom of Page</td><td>أسفل المستند</td></tr>
+      <tr><td>Page Margins</td><td>الهوامش الجانبية</td></tr>
+      <tr><td>Current Position</td><td>عند مكان مؤشر الكتابة</td></tr>
+    </table>
+    <div class="note-box" style="margin-top:10px">
+      <strong>Format Page Numbers:</strong> يتيح تحديد صيغة الأرقام (1,2,3... أو a,b,c...) وتحديد رقم البداية (Start at).
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">5️⃣ تبويب إدراج النص (Text)</div>
+    <table class="tbl green">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td>Text Box</td><td>إدراج مربع نص</td></tr>
+      <tr><td>Quick Parts</td><td>إدراج نصوص سريعة (AutoText, Field...)</td></tr>
+      <tr><td>WordArt</td><td>إدراج نصوص فنية</td></tr>
+      <tr><td>Drop Cap</td><td>إدراج حرف كبير في بداية الفقرة</td></tr>
+      <tr><td>Signature Line</td><td>إدراج سطر التوقيع</td></tr>
+      <tr><td>Date &amp; Time</td><td>إدراج الوقت والتاريخ (مع خيار Update Automatically)</td></tr>
+      <tr><td>Object</td><td>إدراج عناصر خاصة</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">6️⃣ إدراج الرموز والمعادلات (Symbols)</div>
+    <table class="tbl">
+      <tr><th>الأداة</th><th>التفاصيل</th></tr>
+      <tr><td><strong>Equation (π)</strong></td><td>معادلات جاهزة (Area of Circle, Binomial Theorem, Fourier Series...) + Insert New Equation + Ink Equation</td></tr>
+      <tr><td><strong>Symbol (Ω)</strong></td><td>رموز متنوعة مع اختيار Font وSubset + Special Characters + إمكانية إنشاء Shortcut Key</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DESIGN ===== -->
+<div id="design" class="section">
+  <div class="sec-header">🎨 علامة التبويب تصميم Design</div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ تغيير النمط (Themes)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">يتم من خلاله تغيير سمات المستند من حيث اللون وحجم الخط ونوعه والتأثيرات.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="tag tag-blue">Office</span>
+      <span class="tag tag-blue">Facet</span>
+      <span class="tag tag-blue">Integral</span>
+      <span class="tag tag-blue">Ion</span>
+      <span class="tag tag-blue">Organic</span>
+      <span class="tag tag-blue">Retrospect</span>
+      <span class="tag tag-blue">Slice</span>
+      <span class="tag tag-blue">Wisp</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-accent">Reset to Theme from Template</span>
+      <span class="tag tag-accent">Browse for Themes</span>
+      <span class="tag tag-accent">Save Current Theme</span>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">2️⃣ تغيير نمط الخط (Style Sets)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+      <span class="tag tag-green">Default</span>
+      <span class="tag tag-green">Title + Heading styles</span>
+      <span class="tag tag-green">Reset to Default Style Set</span>
+      <span class="tag tag-green">Save as New Style Set</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3️⃣ تغيير اللون والخط والتأثيرات</div>
+    <table class="tbl">
+      <tr><th>الإعداد</th><th>الخيارات</th></tr>
+      <tr><td><strong>المسافات بين السطور</strong></td><td>Default, No Paragraph Space, Compact, Tight, Open, Relaxed, Double, Custom</td></tr>
+      <tr><td><strong>الخطوط (Fonts)</strong></td><td>Office (Calibri Light/Calibri), Arial, Cambria, Corbel, Candara...</td></tr>
+      <tr><td><strong>الألوان (Colors)</strong></td><td>Office, Grayscale, Blue Warm, Green, Red, Violet, Median وغيرها</td></tr>
+      <tr><td><strong>التأثيرات (Effects)</strong></td><td>Office, Smokey Glass, Glow Edge, Frosted Glass, Reflection وغيرها</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">4️⃣ ضبط الصفحة (Page Background)</div>
+    <table class="tbl green">
+      <tr><th>الأداة</th><th>التفاصيل</th></tr>
+      <tr><td><strong>Watermark — العلامة المائية</strong></td><td>Confidential, DO NOT COPY — أو Custom Watermark مخصصة — Remove Watermark للإزالة</td></tr>
+      <tr><td><strong>Page Color — لون الصفحة</strong></td><td>Theme Colors, Standard Colors, More Colors, Fill Effects</td></tr>
+      <tr><td><strong>Page Borders — حدود الصفحة</strong></td><td>Setting (None/Box/Shadow/3-D/Custom), Style, Color, Width, Art — Apply to: Whole document / This section / First page only</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== LAYOUT ===== -->
+<div id="layout" class="section">
+  <div class="sec-header">📐 علامة التبويب تخطيط Layout</div>
+
+  <div class="card">
+    <div class="card-title">📄 تخطيط الصفحة (Page Setup)</div>
+    <table class="tbl">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Margins</strong></td><td>هوامش الصفحة (Normal, Narrow, Wide أو Custom)</td></tr>
+      <tr><td><strong>Orientation</strong></td><td>اتجاه الصفحة: Portrait (عمودي) أو Landscape (أفقي)</td></tr>
+      <tr><td><strong>Size</strong></td><td>حجم الورق (A4, Letter, Legal...)</td></tr>
+      <tr><td><strong>Columns</strong></td><td>عدد الأعمدة في الصفحة (One, Two, Three, Left, Right)</td></tr>
+      <tr><td><strong>Breaks</strong></td><td>فواصل الصفحات والأقسام</td></tr>
+      <tr><td><strong>Line Numbers</strong></td><td>إضافة أرقام للأسطر</td></tr>
+      <tr><td><strong>Hyphenation</strong></td><td>الواصلة بين الكلمات</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== REVIEW ===== -->
+<div id="review" class="section">
+  <div class="sec-header">✅ علامة التبويب المراجعة Review</div>
+
+  <div class="card">
+    <div class="card-title">🔍 مجموعة التدقيق اللغوي (Spelling &amp; Grammar)</div>
+    <p style="font-size:.93rem;line-height:1.8;margin-bottom:12px">أثناء الكتابة يقوم البرنامج بوضع خط ملوّن تحت الكلمات للإشارة إلى الأخطاء:</p>
+    <table class="tbl">
+      <tr><th>لون الخط</th><th>الدلالة</th></tr>
+      <tr><td><span style="color:#c0392b;font-weight:800">● أحمر</span></td><td>الكلمة غير معروفة لدى برنامج Word (خطأ إملائي)</td></tr>
+      <tr><td><span style="color:#2e7d32;font-weight:800">● أخضر</span></td><td>خطأ نحوي</td></tr>
+      <tr><td><span style="color:#1565c0;font-weight:800">● أزرق</span></td><td>خطأ سياقي (مثل تكرار كلمة مرتين)</td></tr>
+    </table>
+    <div class="divider"></div>
+    <p style="font-size:.93rem;font-weight:700;margin-bottom:8px">خطوات التدقيق:</p>
+    <div class="step"><div class="step-num">1</div><div class="step-body">النقر على تبويب <strong>Review</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">اختيار <strong>Spelling and Grammar</strong> ← يظهر مربع حوار التصحيح</div></div>
+
+    <table class="tbl" style="margin-top:12px">
+      <tr><th>الخيار</th><th>الوظيفة</th></tr>
+      <tr><td>Ignore Once</td><td>تجاهل لمرة واحدة لكلمة واحدة</td></tr>
+      <tr><td>Ignore All</td><td>تجاهل كل الأخطاء المماثلة</td></tr>
+      <tr><td>Add to Dictionary</td><td>إضافة كلمة جديدة إلى القاموس</td></tr>
+      <tr><td>Change</td><td>تغيير الكلمة بالاقتراح المناسب</td></tr>
+      <tr><td>Auto Correct</td><td>التصحيح التلقائي</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🌐 مجموعات أخرى في Review</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag tag-green">Translate — الترجمة</span>
+      <span class="tag tag-green">Language — تغيير اللغة</span>
+      <span class="tag tag-green">Comments — إدراج التعليقات</span>
+      <span class="tag tag-green">Track Changes — تتبع التغييرات</span>
+      <span class="tag tag-green">Word Count — عدد الكلمات</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW ===== -->
+<div id="view" class="section">
+  <div class="sec-header">👁️ علامة التبويب العرض View</div>
+
+  <div class="card">
+    <div class="card-title">1️⃣ مجموعة العرض (Views)</div>
+    <table class="tbl">
+      <tr><th>طريقة العرض</th><th>الوصف</th></tr>
+      <tr><td><strong>Read Mode</strong></td><td>عرض القراءة فقط</td></tr>
+      <tr><td><strong>Print Layout</strong></td><td>عرض بغرض تحرير النص والطباعة (الافتراضي)</td></tr>
+      <tr><td><strong>Web Layout</strong></td><td>عرض المستند كصفحة ويب</td></tr>
+      <tr><td><strong>Outline</strong></td><td>عرض مخطط تفصيلي هرمي</td></tr>
+      <tr><td><strong>Draft</strong></td><td>عرض كمسودة للكتابة السريعة</td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">2️⃣ مجموعة Show</div>
+    <table class="tbl green">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Ruler — المسطرة</strong></td><td>إظهار/إخفاء المسطرة الرأسية والأفقية للهوامش</td></tr>
+      <tr><td><strong>Gridlines — خطوط الشبكة</strong></td><td>إظهار/إخفاء خطوط الشبكة في المستند</td></tr>
+      <tr><td><strong>Navigation Pane — خريطة المستند</strong></td><td>التحرك خلال صفحات المستند بطريقة هيكلية</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3️⃣ مجموعة Zoom</div>
+    <table class="tbl">
+      <tr><th>الأداة</th><th>الوظيفة</th></tr>
+      <tr><td><strong>Zoom</strong></td><td>تكبير/تصغير بنسب محددة (75%, 100%, 200%, Page width, Text width, Whole page, Many pages)</td></tr>
+      <tr><td><strong>100%</strong></td><td>ضبط حجم المستند الافتراضي</td></tr>
+      <tr><td><strong>One Page</strong></td><td>عرض المستند صفحة واحدة</td></tr>
+      <tr><td><strong>Multi Page</strong></td><td>عرض المستند صفحتان</td></tr>
+      <tr><td><strong>Page Width</strong></td><td>عرض المستند بمقدار عرض الصفحة</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="sec-header">🎯 أسئلة تقييمية على محاضرة Word</div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">النتيجة الحالية</div>
+      <div class="score-val" id="scoreVal">0 / 15</div>
+    </div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 إعادة الاختبار</button>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-q" id="q1">
+    <div class="q-text"><span class="q-num">1</span> ما اختصار لوحة المفاتيح للبحث عن كلمة في مستند Word؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">أ</span> Ctrl + H</div>
+      <div class="option" onclick="answer(this,'q1',true)"><span class="letter">ب</span> Ctrl + F</div>
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">ج</span> Ctrl + G</div>
+      <div class="option" onclick="answer(this,'q1',false)"><span class="letter">د</span> Ctrl + A</div>
+    </div>
+    <div class="answer-reveal" id="ans-q1">✅ الإجابة: Ctrl + F يفتح نافذة البحث عن كلمة أو جملة ضمن المستند</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-q green" id="q2">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">2</span> ما وظيفة Format Painter في تبويب Home؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--green)">أ</span> تنسيق الجداول تلقائياً</div>
+      <div class="option" onclick="answer(this,'q2',true)"><span class="letter" style="background:var(--green)">ب</span> نسخ تنسيق نص وتطبيقه على نص آخر</div>
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--green)">ج</span> رسم أشكال هندسية</div>
+      <div class="option" onclick="answer(this,'q2',false)"><span class="letter" style="background:var(--green)">د</span> تلوين خلفية الصفحة</div>
+    </div>
+    <div class="answer-reveal" id="ans-q2">✅ الإجابة: Format Painter (الفرشاة) تنسخ تنسيق النص المحدد وتطبقه على نص آخر بالنقر عليه</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-q accent" id="q3">
+    <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">3</span> ما الخط الذي يضعه Word تحت الكلمة للإشارة إلى خطأ نحوي؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">أ</span> الخط الأحمر</div>
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">ب</span> الخط الأزرق</div>
+      <div class="option" onclick="answer(this,'q3',true)"><span class="letter" style="background:var(--accent);color:var(--dark)">ج</span> الخط الأخضر</div>
+      <div class="option" onclick="answer(this,'q3',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">د</span> الخط الأصفر</div>
+    </div>
+    <div class="answer-reveal" id="ans-q3">✅ الإجابة: الخط الأخضر يدل على الأخطاء النحوية، الأحمر للإملائية، الأزرق للسياقية</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-q" id="q4">
+    <div class="q-text"><span class="q-num">4</span> ما الفرق بين Save و Save As في قائمة File؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">أ</span> لا فرق بينهما</div>
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">ب</span> Save As يحفظ بشكل أسرع</div>
+      <div class="option" onclick="answer(this,'q4',true)"><span class="letter">ج</span> Save يحفظ التعديلات، بينما Save As يتيح تغيير مكان واسم ونوع المستند</div>
+      <div class="option" onclick="answer(this,'q4',false)"><span class="letter">د</span> Save يُنشئ نسخة جديدة تلقائياً</div>
+    </div>
+    <div class="answer-reveal" id="ans-q4">✅ الإجابة: Save لحفظ التعديلات على نفس المستند، Save As لتغيير الاسم والمكان والنوع</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-q green" id="q5">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">5</span> ما وظيفة Subscript (X₂) في مجموعة الخط؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--green)">أ</span> كتابة رمز في أعلى الحرف</div>
+      <div class="option" onclick="answer(this,'q5',true)"><span class="letter" style="background:var(--green)">ب</span> كتابة رمز في أسفل الحرف مثال H₂O</div>
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--green)">ج</span> تصغير الخط بمقدار خطوة</div>
+      <div class="option" onclick="answer(this,'q5',false)"><span class="letter" style="background:var(--green)">د</span> وضع خط تحت الكلمة</div>
+    </div>
+    <div class="answer-reveal" id="ans-q5">✅ الإجابة: Subscript تُنزل الرمز إلى أسفل الكلمة، وتُستخدم في الصيغ الكيميائية مثل H₂O</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-q" id="q6">
+    <div class="q-text"><span class="q-num">6</span> كيف يمكن إدراج رأس الصفحة (Header) بشكل مباشر؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter">أ</span> من تبويب Review</div>
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter">ب</span> بالضغط Ctrl+H</div>
+      <div class="option" onclick="answer(this,'q6',true)"><span class="letter">ج</span> بالنقر المزدوج في الهامش العلوي للصفحة</div>
+      <div class="option" onclick="answer(this,'q6',false)"><span class="letter">د</span> من تبويب View</div>
+    </div>
+    <div class="answer-reveal" id="ans-q6">✅ الإجابة: النقر المزدوج في الهامش العلوي يفتح منطقة رأس الصفحة مباشرة</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-q accent" id="q7">
+    <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">7</span> ما الذي تتيحه أداة Watermark في تبويب Design؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">أ</span> تلوين خلفية الصفحة</div>
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">ب</span> إضافة حدود للصفحة</div>
+      <div class="option" onclick="answer(this,'q7',true)"><span class="letter" style="background:var(--accent);color:var(--dark)">ج</span> إضافة علامة مائية شفافة (Confidential, DO NOT COPY أو مخصصة)</div>
+      <div class="option" onclick="answer(this,'q7',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">د</span> تغيير نوع الخط</div>
+    </div>
+    <div class="answer-reveal" id="ans-q7">✅ الإجابة: Watermark تضيف علامة مائية شفافة خلف النص لحماية المستند أو الدلالة على طبيعته</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-q green" id="q8">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">8</span> ما الأداة التي تُعيد النص إلى حالته الافتراضية بدون أي تنسيق في مجموعة Font؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--green)">أ</span> Change Case</div>
+      <div class="option" onclick="answer(this,'q8',true)"><span class="letter" style="background:var(--green)">ب</span> Clear All Formatting</div>
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--green)">ج</span> Format Painter</div>
+      <div class="option" onclick="answer(this,'q8',false)"><span class="letter" style="background:var(--green)">د</span> Strikethrough</div>
+    </div>
+    <div class="answer-reveal" id="ans-q8">✅ الإجابة: Clear All Formatting تزيل جميع التنسيقات وتُعيد النص إلى حالته الافتراضية</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-q" id="q9">
+    <div class="q-text"><span class="q-num">9</span> ما المقصود بـ Justify في خيارات المحاذاة؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter">أ</span> محاذاة النص إلى اليمين فقط</div>
+      <div class="option" onclick="answer(this,'q9',true)"><span class="letter">ب</span> ضبط النص على مستوى واحد من الاتجاهين يمين ويسار معاً</div>
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter">ج</span> توسيط النص في المنتصف</div>
+      <div class="option" onclick="answer(this,'q9',false)"><span class="letter">د</span> محاذاة النص إلى أعلى مربع النص</div>
+    </div>
+    <div class="answer-reveal" id="ans-q9">✅ الإجابة: Justify تضبط النص على مستوى واحد من الجهتين يمين ويسار لإعطاء مظهر متناسق للفقرة</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-q accent" id="q10">
+    <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">10</span> ما طريقة إدراج جدول Excel داخل مستند Word؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">أ</span> Home → Table → Excel</div>
+      <div class="option" onclick="answer(this,'q10',true)"><span class="letter" style="background:var(--accent);color:var(--dark)">ب</span> Insert → Table → Excel Spreadsheet</div>
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">ج</span> File → Import → Excel</div>
+      <div class="option" onclick="answer(this,'q10',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">د</span> Design → Insert → Spreadsheet</div>
+    </div>
+    <div class="answer-reveal" id="ans-q10">✅ الإجابة: Insert → Table → Excel Spreadsheet تُظهر نافذة Excel لإدخال البيانات داخل مستند Word</div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-q green" id="q11">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">11</span> كيف يمكن إضافة أمر إلى شريط أدوات الوصول السريع (Quick Access Toolbar)؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--green)">أ</span> بالسحب والإفلات من الـ Ribbon مباشرة</div>
+      <div class="option" onclick="answer(this,'q11',true)"><span class="letter" style="background:var(--green)">ب</span> زر Customize → More Commands → تحديد الأمر → ADD → OK</div>
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--green)">ج</span> من File → Options → Commands</div>
+      <div class="option" onclick="answer(this,'q11',false)"><span class="letter" style="background:var(--green)">د</span> بالضغط Ctrl+Q</div>
+    </div>
+    <div class="answer-reveal" id="ans-q11">✅ الإجابة: من زر Customize نختار More Commands ثم نحدد الأمر ونضغط ADD ثم OK</div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-q" id="q12">
+    <div class="q-text"><span class="q-num">12</span> ما الأنواع التي تتضمنها مجموعة SmartArt عند الإدراج؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter">أ</span> صور وجداول فقط</div>
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter">ب</span> Column و Line و Pie فقط</div>
+      <div class="option" onclick="answer(this,'q12',true)"><span class="letter">ج</span> List, Process, Cycle, Hierarchy, Relationship, Matrix, Pyramid وغيرها</div>
+      <div class="option" onclick="answer(this,'q12',false)"><span class="letter">د</span> أشكال هندسية مجردة فقط</div>
+    </div>
+    <div class="answer-reveal" id="ans-q12">✅ الإجابة: SmartArt تشمل أنواعاً متعددة منها القوائم والعمليات والدورات والتسلسلات الهرمية وغيرها</div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-q accent" id="q13">
+    <div class="q-text"><span class="q-num" style="background:var(--accent);color:var(--dark)">13</span> ما وظيفة خيار Different First Page في تبويب تصميم الرأس والتذييل؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">أ</span> يجعل آخر صفحة مختلفة</div>
+      <div class="option" onclick="answer(this,'q13',true)"><span class="letter" style="background:var(--accent);color:var(--dark)">ب</span> يجعل رأس الصفحة الأولى (الغلاف) مختلفاً عن بقية الصفحات</div>
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">ج</span> يُغير حجم الخط في الرأس</div>
+      <div class="option" onclick="answer(this,'q13',false)"><span class="letter" style="background:var(--accent);color:var(--dark)">د</span> يُضيف رقم الصفحة تلقائياً</div>
+    </div>
+    <div class="answer-reveal" id="ans-q13">✅ الإجابة: Different First Page يُمكّن من جعل الصفحة الأولى (صفحة الغلاف) بدون رأس أو بأسلوب مختلف</div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="quiz-q green" id="q14">
+    <div class="q-text"><span class="q-num" style="background:var(--green)">14</span> ما وظيفة أداة Navigation Pane في تبويب View؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--green)">أ</span> عرض المستند كصفحة ويب</div>
+      <div class="option" onclick="answer(this,'q14',true)"><span class="letter" style="background:var(--green)">ب</span> التحرك خلال صفحات المستند بطريقة هيكلية</div>
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--green)">ج</span> إظهار خطوط الشبكة</div>
+      <div class="option" onclick="answer(this,'q14',false)"><span class="letter" style="background:var(--green)">د</span> ضبط نسبة تكبير المستند</div>
+    </div>
+    <div class="answer-reveal" id="ans-q14">✅ الإجابة: Navigation Pane (خريطة المستند) تتيح التنقل بين أقسام وصفحات المستند بشكل هيكلي</div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="quiz-q" id="q15">
+    <div class="q-text"><span class="q-num">15</span> ما الأمر المستخدم لاستبدال كلمة بأخرى في مستند Word؟</div>
+    <div class="options">
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter">أ</span> Ctrl + F</div>
+      <div class="option" onclick="answer(this,'q15',true)"><span class="letter">ب</span> Ctrl + H</div>
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter">ج</span> Ctrl + G</div>
+      <div class="option" onclick="answer(this,'q15',false)"><span class="letter">د</span> Ctrl + A</div>
+    </div>
+    <div class="answer-reveal" id="ans-q15">✅ الإجابة: Ctrl + H يفتح نافذة Find &amp; Replace لاستبدال كلمة أو عبارة بأخرى في المستند</div>
+  </div>
+
+</div><!-- end quiz -->
+
+</div><!-- end content -->
+
+<div class="footer">
+  جامعة قاسيون الخاصة للعلوم والتكنولوجيا — د.م. إيميل جرجس روميّه — Microsoft Word 2025/2026
+</div>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  let score = 0, answered = {};
+
+  function answer(el, qId, isCorrect) {
+    if (answered[qId]) return;
+    answered[qId] = true;
+    const opts = el.parentElement.querySelectorAll('.option');
+    opts.forEach(o => { o.style.pointerEvents='none'; o.style.opacity='.7'; });
+    if (isCorrect) {
+      el.classList.add('correct'); el.style.opacity='1'; score++;
+    } else {
+      el.classList.add('wrong'); el.style.opacity='1';
+      opts.forEach(o => { if ((o.getAttribute('onclick')||'').includes('true')) { o.classList.add('correct'); o.style.opacity='1'; } });
+    }
+    document.getElementById('ans-'+qId).classList.add('show');
+    document.getElementById('scoreVal').textContent = score + ' / 15';
+  }
+
+  function resetQuiz() {
+    score = 0; answered = {};
+    document.querySelectorAll('.option').forEach(o => { o.classList.remove('correct','wrong'); o.style.pointerEvents=''; o.style.opacity=''; });
+    document.querySelectorAll('.answer-reveal').forEach(a => a.classList.remove('show'));
+    document.getElementById('scoreVal').textContent = '0 / 15';
+  }
+</script>
+</body>
+</html>
