@@ -2,7 +2,7 @@
 ### Exceed_Your_Limits
 
 ## Programming_Cpp:
-### [Cpp_7_quiz_0](/cpp_lecture7_quiz.html)
+### [Cpp_7_quiz_0](/cpp_lecture7_quiz1.html)
 ### [Cpp_7_quiz_1](/ch7_quiz.html)
 
 ## Computer_Skills:
