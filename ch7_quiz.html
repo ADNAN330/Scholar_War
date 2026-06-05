@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل 7 — أسئلة امتحانية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #0f1218;
+  --bg3: #141820;
+  --card: #161c26;
+  --border: #1e2a3a;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #7c3aed;
+  --green: #00ff88;
+  --red: #ff3b5c;
+  --yellow: #ffd600;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --code-bg: #0d1117;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== HEADER ========== */
+header {
+  position: relative;
+  z-index: 10;
+  padding: 48px 32px 36px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(0,212,255,0.06) 0%, transparent 100%);
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.header-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+header h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ========== NAV ========== */
+.nav-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,12,16,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0,212,255,0.08);
+}
+
+/* ========== MAIN ========== */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* ========== SECTION ========== */
+.section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 8px;
+  border-right: 3px solid var(--accent);
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  min-width: 60px;
+  text-align: center;
+}
+
+.section-info h2 {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.section-info p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.stat-chip {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--card);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-chip span {
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+/* ========== QUESTION CARD ========== */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.q-card:hover { border-color: rgba(0,212,255,0.3); }
+
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+
+.q-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  padding: 2px 8px;
+  border-radius: 3px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.q-type-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid;
+}
+
+.badge-output { color: #ffd600; border-color: rgba(255,214,0,0.3); background: rgba(255,214,0,0.08); }
+.badge-concept { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
+.badge-count { color: #34d399; border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); }
+.badge-syntax { color: #f97316; border-color: rgba(249,115,22,0.3); background: rgba(249,115,22,0.08); }
+.badge-index { color: #38bdf8; border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
+
+.q-body { padding: 16px 20px; }
+
+.q-text {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid #1e2a3a;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 10px 0 16px;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+}
+
+pre code, code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+}
+
+.option:hover {
+  border-color: rgba(0,212,255,0.4);
+  background: rgba(0,212,255,0.05);
+}
+
+.opt-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 3px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.opt-text { direction: rtl; }
+
+.option.correct {
+  border-color: var(--green);
+  background: rgba(0,255,136,0.08);
+}
+.option.correct .opt-label {
+  color: var(--green);
+  background: rgba(0,255,136,0.15);
+  border-color: rgba(0,255,136,0.4);
+}
+
+.option.wrong {
+  border-color: var(--red);
+  background: rgba(255,59,92,0.08);
+  opacity: 0.6;
+}
+.option.wrong .opt-label {
+  color: var(--red);
+  background: rgba(255,59,92,0.1);
+  border-color: rgba(255,59,92,0.3);
+}
+
+.option.selected-wrong {
+  border-color: var(--red);
+  background: rgba(255,59,92,0.12);
+}
+
+.answer-reveal {
+  display: none;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(0,255,136,0.05);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.option.locked { cursor: default; pointer-events: none; }
+
+/* ========== ANSWER SHEET ========== */
+.answer-sheet {
+  margin-top: 32px;
+  padding: 20px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  border-top: 2px solid var(--accent2);
+}
+
+.answer-sheet h3 {
+  font-size: 14px;
+  color: var(--accent2);
+  margin-bottom: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.answer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  direction: ltr;
+}
+
+.ans-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.ans-item span { color: var(--green); font-weight: 700; }
+
+/* ========== SCORE BAR ========== */
+.score-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 50;
+  display: none;
+  max-width: 400px;
+  margin: 16px auto 0;
+  padding: 12px 24px;
+  background: rgba(10,12,16,0.96);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.score-bar.visible { display: block; }
+.score-bar .score-num { font-size: 22px; font-weight: 700; color: var(--accent); }
+
+/* reset btn */
+.reset-btn {
+  margin-top: 16px;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.reset-btn:hover { background: rgba(255,107,53,0.1); }
+
+@media (max-width: 600px) {
+  .options { grid-template-columns: 1fr; }
+  .stats-bar { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">C++ — Chapter 7</div>
+  <h1>أسئلة امتحانية — المصفوفات والـ Vector</h1>
+  <p>140 سؤالًا · 7 مجموعات · اختر الإجابة الصحيحة</p>
+</header>
+
+<nav class="nav-container">
+  <button class="nav-btn active" onclick="showSection('s1', this)">§7.8 — مصفوفات 3D</button>
+  <button class="nav-btn" onclick="showSection('s2', this)">§7.9 — Vector (تعريف + range-for)</button>
+  <button class="nav-btn" onclick="showSection('s3', this)">§7.9 — Vector (دوال)</button>
+  <button class="nav-btn" onclick="showSection('s4', this)">§7.10 — البحث الخطي</button>
+  <button class="nav-btn" onclick="showSection('s5', this)">§7.10 — البحث الثنائي</button>
+  <button class="nav-btn" onclick="showSection('s6', this)">§7.11 — Bubble & Selection Sort</button>
+  <button class="nav-btn" onclick="showSection('s7', this)">§7.12 — فرز/بحث النصوص</button>
+</nav>
+
+<div class="container">
+
+<!-- ============================= SECTION 1 ============================= -->
+<div id="s1" class="section active">
+  <div class="section-header">
+    <div class="section-num">§7.8</div>
+    <div class="section-info">
+      <h2>المصفوفات ثلاثية الأبعاد — 3D Arrays</h2>
+      <p>عدد العناصر · sizeof · الفهارس · تمرير للدوال · الخرج · out-of-bounds</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + مفاهيم + فهارس</span></div>
+    <div class="stat-chip">الصيغة: <span>int a[2][3][4]</span></div>
+  </div>
+  <div id="q-s1"></div>
+  <div class="answer-sheet">
+    <h3>// مفتاح الإجابات</h3>
+    <div class="answer-grid" id="ans-s1"></div>
+  </div>
+  <div class="score-bar" id="score-s1">
+    <div>النتيجة</div>
+    <div class="score-num" id="score-num-s1">0 / 20</div>
+    <button class="reset-btn" onclick="resetSection('s1')">إعادة المحاولة</button>
+  </div>
+</div>
+
+<!-- ============================= SECTION 2 ============================= -->
+<div id="s2" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.9</div>
+    <div class="section-info">
+      <h2>Vector — التعريفات وRange-based for</h2>
+      <p>أشكال التعريف · النسخ · []  · range-based for · الفرق بين by-value وby-reference</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + مفاهيم</span></div>
+    <div class="stat-chip">الصيغة: <span>vector&lt;int&gt; / for(auto &x : v)</span></div>
+  </div>
+  <div id="q-s2"></div>
+  <div class="answer-sheet">
+    <h3>// مفتاح الإجابات</h3>
+    <div class="answer-grid" id="ans-s2"></div>
+  </div>
+  <div class="score-bar" id="score-s2">
+    <div>النتيجة</div>
+    <div class="score-num" id="score-num-s2">0 / 20</div>
+    <button class="reset-btn" onclick="resetSection('s2')">إعادة المحاولة</button>
+  </div>
+</div>
+
+<!-- ============================= SECTION 3 ============================= -->
+<div id="s3" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.9</div>
+    <div class="section-info">
+      <h2>Vector — الدوال والعمليات</h2>
+      <p>push_back · pop_back · clear · empty · at · resize · swap · الحلقات</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + size</span></div>
+    <div class="stat-chip">الصيغة: <span>v.push_back / v.resize / v.swap</span></div>
+  </div>
+  <div id="q-s3"></div>
+  <div class="answer-sheet">
+    <h3>// مفتاح الإجابات</h3>
+    <div class="answer-grid" id="ans-s3"></div>
+  </div>
+  <div class="score-bar" id="score-s3">
+    <div>النتيجة</div>
+    <div class="score-num" id="score-num-s3">0 / 20</div>
+    <button class="reset-btn" onclick="resetSection('s3')">إعادة المحاولة</button>
+  </div>
+</div>
+
+<!-- ============================= SECTION 4 ============================= -->
+<div id="s4" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.10</div>
+    <div class="section-info">
+      <h2>البحث الخطي — Linear Search</h2>
+      <p>القيمة المعادة · معنى -1 · دور found · دور position · متى تتوقف الحلقة</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + مفاهيم</span></div>
+    <div class="stat-chip">التعقيد: <span>O(n)</span></div>
+  </div>
+  <div id="q-s4"></div>
+  <div class="answer-sheet">
+    <h3>// مفتاح الإجابات</h3>
+    <div class="answer-grid" id="ans-s4"></div>
+  </div>
+  <div class="score-bar" id="score-s4">
+    <div>النتيجة</div>
+    <div class="score-num" id="score-num-s4">0 / 20</div>
+    <button class="reset-btn" onclick="resetSection('s4')">إعادة المحاولة</button>
+  </div>
+</div>
+
+<!-- ============================= SECTION 5 ============================= -->
+<div id="s5" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.10</div>
+    <div class="section-info">
+      <h2>البحث الثنائي — Binary Search</h2>
+      <p>قيمة middle · تحديث first/last · معنى -1 · عدد المقارنات · الفرق عن Linear Search</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + تتبع + مفاهيم</span></div>
+    <div class="stat-chip">التعقيد: <span>O(log2n)</span></div>
+  </div>
+  <div id="q-s5"></div>
+  <div class="answer-sheet"><h3>// مفتاح الإجابات</h3><div class="answer-grid" id="ans-s5"></div></div>
+  <div class="score-bar" id="score-s5"><div>النتيجة</div><div class="score-num" id="score-num-s5">0 / 20</div><button class="reset-btn" onclick="resetSection('s5')">إعادة المحاولة</button></div>
+</div>
+<!-- ============================= SECTION 6 ============================= -->
+<div id="s6" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.11</div>
+    <div class="section-info">
+      <h2>Bubble Sort and Selection Sort</h2>
+      <p>تتبع دورات الترتيب · العنصر المستقر · الفرق بين الخوارزميتين · عدد التبديلات</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>تتبع + مفاهيم</span></div>
+    <div class="stat-chip">الصيغة: <span>Bubble vs Selection</span></div>
+  </div>
+  <div id="q-s6"></div>
+  <div class="answer-sheet"><h3>// مفتاح الإجابات</h3><div class="answer-grid" id="ans-s6"></div></div>
+  <div class="score-bar" id="score-s6"><div>النتيجة</div><div class="score-num" id="score-num-s6">0 / 20</div><button class="reset-btn" onclick="resetSection('s6')">إعادة المحاولة</button></div>
+</div>
+<!-- ============================= SECTION 7 ============================= -->
+<div id="s7" class="section">
+  <div class="section-header">
+    <div class="section-num">§7.12</div>
+    <div class="section-info">
+      <h2>فرز وبحث النصوص</h2>
+      <p>الترتيب الأبجدي · بحث ثنائي على النصوص · const and ref · مقارنة النصوص</p>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip">عدد الأسئلة: <span>20</span></div>
+    <div class="stat-chip">النوع: <span>خرج + مفاهيم</span></div>
+    <div class="stat-chip">الصيغة: <span>vector string</span></div>
+  </div>
+  <div id="q-s7"></div>
+  <div class="answer-sheet"><h3>// مفتاح الإجابات</h3><div class="answer-grid" id="ans-s7"></div></div>
+  <div class="score-bar" id="score-s7"><div>النتيجة</div><div class="score-num" id="score-num-s7">0 / 20</div><button class="reset-btn" onclick="resetSection('s7')">إعادة المحاولة</button></div>
+</div>
+</div><!-- /container -->
+
+<script>
+// ========================= DATA =========================
+const sections = {
+  s1: {
+    answers: ['C','C','C','A','C','B','A','B','B','C','C','B','C','C','B','B','A','B','A','A'],
+    questions: [
+      { n:1, type:'count', text:'كم عدد العناصر؟', code:'int a[2][3][4];', opts:['A) 9','B) 12','C) 24','D) 48'] },
+      { n:2, type:'count', text:'كم عدد العناصر؟', code:'double seats[3][5][8];', opts:['A) 15','B) 40','C) 120','D) 240'] },
+      { n:3, type:'output', text:'ما النتيجة؟', code:'int a[2][3][4];\ncout << a[0][0][0];', opts:['A) 0','B) Compile Error','C) قيمة غير مهيأة (غير معروفة)','D) 1'] },
+      { n:4, type:'output', text:'ما الخرج؟', code:'int a[2][3][4] = {};\ncout << a[0][0][0];', opts:['A) 0','B) 1','C) Error','D) قيمة عشوائية'] },
+      { n:5, type:'output', text:'إذا كان حجم int = 4 بايت. ما الناتج؟', code:'int a[2][3][4];\ncout << sizeof(a);', opts:['A) 24','B) 48','C) 96','D) 192'] },
+      { n:6, type:'syntax', text:'أي تعريف صحيح لدالة تستقبل int a[2][3][4]؟', code:'', opts:['A) void show(int a[][][]);','B) void show(int a[][3][4]);','C) void show(int a[][][4]);','D) void show(int a[2][][4]);'] },
+      { n:7, type:'index', text:'أي عنصر نحاول الوصول إليه؟', code:'int a[2][3][4];\ncout << a[1][2][3];', opts:['A) الطابق 1 الصف 2 العمود 3','B) الطابق 2 الصف 3 العمود 4','C) الطابق 1 الصف 3 العمود 2','D) خطأ'] },
+      { n:8, type:'index', text:'أكبر فهرس صحيح للعمود هو:', code:'int a[2][3][4];', opts:['A) 2','B) 3','C) 4','D) 5'] },
+      { n:9, type:'index', text:'أكبر فهرس صحيح للطابق هو:', code:'int a[2][3][4];', opts:['A) 0','B) 1','C) 2','D) 3'] },
+      { n:10, type:'output', text:'ما الخرج؟', code:'int a[2][3][4];\na[1][2][3] = 10;\ncout << a[1][2][3];', opts:['A) 1','B) 3','C) 10','D) Error'] },
+      { n:11, type:'count', text:'كم عنصرًا تم تعديل قيمته؟', code:'int a[2][3][4];\nfor(int i=0;i<2;i++)\n    for(int j=0;j<3;j++)\n        for(int k=0;k<4;k++)\n            a[i][j][k]=1;', opts:['A) 9','B) 12','C) 24','D) 48'] },
+      { n:12, type:'concept', text:'كم صفًا يوجد في كل طابق؟', code:'int a[2][3][4];', opts:['A) 2','B) 3','C) 4','D) 24'] },
+      { n:13, type:'concept', text:'كم عمودًا يوجد في كل صف؟', code:'int a[2][3][4];', opts:['A) 2','B) 3','C) 4','D) 24'] },
+      { n:14, type:'index', text:'النتيجة الأدق:', code:'int a[2][3][4];\ncout << a[2][0][0];', opts:['A) يطبع 0','B) Compile Error','C) خارج حدود المصفوفة','D) يطبع 2'] },
+      { n:15, type:'index', text:'النتيجة الأدق:', code:'int a[2][3][4];\ncout << a[1][3][0];', opts:['A) صحيح','B) خارج حدود الصفوف','C) خارج حدود الأعمدة','D) Compile Error'] },
+      { n:16, type:'index', text:'النتيجة الأدق:', code:'int a[2][3][4];\ncout << a[1][2][4];', opts:['A) صحيح','B) خارج حدود الأعمدة','C) خارج حدود الصفوف','D) Compile Error'] },
+      { n:17, type:'output', text:'ما الخرج؟', code:'int a[2][3][4] = {};\ncout << a[1][2][3];', opts:['A) 0','B) 1','C) 23','D) Error'] },
+      { n:18, type:'output', text:'ما الخرج؟', code:'int a[2][3][4];\nfor(int i=0;i<2;i++)\n    for(int j=0;j<3;j++)\n        for(int k=0;k<4;k++)\n            a[i][j][k]=i+j+k;\ncout << a[1][2][3];', opts:['A) 5','B) 6','C) 7','D) 8'] },
+      { n:19, type:'output', text:'ما الخرج؟', code:'int a[2][3][4];\nfor(int i=0;i<2;i++)\n    for(int j=0;j<3;j++)\n        for(int k=0;k<4;k++)\n            a[i][j][k]=100*i+10*j+k;\ncout << a[1][2][3];', opts:['A) 123','B) 321','C) 213','D) 132'] },
+      { n:20, type:'concept', text:'أي عبارة صحيحة؟', code:'int a[2][3][4];', opts:['A) يوجد طابقان وكل طابق يحوي 3 صفوف و4 أعمدة','B) يوجد طابقان وكل طابق يحوي 4 صفوف و3 أعمدة','C) يوجد 3 طوابق وكل طابق يحوي 4 صفوف و2 عمود','D) يوجد 4 طوابق وكل طابق يحوي 3 صفوف و2 عمود'] },
+    ]
+  },
+  s2: {
+    answers: ['A','C','A','B','B','B','B','A','A','A','B','C','A','A','C','B','D','B','C','D'],
+    questions: [
+      { n:1, type:'output', text:'ما الخرج؟', code:'vector<int> v1;\ncout << v1.size();', opts:['A) 0','B) 1','C) Error','D) قيمة عشوائية'] },
+      { n:2, type:'output', text:'ما الخرج؟', code:'vector<int> v2(10);\ncout << v2.size();', opts:['A) 0','B) 1','C) 10','D) Error'] },
+      { n:3, type:'output', text:'ما الخرج؟', code:'vector<int> v2(10);\ncout << v2[0];', opts:['A) 0','B) 10','C) قيمة عشوائية','D) Error'] },
+      { n:4, type:'output', text:'ما الخرج؟', code:'vector<int> v3(10,2);\ncout << v3[5];', opts:['A) 0','B) 2','C) 5','D) 10'] },
+      { n:5, type:'output', text:'ما الخرج؟', code:'vector<int> v3(10,2);\ncout << v3.size();', opts:['A) 2','B) 10','C) 20','D) Error'] },
+      { n:6, type:'output', text:'ما الخرج؟', code:'vector<int> v3(10,2);\nvector<int> v4(v3);\ncout << v4[3];', opts:['A) 0','B) 2','C) 3','D) 10'] },
+      { n:7, type:'output', text:'ما الخرج؟', code:'vector<int> v5 {10,20,30,40};\ncout << v5[2];', opts:['A) 20','B) 30','C) 40','D) 2'] },
+      { n:8, type:'output', text:'ما الخرج؟', code:"vector<char> letters(25,'A');\ncout << letters[10];", opts:['A) A','B) 10','C) 25','D) Error'] },
+      { n:9, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nfor(int x : v)\n    cout << x;', opts:['A) 102030','B) 123','C) 60','D) Error'] },
+      { n:10, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nfor(int x : v)\n    x++;\ncout << v[0];', opts:['A) 10','B) 11','C) 20','D) Error'] },
+      { n:11, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nfor(int &x : v)\n    x++;\ncout << v[0];', opts:['A) 10','B) 11','C) 20','D) 30'] },
+      { n:12, type:'output', text:'ما الخرج؟', code:'vector<int> v {1,2,3};\nfor(int &x : v)\n    x *= 2;\ncout << v[2];', opts:['A) 3','B) 4','C) 6','D) 8'] },
+      { n:13, type:'output', text:'ما الخرج؟', code:'vector<int> v {1,2,3};\nfor(int x : v)\n    x *= 2;\ncout << v[2];', opts:['A) 3','B) 6','C) 2','D) Error'] },
+      { n:14, type:'output', text:'ما الخرج؟', code:'vector<int> v(5);\nfor(int x : v)\n    cout << x;', opts:['A) 00000','B) 55555','C) لا شيء','D) Error'] },
+      { n:15, type:'output', text:'ما الخرج؟', code:'vector<int> v(3,7);\nint sum = 0;\nfor(int x : v)\n    sum += x;\ncout << sum;', opts:['A) 7','B) 14','C) 21','D) 3'] },
+      { n:16, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nvector<int> copy(v);\ncopy[0] = 99;\ncout << v[0];', opts:['A) 99','B) 10','C) 20','D) Error'] },
+      { n:17, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nvector<int> copy(v);\ncopy[0] = 99;\ncout << copy[0];', opts:['A) 10','B) 20','C) 30','D) 99'] },
+      { n:18, type:'output', text:'ما الخرج؟', code:'vector<string> names {"Ali","Omar","Sara"};\ncout << names[1];', opts:['A) Ali','B) Omar','C) Sara','D) Error'] },
+      { n:19, type:'concept', text:'ما النتيجة الأدق؟', code:'vector<int> v;\ncout << v[0];', opts:['A) يطبع 0','B) Compile Error','C) Undefined Behavior','D) يطبع 1'] },
+      { n:20, type:'output', text:'ما الخرج؟', code:'vector<int> v(3);\nfor(int &x : v)\n    x = 5;\ncout << v[1];', opts:['A) 0','B) 1','C) 3','D) 5'] },
+    ]
+  },
+  s3: {
+    answers: ['B','B','B','B','A','B','A','B','B','C','B','B','B','C','A','B','D','B','B','B'],
+    questions: [
+      { n:1, type:'output', text:'ما الخرج؟', code:'vector<int> v;\nv.push_back(5);\ncout << v.size();', opts:['A) 0','B) 1','C) 5','D) Error'] },
+      { n:2, type:'output', text:'ما الخرج؟', code:'vector<int> v;\nv.push_back(10);\nv.push_back(20);\ncout << v[1];', opts:['A) 10','B) 20','C) 2','D) Error'] },
+      { n:3, type:'output', text:'ما الخرج — ماذا تصبح size؟', code:'vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.pop_back();\ncout << v.size();', opts:['A) 1','B) 2','C) 3','D) 0'] },
+      { n:4, type:'output', text:'ما الخرج؟', code:'vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.pop_back();\ncout << v[1];', opts:['A) 1','B) 2','C) 3','D) Error'] },
+      { n:5, type:'output', text:'ما الخرج؟', code:'vector<int> v(100);\nv.clear();\ncout << v.size();', opts:['A) 0','B) 1','C) 100','D) Error'] },
+      { n:6, type:'output', text:'ما الخرج؟', code:'vector<int> v;\ncout << v.empty();', opts:['A) 0','B) 1','C) Error','D) قيمة عشوائية'] },
+      { n:7, type:'output', text:'ما الخرج؟', code:'vector<int> v;\nv.push_back(7);\ncout << v.empty();', opts:['A) 0','B) 1','C) 7','D) Error'] },
+      { n:8, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30,40};\ncout << v.at(2);', opts:['A) 20','B) 30','C) 40','D) 2'] },
+      { n:9, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30,40};\ncout << v.at(0);', opts:['A) 0','B) 10','C) 20','D) Error'] },
+      { n:10, type:'output', text:'ما الخرج — ماذا تصبح size؟', code:'vector<int> v {10,20,30};\nv.resize(5,1);\ncout << v.size();', opts:['A) 3','B) 4','C) 5','D) 1'] },
+      { n:11, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nv.resize(5,1);\ncout << v[4];', opts:['A) 0','B) 1','C) 5','D) 30'] },
+      { n:12, type:'output', text:'ما الخرج؟', code:'vector<int> v {10,20,30};\nv.resize(5,1);\ncout << v[3];', opts:['A) 0','B) 1','C) 3','D) 30'] },
+      { n:13, type:'output', text:'ما الخرج — ماذا تصبح size لـ a؟', code:'vector<int> a {1,2,3};\nvector<int> b {4,5,6,7,8};\na.swap(b);\ncout << a.size();', opts:['A) 3','B) 5','C) 8','D) 2'] },
+      { n:14, type:'output', text:'ما الخرج؟', code:'vector<int> a {1,2,3};\nvector<int> b {4,5,6,7,8};\na.swap(b);\ncout << a[0];', opts:['A) 1','B) 2','C) 4','D) 8'] },
+      { n:15, type:'output', text:'ما الخرج؟', code:'vector<int> a {1,2,3};\nvector<int> b {4,5,6,7,8};\na.swap(b);\ncout << b[1];', opts:['A) 2','B) 5','C) 4','D) 1'] },
+      { n:16, type:'output', text:'ما الخرج — ماذا تصبح size؟', code:'vector<int> values;\nfor(int i=0;i<4;i++)\n    values.push_back(i);\ncout << values.size();', opts:['A) 3','B) 4','C) 5','D) 6'] },
+      { n:17, type:'output', text:'ما الخرج؟', code:'vector<int> values;\nfor(int i=0;i<4;i++)\n    values.push_back(i);\ncout << values[3];', opts:['A) 2','B) 3','C) 4','D) 0'] },
+      { n:18, type:'output', text:'ما الخرج؟', code:'vector<int> values;\nfor(int i=0;i<7;i++)\n    values.push_back(i*2);\ncout << values[5];', opts:['A) 8','B) 10','C) 12','D) 14'] },
+      { n:19, type:'output', text:'ما الخرج — ماذا تصبح size؟', code:'vector<int> values;\nfor(int i=0;i<7;i++)\n    values.push_back(i*2);\ncout << values.size();', opts:['A) 6','B) 7','C) 12','D) 14'] },
+      { n:20, type:'output', text:'ما الخرج؟', code:'vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.clear();\ncout << v.empty();', opts:['A) 0','B) 1','C) 2','D) Error'] },
+    ]
+  },
+  s4: {
+    answers: ['A','A','A','C','A','C','A','A','A','C','B','B','B','C','B','C','A','B','A','C'],
+    questions: [
+      { n:1, type:'output', text:'ما الخرج؟', code:'int a[5] = {87,75,98,100,82};\ncout << linearSearch(a,5,100);', opts:['A) 3','B) 4','C) 100','D) -1'] },
+      { n:2, type:'output', text:'ما الخرج؟', code:'int a[5] = {87,75,98,100,82};\ncout << linearSearch(a,5,87);', opts:['A) 0','B) 1','C) 87','D) -1'] },
+      { n:3, type:'output', text:'ما الخرج؟', code:'int a[5] = {87,75,98,100,82};\ncout << linearSearch(a,5,82);', opts:['A) 4','B) 5','C) 82','D) -1'] },
+      { n:4, type:'output', text:'ما الخرج؟', code:'int a[5] = {87,75,98,100,82};\ncout << linearSearch(a,5,50);', opts:['A) 0','B) 1','C) -1','D) 50'] },
+      { n:5, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\nint pos = linearSearch(a,5,30);\ncout << pos;', opts:['A) 2','B) 3','C) 30','D) -1'] },
+      { n:6, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\nint pos = linearSearch(a,5,60);\ncout << pos;', opts:['A) 5','B) 6','C) -1','D) 0'] },
+      { n:7, type:'output', text:'ما الخرج؟', code:'int a[5] = {5,5,5,5,5};\ncout << linearSearch(a,5,5);', opts:['A) 0','B) 1','C) 4','D) 5'] },
+      { n:8, type:'output', text:'ما الخرج؟', code:'int a[5] = {1,2,3,4,5};\ncout << linearSearch(a,5,1);', opts:['A) 0','B) 1','C) -1','D) 5'] },
+      { n:9, type:'output', text:'ما الخرج؟', code:'int a[5] = {1,2,3,4,5};\ncout << linearSearch(a,5,5);', opts:['A) 4','B) 5','C) 0','D) -1'] },
+      { n:10, type:'output', text:'ما الخرج؟', code:'int a[5] = {1,2,3,4,5};\nint result = linearSearch(a,5,8);\nif(result == -1)\n    cout << "NF";\nelse\n    cout << result;', opts:['A) 8','B) 0','C) NF','D) -1'] },
+      { n:11, type:'output', text:'ما الخرج؟', code:'int a[5] = {7,8,9,10,11};\nint result = linearSearch(a,5,9);\ncout << result + 1;', opts:['A) 2','B) 3','C) 9','D) 10'] },
+      { n:12, type:'output', text:'ما الخرج؟', code:'int a[5] = {7,8,9,10,11};\nint result = linearSearch(a,5,7);\ncout << result + 1;', opts:['A) 0','B) 1','C) 7','D) 2'] },
+      { n:13, type:'output', text:'ما الخرج؟', code:'int a[5] = {7,8,9,10,11};\nint result = linearSearch(a,5,11);\ncout << result + 1;', opts:['A) 4','B) 5','C) 11','D) 6'] },
+      { n:14, type:'concept', text:'ما الغرض من التهيئة التالية داخل الدالة؟', code:'int position = -1;', opts:['A) تسريع البحث','B) منع الخطأ البرمجي','C) الإشارة إلى عدم العثور على العنصر','D) تخزين حجم المصفوفة'] },
+      { n:15, type:'concept', text:'متى تصبح found == true؟', code:'bool found = false;', opts:['A) عند نهاية الحلقة','B) عند العثور على القيمة','C) عند عدم العثور على القيمة','D) عند index = 0'] },
+      { n:16, type:'concept', text:'متى تتوقف الحلقة؟', code:'while(index < size && !found)', opts:['A) عند نهاية المصفوفة فقط','B) عند إيجاد العنصر فقط','C) عند نهاية المصفوفة أو إيجاد العنصر','D) لا تتوقف'] },
+      { n:17, type:'output', text:'ما الخرج؟ (عند تكرار القيمة)', code:'int a[5] = {10,20,30,20,10};\ncout << linearSearch(a,5,20);', opts:['A) 1','B) 3','C) 2','D) 4'] },
+      { n:18, type:'output', text:'ما الخرج؟', code:'int a[5] = {4,8,12,16,20};\ncout << linearSearch(a,5,16);', opts:['A) 4','B) 3','C) 2','D) 1'] },
+      { n:19, type:'output', text:'ما الخرج؟', code:'int a[5] = {4,8,12,16,20};\ncout << linearSearch(a,5,4);', opts:['A) 0','B) 1','C) 4','D) -1'] },
+      { n:20, type:'concept', text:'هل البحث الخطي يحتاج أن تكون المصفوفة مرتبة؟', code:'', opts:['A) نعم دائمًا','B) نعم إذا كان الحجم كبيرًا','C) لا','D) فقط للمصفوفات الثنائية'] },
+    ]
+  }  ,
+  s5: {
+    answers: ['A','A','A','D','C','B','B','B','C','C','C','C','C','B','C','B','D','B','A','B'],
+    questions: [
+      { n:1, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\ncout << binarySearch(a,5,30);', opts:['A) 2','B) 3','C) 30','D) -1'] },
+      { n:2, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\ncout << binarySearch(a,5,10);', opts:['A) 0','B) 1','C) 10','D) -1'] },
+      { n:3, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\ncout << binarySearch(a,5,50);', opts:['A) 4','B) 5','C) 50','D) -1'] },
+      { n:4, type:'output', text:'ما الخرج؟', code:'int a[5] = {10,20,30,40,50};\ncout << binarySearch(a,5,35);', opts:['A) 2','B) 3','C) 35','D) -1'] },
+      { n:5, type:'concept', text:'في أول دورة على int a[5]={10,20,30,40,50}. كم تكون قيمة middle؟', code:'', opts:['A) 0','B) 1','C) 2','D) 3'] },
+      { n:6, type:'concept', text:'في المصفوفة السابقة ما قيمة a[middle]؟', code:'int a[5]={10,20,30,40,50};', opts:['A) 20','B) 30','C) 40','D) 50'] },
+      { n:7, type:'concept', text:'بعد مقارنة 30 > 10 ماذا يحدث؟', code:'binarySearch(a,5,10);', opts:['A) first = middle+1','B) last = middle-1','C) position = middle','D) found = false'] },
+      { n:8, type:'concept', text:'بعد مقارنة 30 < 50 ماذا يحدث؟', code:'binarySearch(a,5,50);', opts:['A) last = middle-1','B) first = middle+1','C) position = middle','D) return -1'] },
+      { n:9, type:'concept', text:'لماذا نُهيّئ position بـ -1 داخل الدالة؟', code:'int position = -1;', opts:['A) لتسريع البحث','B) قيمة ابتدائية للوسط','C) للدلالة على عدم العثور على العنصر','D) لتخزين الحجم'] },
+      { n:10, type:'concept', text:'متى تتوقف الحلقة؟', code:'while (!found && first <= last)', opts:['A) عند العثور فقط','B) عند انتهاء المجال فقط','C) عند العثور أو عندما يصبح first > last','D) لا تتوقف'] },
+      { n:11, type:'concept', text:'أي مصفوفة مناسبة للبحث الثنائي؟', code:'', opts:['A) {40,10,30,20}','B) {5,1,9,7}','C) {10,20,30,40}','D) {8,3,2,1}'] },
+      { n:12, type:'concept', text:'ما النتيجة الأدق لتطبيق binarySearch على مصفوفة غير مرتبة؟', code:'int a[5]={50,40,30,20,10};\ncout << binarySearch(a,5,20);', opts:['A) يجد العنصر دائماً','B) يعيد 3 دائماً','C) قد يعطي نتيجة خاطئة','D) Compile Error'] },
+      { n:13, type:'concept', text:'ما تعقيد البحث الثنائي؟', code:'', opts:['A) O(n)','B) O(n2)','C) O(log n)','D) O(1)'] },
+      { n:14, type:'concept', text:'ما تعقيد البحث الخطي؟', code:'', opts:['A) O(log n)','B) O(n)','C) O(n2)','D) O(1)'] },
+      { n:15, type:'concept', text:'عند 1000 عنصر مرتب، أسوأ حالة بحث ثنائي تقريباً:', code:'', opts:['A) 1000 مقارنة','B) 500 مقارنة','C) 10 مقارنات','D) مقارنة واحدة'] },
+      { n:16, type:'output', text:'ما الخرج؟', code:'int ids[5]={100,200,300,400,500};\ncout << binarySearch(ids,5,400);', opts:['A) 2','B) 3','C) 4','D) -1'] },
+      { n:17, type:'output', text:'ما الخرج؟', code:'int ids[5]={100,200,300,400,500};\ncout << binarySearch(ids,5,600);', opts:['A) 5','B) 6','C) 0','D) -1'] },
+      { n:18, type:'concept', text:'إذا first=0 و last=19، ما قيمة middle=(first+last)/2؟', code:'', opts:['A) 8','B) 9','C) 10','D) 19'] },
+      { n:19, type:'concept', text:'إذا كانت array[middle] > value، القيمة المطلوبة تقع في:', code:'', opts:['A) النصف الأيسر','B) النصف الأيمن','C) المنتصف','D) غير معروف'] },
+      { n:20, type:'concept', text:'إذا كانت array[middle] < value، القيمة المطلوبة تقع في:', code:'', opts:['A) النصف الأيسر','B) النصف الأيمن','C) غير موجودة','D) المنتصف'] }
+    ]
+  },
+  s6: {
+    answers: ['A','B','A','A','A','B','C','A','A','A','A','B','B','B','B','B','B','A','B','C'],
+    questions: [
+      { n:1, type:'concept', text:'في Bubble Sort بعد الدورة الأولى كاملة تصبح:', code:'int a[] = {7,2,3,8,9,1};', opts:['A) {2,3,7,8,1,9}','B) {1,2,3,7,8,9}','C) {2,7,3,8,1,9}','D) {7,2,3,8,1,9}'] },
+      { n:2, type:'concept', text:'ما العنصر الذي يستقر في مكانه بعد الدورة الأولى؟', code:'int a[] = {6,1,5,2,4,3};', opts:['A) 1','B) 6','C) 5','D) 3'] },
+      { n:3, type:'concept', text:'بعد أول دورة Bubble Sort تصبح:', code:'int a[] = {5,4,3,2,1};', opts:['A) {4,3,2,1,5}','B) {1,2,3,4,5}','C) {5,4,3,1,2}','D) {4,5,3,2,1}'] },
+      { n:4, type:'concept', text:'بعد أول دورة Bubble Sort تصبح:', code:'int a[] = {1,2,3,4,5};', opts:['A) {1,2,3,4,5}','B) {5,4,3,2,1}','C) {2,1,3,4,5}','D) {1,2,3,5,4}'] },
+      { n:5, type:'concept', text:'ما الناتج النهائي لـ Bubble Sort؟', code:'int a[] = {6,1,5,2,4,3};', opts:['A) {1,2,3,4,5,6}','B) {6,5,4,3,2,1}','C) {1,3,2,4,5,6}','D) {6,1,5,2,4,3}'] },
+      { n:6, type:'concept', text:'ماذا يحدث عند تنفيذ الشرط؟', code:'if(array[index] > array[index+1])', opts:['A) حذف العنصر','B) إنهاء الحلقة','C) تبديل العنصرين','D) ترتيب تنازلي'] },
+      { n:7, type:'concept', text:'أي عبارة تصف Bubble Sort؟', code:'', opts:['A) يبحث عن الأصغر دائماً','B) يبحث عن الأكبر دائماً','C) يقارن العناصر المتجاورة','D) يستخدم البحث الثنائي'] },
+      { n:8, type:'concept', text:'في Selection Sort بعد الدورة الأولى تصبح:', code:'int a[] = {5,7,2,8,9,1};', opts:['A) {1,7,2,8,9,5}','B) {5,1,2,8,9,7}','C) {1,2,7,8,9,5}','D) {5,7,2,8,1,9}'] },
+      { n:9, type:'concept', text:'أي عنصر استقر بعد الدورة الأولى في المثال السابق؟', code:'int a[] = {5,7,2,8,9,1};', opts:['A) 1','B) 2','C) 5','D) 7'] },
+      { n:10, type:'concept', text:'في Selection Sort بعد الدورة الثانية تصبح:', code:'int a[] = {5,7,2,8,9,1};', opts:['A) {1,2,7,8,9,5}','B) {1,7,2,8,9,5}','C) {2,1,7,8,9,5}','D) {1,2,5,8,9,7}'] },
+      { n:11, type:'concept', text:'في Selection Sort بعد الدورة الأولى تصبح:', code:'int a[] = {4,3,2,1};', opts:['A) {1,3,2,4}','B) {3,2,1,4}','C) {1,2,3,4}','D) {4,3,2,1}'] },
+      { n:12, type:'concept', text:'ما الذي نبحث عنه في كل دورة من Selection Sort؟', code:'', opts:['A) أكبر عنصر','B) أصغر عنصر','C) عنصر عشوائي','D) العنصر الأوسط'] },
+      { n:13, type:'concept', text:'ما الغرض من هذا السطر في Selection Sort؟', code:'swap(array[minIndex], array[start]);', opts:['A) حذف الأصغر','B) نقل الأصغر إلى مكانه الصحيح','C) ترتيب تنازلي','D) إنهاء الحلقة'] },
+      { n:14, type:'concept', text:'أي الخوارزميات تقوم عادة بعدد تبديلات أقل؟', code:'', opts:['A) Bubble Sort','B) Selection Sort','C) Binary Search','D) Linear Search'] },
+      { n:15, type:'concept', text:'أي الخوارزميات تعتمد على مقارنة عناصر متجاورة؟', code:'', opts:['A) Selection Sort','B) Bubble Sort','C) Binary Search','D) Linear Search'] },
+      { n:16, type:'concept', text:'أي الخوارزميات تبحث عن أصغر عنصر في الجزء غير المرتب؟', code:'', opts:['A) Bubble Sort','B) Selection Sort','C) Binary Search','D) Linear Search'] },
+      { n:17, type:'concept', text:'في Bubble Sort بعد التنفيذ تصبح:', code:'int a[] = {2,1};', opts:['A) {2,1}','B) {1,2}','C) {2}','D) {1}'] },
+      { n:18, type:'concept', text:'في Selection Sort بعد التنفيذ تصبح:', code:'int a[] = {2,1};', opts:['A) {1,2}','B) {2,1}','C) {2}','D) {1}'] },
+      { n:19, type:'concept', text:'كل من Bubble Sort و Selection Sort ينتجان:', code:'', opts:['A) بحثاً أسرع','B) ترتيباً تصاعدياً','C) ترتيباً تنازلياً دائماً','D) حذف العناصر'] },
+      { n:20, type:'concept', text:'أي عبارة صحيحة؟', code:'', opts:['A) Bubble Sort يضع أصغر عنصر في البداية كل دورة','B) Selection Sort يقارن المتجاورين فقط','C) Bubble Sort يجعل أكبر عنصر يصل لنهايته في كل دورة','D) Selection Sort يحتاج مصفوفة مرتبة مسبقاً'] }
+    ]
+  },
+  s7: {
+    answers: ['A','B','C','C','B','B','B','C','A','B','B','B','A','B','C','B','A','A','C','B'],
+    questions: [
+      { n:1, type:'concept', text:'بعد الترتيب الأبجدي تصبح:', code:'vector<string> names{"Lopez","Smith","Pike"};', opts:['A) Lopez Pike Smith','B) Pike Lopez Smith','C) Lopez Smith Pike','D) Smith Pike Lopez'] },
+      { n:2, type:'concept', text:'بعد الفرز تصبح:', code:'vector<string> names{"Jones","Abernathy"};', opts:['A) Jones Abernathy','B) Abernathy Jones','C) Jones','D) Abernathy'] },
+      { n:3, type:'concept', text:'المقارنة في الشرط التالي هي:', code:'if(v[i] < minValue)', opts:['A) عددية','B) عشوائية','C) أبجدية','D) حسب الطول'] },
+      { n:4, type:'concept', text:'أي اسم يأتي أولاً أبجدياً؟', code:'', opts:['A) Wilson','B) Smith','C) Abernathy','D) Pike'] },
+      { n:5, type:'concept', text:'بعد الترتيب، ما موقع Lopez في القائمة المرتبة: Abernathy,Alvarado,Hall,Harrison,Jones,Kimura,Lopez,Pike,Smith,Wilson؟', code:'', opts:['A) 5','B) 6','C) 7','D) 8'] },
+      { n:6, type:'concept', text:'ما موقع Jones في القائمة المرتبة؟', code:'', opts:['A) 3','B) 4','C) 5','D) 6'] },
+      { n:7, type:'concept', text:'ما موقع Wilson في القائمة المرتبة؟', code:'', opts:['A) 8','B) 9','C) 10','D) -1'] },
+      { n:8, type:'output', text:'ما الخرج إذا بحثنا عن Carter في القائمة المرتبة؟', code:'binarySearch(names, "Carter");', opts:['A) 0','B) 5','C) -1','D) 1'] },
+      { n:9, type:'concept', text:'لماذا استُخدم const؟', code:'int binarySearch(const vector<string>& v, string str)', opts:['A) لمنع تعديل المتجه','B) لتسريع الفرز','C) لمنع البحث','D) لحذف العناصر'] },
+      { n:10, type:'concept', text:'لماذا استُخدم &؟', code:'void selectionSort(vector<string>& v)', opts:['A) لنسخ المتجه','B) لتمريره بالمرجع وتعديل الأصل','C) لمنع التعديل','D) لا فائدة له'] },
+      { n:11, type:'concept', text:'إذا حذفنا & من الدالة، ماذا يحدث؟', code:'void selectionSort(vector<string> v)', opts:['A) يفرز المتجه الأصلي','B) يفرز نسخة فقط','C) خطأ ترجمة','D) توقف البرنامج'] },
+      { n:12, type:'concept', text:'إذا first=0 و last=9، ما قيمة middle=(first+last)/2؟', code:'', opts:['A) 3','B) 4','C) 5','D) 9'] },
+      { n:13, type:'concept', text:'إذا كان v[middle] > str، ننتقل إلى:', code:'', opts:['A) النصف الأيسر','B) النصف الأيمن','C) البداية','D) النهاية'] },
+      { n:14, type:'concept', text:'إذا كان v[middle] < str، ننتقل إلى:', code:'', opts:['A) النصف الأيسر','B) النصف الأيمن','C) الوسط','D) نعيد -1 مباشرة'] },
+      { n:15, type:'concept', text:'أي خوارزمية استُخدمت لترتيب الأسماء؟', code:'', opts:['A) Bubble Sort','B) Linear Search','C) Selection Sort','D) Binary Search'] },
+      { n:16, type:'concept', text:'أي خوارزمية استُخدمت للبحث عن الاسم؟', code:'', opts:['A) Bubble Sort','B) Binary Search','C) Selection Sort','D) Insertion Sort'] },
+      { n:17, type:'concept', text:'هل يمكن تطبيق Selection Sort على vector<string>؟', code:'', opts:['A) نعم','B) لا','C) فقط بعد تحويل النصوص','D) فقط مع const'] },
+      { n:18, type:'concept', text:'هل يمكن تطبيق Binary Search على vector<string> بعد ترتيبه؟', code:'', opts:['A) نعم','B) لا','C) فقط مع الأرقام','D) يحتاج مكتبة خاصة'] },
+      { n:19, type:'concept', text:'أي عبارة صحيحة؟', code:'', opts:['A) Binary Search لا يعمل مع النصوص','B) Selection Sort لا يعمل مع النصوص','C) يمكن مقارنة النصوص أبجدياً باستخدام < و >','D) يجب تحويل النصوص إلى أرقام أولاً'] },
+      { n:20, type:'concept', text:'أي شرط يجب تحقيقه قبل استخدام binarySearch؟', code:'', opts:['A) أن يكون المتجه فارغاً','B) أن يكون المتجه مرتباً','C) أن يكون الحجم زوجياً','D) أن تكون العناصر أرقاماً فقط'] }
+    ]
+  }
+
+};
+
+const typeMap = {
+  output: { cls: 'badge-output', label: 'خرج' },
+  concept: { cls: 'badge-concept', label: 'مفهوم' },
+  count: { cls: 'badge-count', label: 'عدد' },
+  syntax: { cls: 'badge-syntax', label: 'صياغة' },
+  index: { cls: 'badge-index', label: 'فهرس' },
+};
+
+const state = {};
+
+// ========================= BUILD =========================
+function buildSection(secId) {
+  const sec = sections[secId];
+  const container = document.getElementById('q-' + secId);
+  const ansContainer = document.getElementById('ans-' + secId);
+  state[secId] = { answered: 0, correct: 0, total: sec.questions.length };
+
+  sec.questions.forEach((q, qi) => {
+    const correct = sec.answers[qi];
+    const tm = typeMap[q.type] || typeMap.concept;
+    const codeBlock = q.code ? `<pre><code>${escHtml(q.code)}</code></pre>` : '';
+    const opts = q.opts.map((opt, oi) => {
+      const letters = ['A','B','C','D'];
+      const lbl = letters[oi];
+      const txt = opt.slice(3).trim();
+      return `<div class="option" data-sec="${secId}" data-q="${qi}" data-lbl="${lbl}" onclick="choose(this)">`
+        + `<span class="opt-label">${lbl}</span><span class="opt-text">${escHtml(txt)}</span></div>`;
+    }).join('');
+
+    container.innerHTML += `
+      <div class="q-card" id="qcard-${secId}-${qi}">
+        <div class="q-header">
+          <span class="q-num">Q${q.n}</span>
+          <span class="q-type-badge ${tm.cls}">${tm.label}</span>
+        </div>
+        <div class="q-body">
+          <div class="q-text">${escHtml(q.text)}</div>
+          ${codeBlock}
+          <div class="options">${opts}</div>
+          <div class="answer-reveal" id="reveal-${secId}-${qi}">
+            ✓ الإجابة الصحيحة: <strong>${correct}</strong>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  // answer sheet
+  sec.answers.forEach((ans, i) => {
+    ansContainer.innerHTML += `<div class="ans-item">Q${i+1}: <span>${ans}</span></div>`;
+  });
+}
+
+function choose(el) {
+  if (el.classList.contains('locked')) return;
+  const secId = el.dataset.sec;
+  const qi = parseInt(el.dataset.q);
+  const lbl = el.dataset.lbl;
+  const correct = sections[secId].answers[qi];
+
+  // lock all options in this question
+  const card = document.getElementById(`qcard-${secId}-${qi}`);
+  card.querySelectorAll('.option').forEach(opt => {
+    opt.classList.add('locked');
+    if (opt.dataset.lbl === correct) opt.classList.add('correct');
+    else if (opt.dataset.lbl === lbl && lbl !== correct) opt.classList.add('selected-wrong');
+    else opt.classList.add('wrong');
+  });
+
+  // show reveal
+  document.getElementById(`reveal-${secId}-${qi}`).style.display = 'block';
+
+  // update score
+  state[secId].answered++;
+  if (lbl === correct) state[secId].correct++;
+
+  updateScore(secId);
+}
+
+function updateScore(secId) {
+  const s = state[secId];
+  const scoreBar = document.getElementById('score-' + secId);
+  const scoreNum = document.getElementById('score-num-' + secId);
+  scoreBar.classList.add('visible');
+  scoreNum.textContent = `${s.correct} / ${s.answered}`;
+}
+
+function resetSection(secId) {
+  const container = document.getElementById('q-' + secId);
+  container.innerHTML = '';
+  state[secId] = { answered: 0, correct: 0, total: sections[secId].questions.length };
+  document.getElementById('score-' + secId).classList.remove('visible');
+  document.getElementById('score-num-' + secId).textContent = `0 / 20`;
+  buildSection(secId);
+}
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// init
+['s1','s2','s3','s4','s5','s6','s7'].forEach(buildSection);
+</script>
+</body>
+</html>
