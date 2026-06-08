@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحاضرات السادسة والسابعة — الاقتصاد الهندسي</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap');
+
+  :root {
+    --bg: #0b0f1a;
+    --surface: #131825;
+    --card: #1a2133;
+    --border: #232e44;
+    --l6: #7c6af7;      /* purple — lecture 6 */
+    --l7: #f7916a;      /* coral  — lecture 7 */
+    --accent-gold: #f5c842;
+    --accent-teal: #3ecfb0;
+    --accent-red: #e05c5c;
+    --text: #e6e9f4;
+    --muted: #8490a8;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;line-height:1.85}
+
+  /* ── HERO ── */
+  .hero{
+    background:linear-gradient(160deg,#0b0f1a 0%,#141a30 60%,#0b0f1a 100%);
+    border-bottom:1px solid var(--border);
+    padding:56px 32px 36px;
+    text-align:center;
+    position:relative;overflow:hidden
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(124,106,247,.13) 0%,transparent 70%)
+  }
+  .hero-badge{
+    display:inline-block;
+    border:1px solid rgba(124,106,247,.45);
+    background:rgba(124,106,247,.12);
+    color:var(--l6);padding:4px 18px;
+    border-radius:20px;font-size:.78rem;
+    letter-spacing:2px;font-weight:700;margin-bottom:18px
+  }
+  .hero h1{font-family:'Amiri',serif;font-size:clamp(1.8rem,4.5vw,3rem);color:#fff;margin-bottom:8px;position:relative}
+  .hero p{color:var(--muted);font-size:.95rem;position:relative}
+
+  /* ── TABS ── */
+  .tabs{
+    display:flex;background:var(--surface);
+    border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:100
+  }
+  .tab{
+    flex:1;padding:17px 10px;text-align:center;
+    cursor:pointer;font-weight:700;font-size:.9rem;
+    color:var(--muted);border-bottom:3px solid transparent;
+    transition:all .2s
+  }
+  .tab:hover{color:var(--text)}
+  .tab.a6{border-bottom-color:var(--l6);color:var(--l6)}
+  .tab.a7{border-bottom-color:var(--l7);color:var(--l7)}
+
+  /* ── LAYOUT ── */
+  .container{max-width:960px;margin:0 auto;padding:36px 20px 80px}
+  .lec{display:none}.lec.active{display:block}
+
+  /* ── LECTURE HEADER ── */
+  .lec-head{
+    padding:28px 28px 24px;border-radius:14px;margin-bottom:28px;
+    position:relative;overflow:hidden
+  }
+  .lec-head.l6{background:linear-gradient(135deg,rgba(124,106,247,.18),rgba(124,106,247,.05));border:1px solid rgba(124,106,247,.3)}
+  .lec-head.l7{background:linear-gradient(135deg,rgba(247,145,106,.18),rgba(247,145,106,.05));border:1px solid rgba(247,145,106,.3)}
+  .lec-head .lnum{font-size:.72rem;font-weight:700;letter-spacing:2px;opacity:.7;margin-bottom:6px}
+  .lec-head h2{font-family:'Amiri',serif;font-size:1.8rem;color:#fff;margin-bottom:4px}
+  .lec-head .eng{font-size:.85rem;color:var(--muted)}
+
+  /* ── SECTION CARD ── */
+  .sec{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:12px;margin-bottom:16px;overflow:hidden;
+    transition:border-color .2s
+  }
+  .sec:hover{border-color:rgba(124,106,247,.3)}
+  .l7 .sec:hover{border-color:rgba(247,145,106,.3)}
+
+  .sec-head{
+    padding:18px 22px;display:flex;align-items:center;
+    gap:13px;cursor:pointer;user-select:none
+  }
+  .num{
+    width:34px;height:34px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.82rem;flex-shrink:0
+  }
+  .l6 .num{background:rgba(124,106,247,.2);color:var(--l6)}
+  .l7 .num{background:rgba(247,145,106,.2);color:var(--l7)}
+
+  .sec-head h3{font-size:1.02rem;font-weight:700;flex:1}
+  .chev{color:var(--muted);font-size:.75rem;transition:transform .3s}
+  .sec.open .chev{transform:rotate(180deg)}
+
+  .sec-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+  .sec.open .sec-body{max-height:5000px;padding:0 22px 22px}
+
+  /* ── CONTENT ── */
+  p.txt{margin-bottom:12px;font-size:.93rem;color:#cdd2e0;line-height:1.9}
+  ul.lst{list-style:none;padding:0;margin-bottom:12px}
+  ul.lst li{font-size:.91rem;color:#c4c9d9;margin-bottom:7px;padding-right:18px;position:relative}
+  ul.lst li::before{content:'◆';position:absolute;right:0;color:var(--l6);font-size:.45rem;top:7px}
+  .l7 ul.lst li::before{color:var(--l7)}
+
+  ol.lst{padding-right:22px;margin-bottom:12px}
+  ol.lst li{font-size:.91rem;color:#c4c9d9;margin-bottom:7px}
+
+  .sub{font-weight:700;font-size:.92rem;color:var(--accent-gold);margin:14px 0 7px}
+
+  .hl{
+    background:rgba(124,106,247,.08);border-right:3px solid var(--l6);
+    border-radius:7px;padding:12px 16px;margin-bottom:12px;font-size:.91rem
+  }
+  .l7 .hl{background:rgba(247,145,106,.08);border-right-color:var(--l7)}
+
+  .def{
+    background:rgba(255,255,255,.03);border:1px solid var(--border);
+    border-radius:9px;padding:14px 18px;margin-bottom:12px;font-size:.91rem
+  }
+  .def strong{color:var(--accent-gold)}
+
+  .ex{
+    background:rgba(62,207,176,.06);border:1px dashed rgba(62,207,176,.3);
+    border-radius:9px;padding:14px 18px;margin-bottom:12px
+  }
+  .ex .et{font-weight:700;color:var(--accent-teal);font-size:.8rem;letter-spacing:1px;margin-bottom:8px}
+
+  .warn{
+    background:rgba(224,92,92,.08);border:1px solid rgba(224,92,92,.25);
+    border-radius:9px;padding:12px 16px;margin-bottom:12px
+  }
+  .warn .wt{font-weight:700;color:var(--accent-red);margin-bottom:6px;font-size:.82rem}
+
+  .formula{
+    background:#060912;border:1px solid var(--border);
+    border-radius:9px;padding:16px 18px;margin-bottom:12px;
+    font-family:'Courier New',monospace;font-size:.93rem;
+    direction:ltr;text-align:center;color:#a8d8c8;letter-spacing:.5px
+  }
+
+  .calc{
+    background:#060912;border:1px solid var(--border);
+    border-radius:9px;padding:14px 18px;margin-bottom:12px;
+    font-family:'Courier New',monospace;font-size:.88rem;
+    direction:ltr;text-align:left;color:#9ecfb8
+  }
+
+  table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:.87rem}
+  th{background:rgba(255,255,255,.06);padding:9px 13px;text-align:right;
+     border:1px solid var(--border);color:var(--accent-gold);font-weight:700}
+  td{padding:9px 13px;border:1px solid var(--border);color:#c4c9d9}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.73rem;font-weight:700;margin-left:4px}
+  .b-p{background:rgba(124,106,247,.2);color:var(--l6)}
+  .b-o{background:rgba(247,145,106,.2);color:var(--l7)}
+  .b-g{background:rgba(62,207,176,.2);color:var(--accent-teal)}
+  .b-y{background:rgba(245,200,66,.2);color:var(--accent-gold)}
+  .b-r{background:rgba(224,92,92,.2);color:var(--accent-red)}
+
+  .divider{height:1px;background:var(--border);margin:16px 0}
+
+  .concl{
+    background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,176,.08));
+    border:1px solid rgba(124,106,247,.2);border-radius:11px;
+    padding:18px 22px;margin-bottom:16px
+  }
+  .concl h4{color:var(--l6);margin-bottom:8px}
+  .l7 .concl{background:linear-gradient(135deg,rgba(247,145,106,.1),rgba(62,207,176,.08));
+              border-color:rgba(247,145,106,.2)}
+  .l7 .concl h4{color:var(--l7)}
+
+  @media(max-width:580px){
+    .tabs{gap:0}.tab{font-size:.8rem;padding:14px 6px}
+    .container{padding:20px 14px 60px}
+    .sec-head{padding:14px 16px}.sec.open .sec-body{padding:0 16px 18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">الاقتصاد الهندسي — هندسة الاتصالات والمعلوماتية</div>
+  <h1>المحاضرتان السادسة والسابعة</h1>
+  <p>القيم الحالية والمستقبلية والسنوية · مقارنة البدائل واتخاذ القرار</p>
+</div>
+
+<div class="tabs">
+  <div class="tab a6" onclick="show(6)">📘 المحاضرة السادسة — PW · FW · AW</div>
+  <div class="tab"    onclick="show(7)">📙 المحاضرة السابعة — مقارنة البدائل</div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     LECTURE 6
+════════════════════════════════════════════ -->
+<div class="lec l6 active" id="l6">
+
+  <div class="lec-head l6">
+    <div class="lnum" style="color:var(--l6)">المحاضرة السادسة</div>
+    <h2>القيم الحالية والمستقبلية والسنوية</h2>
+    <div class="eng">Engineering Economics – Present, Future, and Annual Worth</div>
+  </div>
+
+  <!-- 1. مقدمة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١</div><h3>مقدمة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في المحاضرات السابقة تعرّفنا على: مفهوم القيمة الزمنية للنقود، الفائدة البسيطة والفائدة المركبة، ودور الزمن والفائدة في نمو المال.</p>
+      <p class="txt">في هذه المحاضرة ننتقل إلى <strong>المرحلة التطبيقية الحقيقية للاقتصاد الهندسي</strong>، حيث نتعلم كيف:</p>
+      <ul class="lst">
+        <li>نحوّل القيم المالية بين الأزمنة</li>
+        <li>نوحّد الزمن بين بدائل مختلفة</li>
+        <li>نستخدم القيم المالية لاتخاذ قرار هندسي سليم</li>
+      </ul>
+      <div class="hl">هذه المحاضرة هي <strong>مفتاح كل ما يأتي بعدها</strong> من: مقارنة بدائل، تقييم مشاريع، ودراسات جدوى.</div>
+    </div>
+  </div>
+
+  <!-- 2. لماذا نحتاج القيم الحالية والمستقبلية والسنوية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٢</div><h3>لماذا نحتاج إلى القيم الحالية والمستقبلية والسنوية؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في الواقع الهندسي:</p>
+      <ul class="lst">
+        <li>التكاليف لا تُدفع في وقت واحد</li>
+        <li>الإيرادات لا تأتي في زمن واحد</li>
+        <li>المشاريع تمتد لسنوات</li>
+      </ul>
+      <div class="hl">لذلك: <strong>لا يمكن مقارنة قيم مالية دون توحيد زمنها.</strong></div>
+      <p class="txt">ومن هنا تظهر أهمية ثلاث أدوات:</p>
+      <ul class="lst">
+        <li>القيمة الحالية <span class="badge b-p">PW</span></li>
+        <li>القيمة المستقبلية <span class="badge b-g">FW</span></li>
+        <li>القيمة السنوية <span class="badge b-o">AW</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. مفهوم توحيد الزمن -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٣</div><h3>مفهوم توحيد الزمن (Time Equivalence)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>القاعدة الذهبية:</strong> لا يجوز مقارنة مبالغ مالية تقع في أزمنة مختلفة إلا بعد تحويلها إلى زمن واحد.
+      </div>
+      <p class="txt">توحيد الزمن يتم عادة بإحدى الطرق:</p>
+      <ul class="lst">
+        <li>تحويل كل القيم إلى الزمن الحاضر <span class="badge b-p">PW</span></li>
+        <li>أو تحويلها إلى زمن مستقبلي <span class="badge b-g">FW</span></li>
+        <li>أو تحويلها إلى قيمة سنوية مكافئة <span class="badge b-o">AW</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. القيمة الحالية PW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤</div><h3>القيمة الحالية (Present Worth – PW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">4.1 تعريف القيمة الحالية</div>
+      <div class="def">
+        <strong>القيمة الحالية هي:</strong> القيمة المكافئة اليوم لمبلغ مالي سيُدفع أو يُستلم في المستقبل، عند معدل فائدة معيّن. أي أنها تجيب عن السؤال: <em>كم يساوي المال المستقبلي اليوم؟</em>
+      </div>
+
+      <div class="sub">4.2 متى نستخدم القيمة الحالية؟</div>
+      <ul class="lst">
+        <li>عندما نريد تقييم مشروع من منظور اليوم</li>
+        <li>عندما نقارن مشاريع تبدأ الآن</li>
+        <li>عندما نحدد جدوى استثمار حالي</li>
+      </ul>
+
+      <div class="sub">4.3 الصيغة العامة للقيمة الحالية</div>
+      <p class="txt">لمبلغ واحد في المستقبل:</p>
+      <div class="formula">PW = F / (1+i)^n</div>
+      <ul class="lst">
+        <li>PW = القيمة الحالية</li>
+        <li>F = القيمة المستقبلية</li>
+        <li>i = معدل الفائدة</li>
+        <li>n = عدد السنوات</li>
+      </ul>
+
+      <div class="sub">4.4 تفسير هندسي</div>
+      <ul class="lst">
+        <li>كلما زاد الزمن ← قلت القيمة الحالية</li>
+        <li>كلما زاد معدل الفائدة ← قلت القيمة الحالية</li>
+      </ul>
+
+      <div class="sub">4.5 متى نستخدم PW؟</div>
+      <ul class="lst">
+        <li>عندما تبدأ جميع البدائل الآن</li>
+        <li>عندما تكون نقطة القرار هي الزمن الحاضر</li>
+        <li>عند تقييم مشروع منفرد أو بدائل متشابهة العمر</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. القيمة المستقبلية FW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥</div><h3>القيمة المستقبلية (Future Worth – FW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">5.1 تعريف القيمة المستقبلية</div>
+      <div class="def">
+        <strong>القيمة المستقبلية هي:</strong> قيمة مبلغ مالي حالي بعد فترة زمنية محددة عند معدل فائدة معيّن. أي أنها تجيب عن السؤال: <em>كم سيصبح المال الحالي في المستقبل؟</em>
+      </div>
+
+      <div class="sub">5.2 متى نستخدم القيمة المستقبلية؟</div>
+      <ul class="lst">
+        <li>عندما نخطط للمستقبل</li>
+        <li>عندما نقيّم العوائد النهائية للمشاريع</li>
+        <li>عندما ندرس استثمارات طويلة الأجل</li>
+      </ul>
+
+      <div class="sub">5.3 الصيغة العامة للقيمة المستقبلية</div>
+      <div class="formula">FW = P × (1+i)^n</div>
+      <ul class="lst">
+        <li>FW = القيمة المستقبلية</li>
+        <li>P = القيمة الحالية</li>
+        <li>i = معدل الفائدة</li>
+        <li>n = عدد السنوات</li>
+      </ul>
+
+      <div class="sub">5.4 متى تُستخدم FW؟</div>
+      <ul class="lst">
+        <li>في التخطيط طويل الأجل</li>
+        <li>عند دراسة العوائد النهائية</li>
+        <li>أقل استخداماً من PW وAW</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. العلاقة بين PW و FW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٦</div><h3>العلاقة بين القيمة الحالية والمستقبلية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>القيمتان وجهان لعملة واحدة</li>
+        <li>التحويل بينهما يتم باستخدام الفائدة المركبة</li>
+        <li>اختيار أيهما يعتمد على طبيعة القرار</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. القيمة السنوية AW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٧</div><h3>القيمة السنوية (Annual Worth – AW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">7.1 تعريف القيمة السنوية</div>
+      <div class="def">
+        <strong>القيمة السنوية هي:</strong> قيمة سنوية ثابتة مكافئة لسلسلة من التكاليف أو الإيرادات غير المنتظمة عبر الزمن. أي أنها تحوّل: كلفة أو عائد طويل الأجل → إلى مبلغ سنوي ثابت.
+      </div>
+
+      <div class="sub">7.2 لماذا نستخدم القيمة السنوية؟</div>
+      <ul class="lst">
+        <li>سهلة الفهم للإدارة</li>
+        <li>مفيدة في المقارنة</li>
+        <li>مناسبة للمشاريع ذات الأعمار المختلفة</li>
+      </ul>
+
+      <div class="sub">7.3 استخدامات القيمة السنوية في الهندسة</div>
+      <ul class="lst">
+        <li>مقارنة معدات بأعمار مختلفة</li>
+        <li>مقارنة تقنيات تشغيل</li>
+        <li>تحليل قرارات شراء أو استئجار</li>
+      </ul>
+
+      <div class="sub">7.4 متى تكون AW الأفضل؟</div>
+      <ul class="lst">
+        <li>عند اختلاف أعمار البدائل</li>
+        <li>عند قرارات شراء/استبدال</li>
+        <li>عند مقارنة معدات أو أنظمة</li>
+      </ul>
+      <div class="hl"><strong>AW هي الأداة الأقوى في المقارنة الهندسية.</strong></div>
+    </div>
+  </div>
+
+  <!-- 8. الصيغة العامة للقيمة السنوية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٨</div><h3>الصيغة العامة للقيمة السنوية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">لتحويل قيمة حالية إلى قيمة سنوية:</p>
+      <div class="formula">AW = P × [ i(1+i)^n / (1+i)^n − 1 ]</div>
+      <ul class="lst">
+        <li>AW = القيمة السنوية</li>
+        <li>P = القيمة الحالية</li>
+        <li>i = معدل الفائدة</li>
+        <li>n = عدد السنوات</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. متى نستخدم كل طريقة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٩</div><h3>متى نستخدم كل طريقة؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <table>
+        <tr><th>الطريقة</th><th>الحالة الأنسب</th></tr>
+        <tr><td><span class="badge b-p">PW</span></td><td>تقييم مشروع واحد</td></tr>
+        <tr><td><span class="badge b-g">FW</span></td><td>التخطيط المستقبلي</td></tr>
+        <tr><td><span class="badge b-o">AW</span></td><td>مقارنة بدائل</td></tr>
+        <tr><td><span class="badge b-o">AW</span></td><td>أعمار مختلفة</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 10. تطبيقات هندسية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٠</div><h3>تطبيقات هندسية (اتصالات)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>مقارنة شبكتين بعمرين مختلفين</li>
+        <li>تحليل عقد صيانة طويل</li>
+        <li>تقييم توسعة شبكة على مراحل</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11. تطبيقات هندسية حاسب -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١١</div><h3>تطبيقات هندسية (حاسب)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>شراء خوادم أو استئجار سحابة</li>
+        <li>مقارنة أنظمة تشغيل</li>
+        <li>تحليل تكلفة دورة حياة النظام</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 12. أخطاء شائعة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٢</div><h3>أخطاء شائعة في استخدام القيم</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>استخدام القيمة المستقبلية بدل الحالية</li>
+        <li>مقارنة قيم دون توحيد الزمن</li>
+        <li>تجاهل العمر الاقتصادي</li>
+        <li>الخلط بين القيمة السنوية والمتوسط الحسابي</li>
+      </ul>
+      <div class="warn">
+        <div class="wt">⚠ خطأ شائع جداً</div>
+        <p style="font-size:.9rem">القيمة السنوية ≠ مجموع التكاليف ÷ عدد السنوات <strong>❌</strong><br>
+        الصحيح: القيمة السنوية تأخذ الزمن والفائدة بعين الاعتبار، أما المتوسط الحسابي فيتجاهل الزمن.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. القيمة السنوية ليست متوسطاً -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٣</div><h3>لماذا القيمة السنوية ليست متوسطاً حسابياً؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">مثال يوضح الفرق</div>
+        <p class="txt" style="margin:0">كلفة = 100,000 | العمر = 5 سنوات</p>
+        <div class="divider"></div>
+        <p class="txt" style="margin:0"><strong>المتوسط الحسابي (خطأ ❌):</strong><br>100,000 ÷ 5 = 20,000</p>
+        <div class="divider"></div>
+        <p class="txt" style="margin:0"><strong>القيمة السنوية الصحيحة ✅:</strong><br>AW = 26,380 (بفائدة 10%)<br>الفرق سببه الزمن والفائدة.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14. العلاقة بين القيم الثلاث -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٤</div><h3>العلاقة بين القيم الثلاث في اتخاذ القرار</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">الاقتصاد الهندسي لا يفرض طريقة واحدة، بل:</p>
+      <ul class="lst">
+        <li>يعطي أدوات متعددة</li>
+        <li>يتيح اختيار الأنسب حسب القرار</li>
+      </ul>
+      <div class="hl">القرار الصحيح: لا يعتمد على رقم واحد، بل على تحليل متكامل.</div>
+    </div>
+  </div>
+
+  <!-- 15. خلاصة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٥</div><h3>خلاصة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>القيم الحالية والمستقبلية والسنوية أدوات أساسية</li>
+        <li>توحيد الزمن شرط لأي مقارنة صحيحة</li>
+        <li>القيمة السنوية ممتازة للمقارنة</li>
+        <li>هذه المحاضرة أساس تقييم المشاريع الهندسية</li>
+      </ul>
+      <div class="concl">
+        <h4>ملخص خلاصة الأمثلة</h4>
+        <ul class="lst" style="margin:0">
+          <li>PW ممتازة لتقييم مشروع من منظور اليوم</li>
+          <li>FW مفيدة للتخطيط المستقبلي</li>
+          <li>AW الأقوى عند مقارنة البدائل</li>
+          <li>توحيد الزمن شرط أساسي للقرار الصحيح</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── الأمثلة الرقمية المحلولة ── -->
+  <div class="lec-head l6" style="margin-top:28px">
+    <div class="lnum" style="color:var(--l6)">أمثلة رقمية محلولة</div>
+    <h2>القيم الحالية (PW) — المستقبلية (FW) — السنوية (AW)</h2>
+  </div>
+
+  <!-- مثال 1 -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م١</div><h3>المثال (1): حساب القيمة المستقبلية FW</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>القيمة الحالية P = 25,000 ريال</li>
+          <li>معدل الفائدة i = 8% سنوياً</li>
+          <li>الزمن n = 4 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون:</div>
+      <div class="formula">FW = P(1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+FW = 25,000 × (1.08)^4
+FW = 25,000 × 1.3605
+FW = 34,012 ريال
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 25,000 ريال اليوم ≈ 34,012 ريال بعد 4 سنوات</div>
+    </div>
+  </div>
+
+  <!-- مثال 2 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٢</div><h3>المثال (2): حساب القيمة الحالية PW</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>قيمة مستقبلية F = 60,000 ريال</li>
+          <li>معدل الفائدة i = 10%</li>
+          <li>الزمن n = 5 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون:</div>
+      <div class="formula">PW = F / (1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+PW = 60,000 / (1.10)^5
+PW = 60,000 / 1.6105
+PW = 37,260 ريال (تقريباً)
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 60,000 ريال بعد 5 سنوات تساوي اليوم فقط 37,260 ريال</div>
+    </div>
+  </div>
+
+  <!-- مثال 3 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٣</div><h3>المثال (3): مقارنة مشروع باستخدام القيمة الحالية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات — مشروع هندسي</div>
+        <ul class="lst" style="margin:0">
+          <li>كلفة حالية = 40,000 ريال</li>
+          <li>عائد بعد 3 سنوات = 55,000 ريال</li>
+          <li>معدل الفائدة = 12%</li>
+        </ul>
+      </div>
+      <div class="sub">الحل: نحوّل العائد إلى قيمة حالية</div>
+      <div class="calc">
+PW = 55,000 / (1.12)^3
+PW = 55,000 / 1.4049
+PW = 39,150 ريال
+      </div>
+      <div class="sub">القرار:</div>
+      <ul class="lst">
+        <li>الكلفة = 40,000</li>
+        <li>القيمة الحالية للعائد = 39,150</li>
+      </ul>
+      <div class="warn">
+        <div class="wt">❌ المشروع غير مجدٍ اقتصادياً</div>
+        <p style="font-size:.9rem">القيمة الحالية للعائد (39,150) أقل من الكلفة (40,000).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 4 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٤</div><h3>المثال (4): حساب القيمة السنوية AW من قيمة حالية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>قيمة حالية P = 100,000 ريال</li>
+          <li>معدل الفائدة i = 10%</li>
+          <li>العمر n = 5 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون:</div>
+      <div class="formula">AW = P × [ i(1+i)^n / (1+i)^n − 1 ]</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+AW = 100,000 × [ 0.10(1.10)^5 / (1.10)^5 − 1 ]
+AW = 100,000 × [ 0.16105 / 0.6105 ]
+AW = 100,000 × 0.26380
+AW = 26,380 ريال/سنة
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 100,000 ريال موزعة اقتصادياً تعادل 26,380 ريال سنوياً</div>
+    </div>
+  </div>
+
+  <!-- مثال 5 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٥</div><h3>المثال (5): مقارنة بديلين باستخدام القيمة السنوية — مهم جداً</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات — بديلان لمعدات شبكة</div>
+        <table style="margin-top:8px">
+          <tr><th>البند</th><th>البديل A</th><th>البديل B</th></tr>
+          <tr><td>الكلفة الأولية</td><td>60,000</td><td>90,000</td></tr>
+          <tr><td>العمر (سنة)</td><td>3</td><td>6</td></tr>
+          <tr><td colspan="3" style="text-align:center;color:var(--muted)">معدل الفائدة = 10%</td></tr>
+        </table>
+      </div>
+      <div class="sub">الخطوة 1: حساب AW لكل بديل</div>
+      <div class="sub" style="color:var(--l6)">البديل A:</div>
+      <div class="calc">
+AW_A = 60,000 × [ 0.10(1.10)^3 / (1.10)^3 − 1 ]
+AW_A = 60,000 × 0.4021
+AW_A = 24,126 ريال/سنة
+      </div>
+      <div class="sub" style="color:var(--l7)">البديل B:</div>
+      <div class="calc">
+AW_B = 90,000 × [ 0.10(1.10)^6 / (1.10)^6 − 1 ]
+AW_B = 90,000 × 0.2296
+AW_B = 20,664 ريال/سنة
+      </div>
+      <div class="concl">
+        <h4>✅ القرار: الأفضل اقتصادياً = البديل B</h4>
+        <p>رغم كلفته الأولية الأعلى، فإن تكلفته السنوية (20,664) أقل من البديل A (24,126).<br>
+        القيمة السنوية تكشف الحقيقة الاقتصادية عند اختلاف الأعمار.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 6 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٦</div><h3>المثال (6): تطبيق هندسة الحاسب — خوادم</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>شراء خوادم الآن = 120,000 ريال</li>
+          <li>العمر = 4 سنوات</li>
+          <li>معدل الفائدة = 9%</li>
+        </ul>
+      </div>
+      <div class="sub">القيمة السنوية:</div>
+      <div class="calc">
+AW = 120,000 × [ 0.09(1.09)^4 / (1.09)^4 − 1 ]
+AW = 120,000 × 0.308
+AW = 36,960 ريال/سنة
+      </div>
+      <div class="hl"><strong>التفسير:</strong> امتلاك الخوادم يعادل كلفة سنوية قدرها 36,960 ريال</div>
+    </div>
+  </div>
+
+  <!-- مثال 7 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٧</div><h3>المثال (7): خطأ شائع — للتوضيح</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">السؤال</div>
+        <p style="font-size:.9rem">هل القيمة السنوية = مجموع الكلفة ÷ عدد السنوات؟</p>
+        <ul class="lst" style="margin-top:8px;margin-bottom:0">
+          <li>كلفة = 100,000 | العمر = 5 سنوات</li>
+        </ul>
+      </div>
+      <div class="warn">
+        <div class="wt">❌ المتوسط الحسابي (خطأ):</div>
+        <p style="font-size:.9rem">100,000 ÷ 5 = 20,000</p>
+      </div>
+      <div class="hl">
+        <strong>✅ القيمة السنوية الصحيحة = 26,380 (بفائدة 10%)</strong><br>
+        الفرق سببه الزمن والفائدة.
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 8 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٨</div><h3>المثال (8): مقارنة بديلين باستخدام القيمة الحالية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>بديل A: كلفة 70,000 اليوم</li>
+          <li>بديل B: كلفة 95,000 بعد 3 سنوات</li>
+          <li>معدل الفائدة = 11%</li>
+        </ul>
+      </div>
+      <div class="sub">تحويل البديل B إلى قيمة حالية:</div>
+      <div class="calc">
+PW_B = 95,000 / (1.11)^3
+PW_B = 95,000 / 1.3676
+PW_B = 69,450 ريال
+      </div>
+      <div class="sub">القرار:</div>
+      <ul class="lst">
+        <li>A = 70,000</li>
+        <li>B = 69,450</li>
+      </ul>
+      <div class="concl">
+        <h4>✅ الأفضل اقتصادياً = البديل B</h4>
+        <p>رغم كلفته الاسمية الأعلى، إلا أن قيمته الحالية أقل بفضل الزمن.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- أسئلة تدريبية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">❓</div><h3>أسئلة تدريبية للطلاب</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ol class="lst" style="list-style:decimal;padding-right:20px">
+        <li>احسب FW لـ 18,000 ريال لمدة 6 سنوات عند فائدة 7%.</li>
+        <li>احسب PW لـ 80,000 ريال بعد 5 سنوات عند فائدة 9%.</li>
+        <li>لماذا نستخدم AW بدل PW عند اختلاف الأعمار؟</li>
+        <li>قارن بديلين باستخدام AW.</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- end l6 -->
+
+<!-- ══════════════════════════════════════════
+     LECTURE 7
+════════════════════════════════════════════ -->
+<div class="lec l7" id="l7">
+
+  <div class="lec-head l7">
+    <div class="lnum" style="color:var(--l7)">المحاضرة السابعة</div>
+    <h2>مقارنة البدائل واتخاذ القرار الهندسي</h2>
+    <div class="eng">Engineering Economics – Comparison of Alternatives &amp; Decision Making</div>
+  </div>
+
+  <!-- 1. مقدمة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١</div><h3>مقدمة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في المحاضرات السابقة تعلّمنا: القيمة الزمنية للنقود، الفائدة المركبة، والقيم الحالية والمستقبلية والسنوية.</p>
+      <div class="hl">لكن كل هذه الأدوات <strong>لا قيمة لها بحد ذاتها</strong> إذا لم تُستخدم في الهدف الأساسي من الاقتصاد الهندسي، وهو: <strong>اختيار البديل الهندسي الأفضل اقتصادياً.</strong></div>
+      <p class="txt">في هذه المحاضرة ننتقل من مرحلة "الحساب" إلى مرحلة <strong>القرار.</strong></p>
+    </div>
+  </div>
+
+  <!-- 2. ما المقصود بالبدائل الهندسية -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٢</div><h3>ما المقصود بالبدائل الهندسية؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>البدائل الهندسية هي:</strong> حلول مختلفة لتحقيق نفس الهدف الهندسي، لكنها تختلف في: الكلفة، العمر، الأداء، التقنية، المخاطر.
+      </div>
+      <div class="ex">
+        <div class="et">مثال بسيط</div>
+        <ul class="lst" style="margin:0">
+          <li>شبكة ألياف ضوئية</li>
+          <li>شبكة لاسلكية</li>
+          <li>حل هجين</li>
+        </ul>
+        <p style="margin-top:10px;font-size:.88rem;color:var(--muted)">كلها تحقق "الاتصال"، لكن ليست متكافئة اقتصادياً.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. شرط وجود البدائل -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٣</div><h3>شرط وجود البدائل</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>قاعدة أساسية:</strong> لا يوجد قرار اقتصادي دون وجود بدائل.
+      </div>
+      <p class="txt">إذا كان هناك حل واحد فقط:</p>
+      <ul class="lst">
+        <li>لا يوجد اقتصاد هندسي</li>
+        <li>يوجد تنفيذ فقط</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. مبدأ توحيد الزمن قبل المقارنة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤</div><h3>مبدأ توحيد الزمن قبل المقارنة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="hl">قبل أي مقارنة يجب الالتزام بالقاعدة الذهبية: <strong>يجب توحيد الزمن لجميع البدائل قبل المقارنة.</strong></div>
+      <p class="txt">ولا يجوز:</p>
+      <ul class="lst">
+        <li>مقارنة كلفة اليوم بعائد بعد سنوات</li>
+        <li>مقارنة مشاريع بأعمار مختلفة دون معالجة زمنية</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. طرق مقارنة البدائل -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥</div><h3>طرق مقارنة البدائل في الاقتصاد الهندسي</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">الطرق الأساسية هي:</p>
+      <ul class="lst">
+        <li>المقارنة باستخدام <strong>القيمة الحالية</strong> <span class="badge b-p">PW</span></li>
+        <li>المقارنة باستخدام <strong>القيمة السنوية</strong> <span class="badge b-o">AW</span></li>
+        <li>المقارنة باستخدام <strong>القيمة المستقبلية</strong> <span class="badge b-g">FW</span></li>
+      </ul>
+      <div class="hl">نفس القرار يمكن تحليله بأكثر من طريقة، لكن النتيجة يجب أن تكون متوافقة.</div>
+    </div>
+  </div>
+
+  <!-- 6. المقارنة باستخدام PW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٦</div><h3>المقارنة باستخدام القيمة الحالية (PW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">6.1 الفكرة الأساسية</div>
+      <p class="txt">نحوّل جميع التكاليف والإيرادات لكل بديل إلى:</p>
+      <ul class="lst">
+        <li>قيمة حالية واحدة</li>
+        <li>عند نفس معدل الفائدة</li>
+      </ul>
+      <p class="txt">ثم:</p>
+      <ul class="lst">
+        <li>نختار البديل ذو <strong>أقل كلفة حالية</strong></li>
+        <li>أو <strong>أعلى قيمة حالية صافية</strong></li>
+      </ul>
+
+      <div class="sub">6.2 متى نستخدم PW؟</div>
+      <ul class="lst">
+        <li>عندما تبدأ جميع البدائل الآن</li>
+        <li>عندما تكون نقطة القرار هي الزمن الحاضر</li>
+        <li>عند تقييم مشروع منفرد أو بدائل متشابهة العمر</li>
+        <li>عند التحليل المالي الدقيق</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. المقارنة باستخدام AW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٧</div><h3>المقارنة باستخدام القيمة السنوية (AW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">7.1 الفكرة الأساسية</div>
+      <p class="txt">نحوّل كل بديل إلى: كلفة سنوية مكافئة ثم نقارن القيم السنوية مباشرة.</p>
+
+      <div class="sub">7.2 متى تكون AW الأفضل؟</div>
+      <ul class="lst">
+        <li>عند اختلاف أعمار البدائل</li>
+        <li>عند قرارات شراء/استبدال</li>
+        <li>عند مقارنة معدات أو أنظمة</li>
+        <li>القرار الإداري</li>
+      </ul>
+      <div class="hl"><strong>AW هي الأداة الأقوى في المقارنة الهندسية.</strong></div>
+    </div>
+  </div>
+
+  <!-- 8. المقارنة باستخدام FW -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٨</div><h3>المقارنة باستخدام القيمة المستقبلية (FW)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">8.1 الفكرة الأساسية</div>
+      <p class="txt">نحوّل جميع القيم إلى:</p>
+      <ul class="lst">
+        <li>زمن مستقبلي واحد</li>
+        <li>غالباً نهاية عمر المشروع</li>
+      </ul>
+
+      <div class="sub">8.2 متى تُستخدم FW؟</div>
+      <ul class="lst">
+        <li>في التخطيط طويل الأجل</li>
+        <li>عند دراسة العوائد النهائية</li>
+        <li>أقل استخداماً من PW وAW</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. اختيار الطريقة المناسبة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٩</div><h3>اختيار الطريقة المناسبة للمقارنة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <table>
+        <tr><th>الحالة</th><th>الطريقة الأنسب</th></tr>
+        <tr><td>أعمار متساوية</td><td><span class="badge b-p">PW</span></td></tr>
+        <tr><td>أعمار مختلفة</td><td><span class="badge b-o">AW</span></td></tr>
+        <tr><td>تخطيط مستقبلي</td><td><span class="badge b-g">FW</span></td></tr>
+        <tr><td>قرار إداري</td><td><span class="badge b-o">AW</span></td></tr>
+        <tr><td>تحليل مالي دقيق</td><td><span class="badge b-p">PW</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 10. خطوات مقارنة البدائل (منهجية امتحانية) -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٠</div><h3>خطوات مقارنة البدائل — منهجية امتحانية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">أي سؤال مقارنة يُحل بهذه الخطوات:</p>
+      <ol class="lst" style="list-style:decimal;padding-right:22px">
+        <li>تحديد البدائل</li>
+        <li>تحديد العمر الاقتصادي لكل بديل</li>
+        <li>تحديد معدل الفائدة</li>
+        <li>توحيد الزمن (PW أو AW أو FW)</li>
+        <li>إجراء الحسابات</li>
+        <li>اتخاذ القرار الاقتصادي</li>
+        <li>تفسير القرار هندسياً</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 11. تطبيقات على هندسة الاتصالات -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١١</div><h3>تطبيقات على هندسة الاتصالات</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>اختيار معدات شبكة بعمرين مختلفين</li>
+        <li>توسعة شبكة الآن أو لاحقاً</li>
+        <li>شراء أجهزة جديدة أو صيانة القديمة</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 12. تطبيقات على هندسة الحاسب -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٢</div><h3>تطبيقات على هندسة الحاسب</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>خوادم محلية vs سحابة</li>
+        <li>نظام جاهز vs تطوير داخلي</li>
+        <li>تحديث النظام أو الاستمرار به</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 13. العوامل غير الاقتصادية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٣</div><h3>العوامل غير الاقتصادية (Non-Economic Factors)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">رغم أهمية الحسابات، إلا أن القرار الهندسي لا يعتمد فقط على المال. من العوامل غير الكمية:</p>
+      <ul class="lst">
+        <li>الاعتمادية</li>
+        <li>الجودة</li>
+        <li>المرونة</li>
+        <li>الأمان</li>
+        <li>التوافق التقني</li>
+        <li>سهولة الصيانة</li>
+      </ul>
+      <div class="warn">
+        <div class="wt">⚠ تنبيه</div>
+        <p style="font-size:.9rem">لا يجوز استخدام هذه العوامل لتبرير قرار اقتصادي ضعيف دون مبرر منطقي.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14. أخطاء شائعة في مقارنة البدائل -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٤</div><h3>أخطاء شائعة في مقارنة البدائل</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>مقارنة بدائل دون توحيد الزمن</li>
+        <li>تجاهل العمر الاقتصادي</li>
+        <li>استخدام متوسط حسابي بدل AW</li>
+        <li>الخلط بين الكلفة الغارقة والقرار الحالي</li>
+        <li>اختيار الحل "الأرخص" بدل "الأفضل اقتصادياً"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 15. القرار الهندسي الصحيح -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٥</div><h3>القرار الهندسي الصحيح</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>القرار الصحيح هو:</strong> قرار يحقق أفضل توازن بين: الكلفة، الأداء، الزمن، المخاطر.
+      </div>
+      <p class="txt">والاقتصاد الهندسي:</p>
+      <ul class="lst">
+        <li>لا يفرض القرار</li>
+        <li>بل <strong>يدعم القرار بالأرقام</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 16. خلاصة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">١٦</div><h3>خلاصة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>مقارنة البدائل هي جوهر الاقتصاد الهندسي</li>
+        <li>الحساب بدون قرار لا قيمة له</li>
+        <li>توحيد الزمن شرط أساسي</li>
+        <li>AW هي الأداة الأقوى في المقارنة</li>
+        <li>القرار الهندسي الجيد = تحليل + منطق</li>
+      </ul>
+      <div class="concl">
+        <h4>المعادلة الذهبية</h4>
+        <p>القرار الهندسي الصحيح = تحليل تقني + تحليل اقتصادي + منطق هندسي</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end l7 -->
+
+</div><!-- container -->
+
+<script>
+function show(n){
+  document.querySelectorAll('.lec').forEach(l=>l.classList.remove('active'));
+  document.getElementById('l'+n).classList.add('active');
+  const tabs=document.querySelectorAll('.tab');
+  tabs.forEach(t=>t.className='tab');
+  tabs[n-6].className='tab a'+n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tog(head){
+  head.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

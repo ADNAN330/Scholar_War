@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحاضرتان الرابعة والخامسة — الاقتصاد الهندسي</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap');
+
+  :root {
+    --bg: #0c1018;
+    --surface: #131a26;
+    --card: #1a2235;
+    --border: #243047;
+    --l4: #3ecfb0;   /* teal — lecture 4 */
+    --l5: #f5a623;   /* amber — lecture 5 */
+    --gold: #f5c842;
+    --red: #e05c5c;
+    --blue: #5b9cf6;
+    --text: #e4e8f5;
+    --muted: #7a8aaa;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;line-height:1.85}
+
+  /* ── HERO ── */
+  .hero{
+    background:linear-gradient(160deg,#0c1018 0%,#131f35 60%,#0c1018 100%);
+    border-bottom:1px solid var(--border);
+    padding:54px 32px 34px;text-align:center;position:relative;overflow:hidden
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(62,207,176,.12) 0%,transparent 70%)
+  }
+  .hero-badge{
+    display:inline-block;border:1px solid rgba(62,207,176,.4);
+    background:rgba(62,207,176,.1);color:var(--l4);
+    padding:4px 18px;border-radius:20px;font-size:.78rem;
+    letter-spacing:2px;font-weight:700;margin-bottom:18px
+  }
+  .hero h1{font-family:'Amiri',serif;font-size:clamp(1.8rem,4.5vw,3rem);color:#fff;margin-bottom:8px;position:relative}
+  .hero p{color:var(--muted);font-size:.95rem;position:relative}
+
+  /* ── TABS ── */
+  .tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .tab{flex:1;padding:17px 10px;text-align:center;cursor:pointer;font-weight:700;font-size:.9rem;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s}
+  .tab:hover{color:var(--text)}
+  .tab.a4{border-bottom-color:var(--l4);color:var(--l4)}
+  .tab.a5{border-bottom-color:var(--l5);color:var(--l5)}
+
+  /* ── LAYOUT ── */
+  .container{max-width:960px;margin:0 auto;padding:36px 20px 80px}
+  .lec{display:none}.lec.active{display:block}
+
+  /* ── LECTURE HEADER ── */
+  .lec-head{padding:28px 28px 24px;border-radius:14px;margin-bottom:28px;position:relative;overflow:hidden}
+  .lec-head.l4{background:linear-gradient(135deg,rgba(62,207,176,.18),rgba(62,207,176,.04));border:1px solid rgba(62,207,176,.3)}
+  .lec-head.l5{background:linear-gradient(135deg,rgba(245,166,35,.18),rgba(245,166,35,.04));border:1px solid rgba(245,166,35,.3)}
+  .lec-head .lnum{font-size:.72rem;font-weight:700;letter-spacing:2px;opacity:.7;margin-bottom:6px}
+  .lec-head h2{font-family:'Amiri',serif;font-size:1.8rem;color:#fff;margin-bottom:4px}
+  .lec-head .eng{font-size:.85rem;color:var(--muted)}
+
+  /* ── SECTION CARD ── */
+  .sec{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;transition:border-color .2s}
+  .l4 .sec:hover{border-color:rgba(62,207,176,.3)}
+  .l5 .sec:hover{border-color:rgba(245,166,35,.3)}
+
+  .sec-head{padding:18px 22px;display:flex;align-items:center;gap:13px;cursor:pointer;user-select:none}
+  .num{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+  .l4 .num{background:rgba(62,207,176,.2);color:var(--l4)}
+  .l5 .num{background:rgba(245,166,35,.2);color:var(--l5)}
+  .sec-head h3{font-size:1.02rem;font-weight:700;flex:1}
+  .chev{color:var(--muted);font-size:.75rem;transition:transform .3s}
+  .sec.open .chev{transform:rotate(180deg)}
+
+  .sec-body{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+  .sec.open .sec-body{max-height:5000px;padding:0 22px 22px}
+
+  /* ── CONTENT ── */
+  p.txt{margin-bottom:12px;font-size:.93rem;color:#cdd2e0;line-height:1.9}
+  ul.lst{list-style:none;padding:0;margin-bottom:12px}
+  ul.lst li{font-size:.91rem;color:#c4c9d9;margin-bottom:7px;padding-right:18px;position:relative}
+  ul.lst li::before{content:'◆';position:absolute;right:0;color:var(--l4);font-size:.45rem;top:7px}
+  .l5 ul.lst li::before{color:var(--l5)}
+  ol.lst{padding-right:22px;margin-bottom:12px}
+  ol.lst li{font-size:.91rem;color:#c4c9d9;margin-bottom:7px}
+
+  .sub{font-weight:700;font-size:.92rem;color:var(--gold);margin:14px 0 7px}
+
+  .hl{background:rgba(62,207,176,.08);border-right:3px solid var(--l4);border-radius:7px;padding:12px 16px;margin-bottom:12px;font-size:.91rem}
+  .l5 .hl{background:rgba(245,166,35,.08);border-right-color:var(--l5)}
+
+  .def{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:12px;font-size:.91rem}
+  .def strong{color:var(--gold)}
+
+  .ex{background:rgba(91,156,246,.06);border:1px dashed rgba(91,156,246,.3);border-radius:9px;padding:14px 18px;margin-bottom:12px}
+  .ex .et{font-weight:700;color:var(--blue);font-size:.8rem;letter-spacing:1px;margin-bottom:8px}
+
+  .warn{background:rgba(224,92,92,.08);border:1px solid rgba(224,92,92,.25);border-radius:9px;padding:12px 16px;margin-bottom:12px}
+  .warn .wt{font-weight:700;color:var(--red);margin-bottom:6px;font-size:.82rem}
+
+  .formula{background:#060912;border:1px solid var(--border);border-radius:9px;padding:16px 18px;margin-bottom:12px;font-family:'Courier New',monospace;font-size:.95rem;direction:ltr;text-align:center;color:#8fd8c0;letter-spacing:.5px}
+  .calc{background:#060912;border:1px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:12px;font-family:'Courier New',monospace;font-size:.88rem;direction:ltr;text-align:left;color:#9ecfb8}
+
+  table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:.87rem}
+  th{background:rgba(255,255,255,.06);padding:9px 13px;text-align:right;border:1px solid var(--border);color:var(--gold);font-weight:700}
+  td{padding:9px 13px;border:1px solid var(--border);color:#c4c9d9}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.73rem;font-weight:700;margin-left:4px}
+  .b-t{background:rgba(62,207,176,.2);color:var(--l4)}
+  .b-a{background:rgba(245,166,35,.2);color:var(--l5)}
+  .b-b{background:rgba(91,156,246,.2);color:var(--blue)}
+  .b-r{background:rgba(224,92,92,.2);color:var(--red)}
+  .b-y{background:rgba(245,200,66,.2);color:var(--gold)}
+
+  .divider{height:1px;background:var(--border);margin:16px 0}
+
+  .concl{background:linear-gradient(135deg,rgba(62,207,176,.1),rgba(91,156,246,.08));border:1px solid rgba(62,207,176,.2);border-radius:11px;padding:18px 22px;margin-bottom:16px}
+  .concl h4{color:var(--l4);margin-bottom:8px}
+  .l5 .concl{background:linear-gradient(135deg,rgba(245,166,35,.1),rgba(91,156,246,.08));border-color:rgba(245,166,35,.2)}
+  .l5 .concl h4{color:var(--l5)}
+
+  @media(max-width:580px){
+    .tabs{gap:0}.tab{font-size:.8rem;padding:14px 6px}
+    .container{padding:20px 14px 60px}
+    .sec-head{padding:14px 16px}.sec.open .sec-body{padding:0 16px 18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">الاقتصاد الهندسي — هندسة الاتصالات والمعلوماتية</div>
+  <h1>المحاضرتان الرابعة والخامسة</h1>
+  <p>القيمة الزمنية للنقود · الفائدة البسيطة والمركبة</p>
+</div>
+
+<div class="tabs">
+  <div class="tab a4" onclick="show(4)">📗 المحاضرة الرابعة — القيمة الزمنية للنقود</div>
+  <div class="tab"    onclick="show(5)">📙 المحاضرة الخامسة — الفائدة البسيطة والمركبة</div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     LECTURE 4
+════════════════════════════════════════════ -->
+<div class="lec l4 active" id="l4">
+
+  <div class="lec-head l4">
+    <div class="lnum" style="color:var(--l4)">المحاضرة الرابعة</div>
+    <h2>القيمة الزمنية للنقود</h2>
+    <div class="eng">Engineering Economics – Time Value of Money</div>
+  </div>
+
+  <!-- مقدمة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م</div><h3>مقدمة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في المحاضرتين السابقتين، تعرّفنا على: مفهوم الاقتصاد الهندسي، ودور الكلفة وتصنيفاتها في اتخاذ القرار.</p>
+      <p class="txt">في هذه المحاضرة ننتقل إلى <strong>أحد أهم المفاهيم في الاقتصاد الهندسي</strong>، وهو: القيمة الزمنية للنقود.</p>
+      <div class="hl">هذا المفهوم يشكّل الأساس لكل ما سيأتي لاحقاً من: مقارنة مشاريع، تقييم استثمارات، حساب جدوى اقتصادية، وتحليل بدائل هندسية على المدى الزمني.</div>
+    </div>
+  </div>
+
+  <!-- 4-1 الفكرة الأساسية -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١</div><h3>الفكرة الأساسية للقيمة الزمنية للنقود</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>الفكرة الجوهرية:</strong> المال الذي نملكه اليوم لا يساوي نفس المبلغ في المستقبل.
+      </div>
+      <p class="txt">بمعنى آخر:</p>
+      <ul class="lst">
+        <li>10,000 ريال اليوم ≠ 10,000 ريال بعد 5 سنوات</li>
+      </ul>
+      <p class="txt">وهذا ينطبق على:</p>
+      <ul class="lst">
+        <li>الأفراد</li>
+        <li>الشركات</li>
+        <li>المشاريع الهندسية</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-2 لماذا للمال قيمة زمنية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٢</div><h3>لماذا للمال قيمة زمنية؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">هناك عدة أسباب رئيسية تجعل المال يفقد أو يكتسب قيمة مع الزمن:</p>
+
+      <div class="sub">أ. القدرة على الاستثمار</div>
+      <p class="txt">فالمال اليوم يمكن: (استثماره ← تشغيله ← تحقيق عائد منه). أما المال في المستقبل: لا يمكن استخدامه الآن — ويحمل مخاطرة بعدم الحصول عليه.</p>
+
+      <div class="sub">ب. التضخم</div>
+      <p class="txt">التضخم يؤدي إلى:</p>
+      <ul class="lst">
+        <li>انخفاض القوة الشرائية للنقود</li>
+        <li>ارتفاع الأسعار مع الزمن</li>
+      </ul>
+      <p class="txt">أي أن: نفس المبلغ يشتري أقل في المستقبل.</p>
+
+      <div class="sub">ت. المخاطر وعدم اليقين</div>
+      <p class="txt">المستقبل دائماً يحمل:</p>
+      <ul class="lst">
+        <li>مخاطر تقنية</li>
+        <li>مخاطر سوق</li>
+        <li>مخاطر تشغيل</li>
+      </ul>
+      <div class="hl">لذلك يُفضَّل المال المؤكد اليوم على المال غير المؤكد مستقبلاً.</div>
+    </div>
+  </div>
+
+  <!-- 4-3 أهمية القيمة الزمنية للمهندس -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٣</div><h3>أهمية القيمة الزمنية للمهندس</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في الحياة العملية، يتعامل المهندس مع قرارات مثل:</p>
+      <ul class="lst">
+        <li>مشروع يُدر أرباحاً بعد عدة سنوات</li>
+        <li>شراء معدات الآن أو لاحقاً</li>
+        <li>صيانة الآن أو استبدال لاحقاً</li>
+      </ul>
+      <div class="hl">كل هذه القرارات لا يمكن تحليلها دون أخذ الزمن بعين الاعتبار.</div>
+    </div>
+  </div>
+
+  <!-- 4-4 المفاهيم الأساسية في القيمة الزمنية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٤</div><h3>المفاهيم الأساسية في القيمة الزمنية للنقود</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">أ. القيمة الحالية (Present Value – PV)</div>
+      <div class="def">
+        <strong>هي:</strong> قيمة مبلغ مالي مستقبلي محسوبة عند الزمن الحالي.<br>
+        أي: كم يساوي المال المستقبلي اليوم؟
+      </div>
+
+      <div class="sub">ب. القيمة المستقبلية (Future Value – FV)</div>
+      <div class="def">
+        <strong>هي:</strong> قيمة مبلغ مالي حالي بعد فترة زمنية محددة.<br>
+        أي: كم سيصبح المال الحالي في المستقبل؟
+      </div>
+
+      <div class="sub">ت. الفترة الزمنية (n)</div>
+      <ul class="lst">
+        <li>تمثل عدد السنوات أو الفترات — فكلما زادت الفترات، زاد تأثير الزمن.</li>
+      </ul>
+
+      <div class="sub">ث. معدل الفائدة (i)</div>
+      <ul class="lst">
+        <li>يمثل العائد أو تكلفة المال</li>
+        <li>يعكس: التضخم، المخاطر، تكلفة الفرصة البديلة</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-5 الفائدة ودورها في القيمة الزمنية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٥</div><h3>الفائدة ودورها في القيمة الزمنية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>مفهوم الفائدة:</strong> الفائدة هي العائد الناتج عن استخدام المال خلال فترة زمنية، وتُستخدم لربط:
+        <ul class="lst" style="margin-top:8px">
+          <li>القيمة الحالية</li>
+          <li>بالقيمة المستقبلية</li>
+        </ul>
+      </div>
+
+      <div class="sub">أنواع الفائدة (تمهيد)</div>
+      <ul class="lst">
+        <li>الفائدة البسيطة</li>
+        <li>الفائدة المركبة</li>
+      </ul>
+      <p class="txt" style="color:var(--muted);font-size:.85rem">(سيتم التفصيل في محاضرة لاحقة)</p>
+    </div>
+  </div>
+
+  <!-- 4-6 لماذا لا نقارن أموالاً مختلفة مباشرة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٦</div><h3>لماذا لا نقارن أموالاً في أزمنة مختلفة مباشرة؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="warn">
+        <div class="wt">⚠ خطأ شائع</div>
+        <p style="font-size:.9rem">مقارنة كلفة اليوم بعائد بعد سنوات دون تعديل</p>
+      </div>
+      <div class="def">
+        <strong>القاعدة الأساسية:</strong> لا يجوز مقارنة مبالغ مالية تقع في أزمنة مختلفة دون توحيد الزمن.
+      </div>
+      <p class="txt">يجب أولاً:</p>
+      <ul class="lst">
+        <li>تحويل جميع القيم إلى زمن واحد</li>
+        <li>إما الحاضر أو المستقبل أو قيمة سنوية</li>
+      </ul>
+      <p class="txt">حتى يمكن: المقارنة واتخاذ القرار</p>
+    </div>
+  </div>
+
+  <!-- 4-7 توحيد الزمن Time Equivalence -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٧</div><h3>توحيد الزمن (Time Equivalence)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في الاقتصاد الهندسي: يتم تحويل القيم المالية إلى:</p>
+      <ul class="lst">
+        <li>قيمة حالية <span class="badge b-t">PV</span></li>
+        <li>أو قيمة مستقبلية <span class="badge b-b">FV</span></li>
+        <li>أو قيمة سنوية <span class="badge b-a">AW</span></li>
+      </ul>
+      <p class="txt">حتى يمكن: المقارنة واتخاذ القرار</p>
+    </div>
+  </div>
+
+  <!-- 4-8 تطبيقات القيمة الزمنية في الهندسة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٨</div><h3>تطبيقات القيمة الزمنية للنقود في الهندسة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">أ. في هندسة الاتصالات</div>
+      <ul class="lst">
+        <li>مشروع شبكة يبدأ اليوم ويحقق أرباحاً بعد سنوات</li>
+        <li>عقد صيانة طويل الأجل</li>
+        <li>استثمار في بنية تحتية مستقبلية</li>
+      </ul>
+
+      <div class="sub">ب. في هندسة الحاسب</div>
+      <ul class="lst">
+        <li>شراء خوادم الآن مقابل استبدالها لاحقاً</li>
+        <li>تطوير نظام برمجي بعائد مستقبلي</li>
+        <li>الاشتراك في خدمات سحابية طويلة الأمد</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-9 مثال توضيحي بدون حسابات -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-٩</div><h3>مثال توضيحي مبسّط (بدون حسابات)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">لنفترض</div>
+        <p class="txt" style="margin:0">مشروع يحقق 50,000 ريال بعد 5 سنوات.</p>
+        <p class="txt" style="margin-top:8px">السؤال الحقيقي ليس: هل 50,000 رقم جيد؟ بل: <strong>كم تساوي هذه الـ 50,000 اليوم؟</strong><br>
+        هنا يظهر دور القيمة الزمنية للنقود.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-10 الزمن كعنصر قرار هندسي -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١٠</div><h3>الزمن كعنصر قرار هندسي</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">الزمن يؤثر على:</p>
+      <ul class="lst">
+        <li>جدوى المشروع</li>
+        <li>مدة استرداد الكلفة</li>
+        <li>المخاطر</li>
+        <li>التقادم التقني</li>
+      </ul>
+      <p class="txt">مشروع طويل الأجل في مجال التقنية:</p>
+      <ul class="lst">
+        <li>أكثر مخاطرة</li>
+        <li>أكثر عرضة للتغيير</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-11 العلاقة بين القيمة الزمنية واتخاذ القرار -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١١</div><h3>العلاقة بين القيمة الزمنية واتخاذ القرار</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">الاقتصاد الهندسي لا يهتم فقط: بحجم المبلغ — بل يهتم بـ:</p>
+      <ul class="lst">
+        <li>متى يُدفع؟</li>
+        <li>متى يُستلم؟</li>
+        <li>على مدى كم سنة؟</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-12 أخطاء شائعة متعلقة بالقيمة الزمنية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١٢</div><h3>أخطاء شائعة متعلقة بالقيمة الزمنية</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>تجاهل الزمن في التحليل</li>
+        <li>مقارنة أموال دون توحيد الزمن</li>
+        <li>استخدام أرقام اسمية بدل حقيقية</li>
+        <li>إهمال التضخم</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-13 لماذا هذه المحاضرة حجر الأساس -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١٣</div><h3>لماذا تُعد هذه المحاضرة حجر الأساس؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">لأن:</p>
+      <ul class="lst">
+        <li>جميع طرق التقييم القادمة تعتمد عليها</li>
+        <li>أي خطأ هنا ينسف التحليل كاملاً</li>
+        <li>هي الأساس لموضوعات: القيمة الحالية، القيمة السنوية، تقييم المشاريع، تحليل المشاريع</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4-14 خلاصة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٤-١٤</div><h3>خلاصة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>المال مرتبط بالزمن ارتباطاً وثيقاً</li>
+        <li>القيمة الزمنية للنقود مفهوم أساسي</li>
+        <li>لا قرار اقتصادي صحيح دون مراعاة الزمن</li>
+        <li>المهندس الواعي اقتصادياً يفهم أثر الزمن جيداً</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── الأمثلة الرقمية ── -->
+  <div class="lec-head l4" style="margin-top:28px">
+    <div class="lnum" style="color:var(--l4)">أمثلة رقمية محلولة</div>
+    <h2>القيمة الزمنية للنقود — Time Value of Money</h2>
+  </div>
+
+  <!-- مثال 1 -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م١</div><h3>المثال (1): لماذا المال اليوم أفضل من المال غداً؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <p>لديك خياران:</p>
+        <ul class="lst" style="margin-top:8px;margin-bottom:0">
+          <li>استلام 10,000 ريال <strong>اليوم</strong></li>
+          <li>أو استلام 10,000 ريال <strong>بعد سنة</strong></li>
+        </ul>
+        <p style="margin-top:8px;font-size:.88rem">معدل الفائدة السنوي: 10%</p>
+      </div>
+      <div class="sub">الحل:</div>
+      <p class="txt">لو استلمت المال اليوم واستثمرته:</p>
+      <div class="calc">
+FV = 10,000 × (1 + 0.10) = 11,000 ريال
+      </div>
+      <div class="concl">
+        <h4>النتيجة</h4>
+        <ul class="lst" style="margin:0">
+          <li>10,000 اليوم ← تصبح 11,000 بعد سنة</li>
+          <li>10,000 بعد سنة ← تبقى 10,000</li>
+          <li>✅ إذن المال اليوم <strong>أكثر قيمة.</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 2 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٢</div><h3>المثال (2): حساب القيمة المستقبلية (Future Value)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>مبلغ حالي = 20,000 ريال</li>
+          <li>معدل الفائدة = 8% سنوياً</li>
+          <li>الزمن = 5 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون:</div>
+      <div class="formula">FV = PV × (1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+FV = 20,000 × (1.08)^5
+FV = 20,000 × 1.4693
+FV = 29,386 ريال
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 20,000 ريال اليوم ≈ 29,386 ريال بعد 5 سنوات</div>
+    </div>
+  </div>
+
+  <!-- مثال 3 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٣</div><h3>المثال (3): حساب القيمة الحالية (Present Value)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>مبلغ مستقبلي = 50,000 ريال</li>
+          <li>معدل الفائدة = 10%</li>
+          <li>الزمن = 4 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">المطلوب: كم تساوي هذه القيمة اليوم؟</div>
+      <div class="sub">القانون:</div>
+      <div class="formula">PV = FV / (1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+PV = 50,000 / (1.10)^4
+PV = 50,000 / 1.4641
+PV = 34,160 ريال (تقريباً)
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 50,000 ريال بعد 4 سنوات ≠ 50,000 اليوم — قيمتها اليوم فقط 34,160 ريال</div>
+    </div>
+  </div>
+
+  <!-- مثال 4 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٤</div><h3>المثال (4): تطبيق على مشروع هندسي (اتصالات)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <p>مشروع اتصالات:</p>
+        <ul class="lst" style="margin-top:8px;margin-bottom:0">
+          <li>كلفة التنفيذ الآن = 40,000 ريال</li>
+          <li>العائد بعد 3 سنوات = 55,000 ريال</li>
+          <li>معدل الفائدة = 12%</li>
+        </ul>
+      </div>
+      <div class="sub">المطلوب: هل المشروع مجدٍ اقتصادياً؟</div>
+      <div class="sub">الحل: نحوّل العائد المستقبلي إلى قيمة حالية:</div>
+      <div class="calc">
+PV = 55,000 / (1.12)^3
+PV = 55,000 / 1.4049
+PV = 39,150 ريال
+      </div>
+      <div class="sub">المقارنة:</div>
+      <ul class="lst">
+        <li>الكلفة الآن = 40,000</li>
+        <li>القيمة الحالية للعائد = 39,150</li>
+      </ul>
+      <div class="warn">
+        <div class="wt">❌ المشروع غير مجدٍ اقتصادياً</div>
+        <p style="font-size:.9rem">القيمة الحالية للعائد أقل من الكلفة.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 5 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٥</div><h3>المثال (5): مقارنة مبلغين في زمنين مختلفين</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>الخيار A: 25,000 ريال بعد سنتين</li>
+          <li>الخيار B: 30,000 ريال بعد 4 سنوات</li>
+          <li>معدل الفائدة = 10%</li>
+        </ul>
+      </div>
+      <div class="sub">الحل: نحوّل كلاهما إلى قيمة حالية</div>
+      <div class="calc">
+PV_A = 25,000 / (1.10)^2 = 20,661
+
+PV_B = 30,000 / (1.10)^4 = 20,490
+      </div>
+      <div class="concl">
+        <h4>✅ النتيجة: الخيار A أفضل اقتصادياً</h4>
+        <p>رغم أن مبلغه أقل اسمياً، إلا أن قيمته الحالية (20,661) أعلى من B (20,490).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 6 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٦</div><h3>المثال (6): تطبيق في هندسة الحاسب (خيار شراء)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>شراء خادم اليوم = 60,000 ريال</li>
+          <li>أو تأجيل الشراء سنة بسعر 65,000 ريال</li>
+          <li>معدل الفائدة = 8%</li>
+        </ul>
+      </div>
+      <div class="sub">الحل: نحوّل سعر السنة القادمة إلى قيمة حالية:</div>
+      <div class="calc">
+PV = 65,000 / (1.08) = 60,185 ريال
+      </div>
+      <div class="sub">المقارنة:</div>
+      <ul class="lst">
+        <li>الشراء الآن = 60,000</li>
+        <li>الشراء لاحقاً (قيمة حالية) = 60,185</li>
+      </ul>
+      <div class="concl">
+        <h4>✅ الأفضل اقتصادياً: الشراء الآن</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 7 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٧</div><h3>المثال (7): تأثير الزمن الطويل</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>10,000 ريال اليوم</li>
+          <li>معدل الفائدة = 7%</li>
+          <li>الزمن = 15 سنة</li>
+        </ul>
+      </div>
+      <div class="calc">
+FV = 10,000 × (1.07)^15
+FV = 10,000 × 2.759
+FV = 27,590 ريال
+      </div>
+      <div class="hl"><strong>التفسير:</strong> الزمن الطويل يضاعف أثر الفائدة بشكل كبير.</div>
+    </div>
+  </div>
+
+  <!-- مثال 8 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٨</div><h3>المثال (8): خطأ شائع — للتوضيح</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">السؤال</div>
+        <p>أي أفضل؟</p>
+        <ul class="lst" style="margin-top:8px;margin-bottom:0">
+          <li>100,000 ريال بعد 10 سنوات</li>
+          <li>60,000 ريال اليوم</li>
+          <li>معدل الفائدة = 8%</li>
+        </ul>
+      </div>
+      <div class="sub">الحل: نحوّل 100,000 إلى قيمة حالية:</div>
+      <div class="calc">
+PV = 100,000 / (1.08)^10 = 46,300 ريال
+      </div>
+      <div class="sub">النتيجة:</div>
+      <ul class="lst">
+        <li>60,000 اليوم > 46,300 (قيمة حالية لـ 100,000)</li>
+      </ul>
+      <div class="warn">
+        <div class="wt">❌ المبلغ الأكبر ليس دائماً الأفضل!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- أسئلة تدريبية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">❓</div><h3>أسئلة تدريبية للطلاب</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ol class="lst" style="list-style:decimal;padding-right:22px">
+        <li>احسب القيمة المستقبلية لـ 15,000 ريال بعد 6 سنوات عند فائدة 9%.</li>
+        <li>كم تساوي 80,000 ريال بعد 5 سنوات بالقيمة الحالية عند فائدة 10%؟</li>
+        <li>قارن بين 40,000 ريال اليوم و 60,000 ريال بعد 7 سنوات.</li>
+        <li>لماذا لا يجوز مقارنة مبالغ مالية دون توحيد الزمن؟</li>
+      </ol>
+      <div class="concl">
+        <h4>خلاصة الأمثلة</h4>
+        <ul class="lst" style="margin:0">
+          <li>الزمن عنصر حاسم في القرار الاقتصادي</li>
+          <li>القيمة الاسمية قد تكون مضللة</li>
+          <li>التحليل الصحيح يعتمد على التحويل الزمني</li>
+          <li>هذه الأمثلة هي الأساس لكل ما سيأتي لاحقاً</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end l4 -->
+
+<!-- ══════════════════════════════════════════
+     LECTURE 5
+════════════════════════════════════════════ -->
+<div class="lec l5" id="l5">
+
+  <div class="lec-head l5">
+    <div class="lnum" style="color:var(--l5)">المحاضرة الخامسة</div>
+    <h2>الفائدة البسيطة والفائدة المركبة</h2>
+    <div class="eng">Engineering Economics – Simple and Compound Interest</div>
+  </div>
+
+  <!-- مقدمة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م</div><h3>مقدمة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في المحاضرة السابقة تم التعرف على مفهوم <strong>القيمة الزمنية للنقود</strong>، وأصبح واضحاً أن الزمن يلعب دوراً أساسياً في تقييم أي مبلغ مالي.</p>
+      <p class="txt">في هذه المحاضرة ننتقل إلى <strong>الآلية الرياضية والاقتصادية</strong> التي تفسّر كيف ينمو المال مع الزمن، وهي <strong>الفائدة.</strong></p>
+      <div class="def">
+        <strong>الفائدة هي الأداة التي:</strong>
+        <ul class="lst" style="margin-top:8px">
+          <li>تربط الحاضر بالمستقبل</li>
+          <li>تسمح بحساب القيمة المستقبلية</li>
+          <li>تُمكّن من مقارنة البدائل الاقتصادية</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-1 ما هي الفائدة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١</div><h3>ما هي الفائدة؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="def">
+        <strong>الفائدة هي:</strong> العائد الناتج عن استخدام المال خلال فترة زمنية محددة.
+      </div>
+      <p class="txt">من منظور اقتصادي:</p>
+      <ul class="lst">
+        <li>الفائدة هي ثمن الزمن</li>
+        <li>وهي أيضاً تعويض عن: التضخم، المخاطر، كلفة الفرصة البديلة</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-2 دور الفائدة في الاقتصاد الهندسي -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٢</div><h3>دور الفائدة في الاقتصاد الهندسي</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">في الاقتصاد الهندسي، تُستخدم الفائدة من أجل:</p>
+      <ul class="lst">
+        <li>تقييم المشاريع الهندسية</li>
+        <li>مقارنة البدائل</li>
+        <li>حساب القيم المستقبلية والحالية</li>
+        <li>تحليل الجدوى الاقتصادية</li>
+      </ul>
+      <div class="hl">أي قرار هندسي يمتد عبر الزمن لا يمكن تحليله دون تحديد: معدل الفائدة المناسب.</div>
+    </div>
+  </div>
+
+  <!-- 5-3 أنواع الفائدة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٣</div><h3>أنواع الفائدة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">بشكل أساسي، هناك نوعان رئيسيان: الفائدة البسيطة — الفائدة المركبة. وسيتم تناول كل نوع بالتفصيل.</p>
+    </div>
+  </div>
+
+  <!-- 5-4 الفائدة البسيطة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٤</div><h3>أولاً: الفائدة البسيطة (Simple Interest)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">أ. تعريف الفائدة البسيطة</div>
+      <div class="def">
+        <strong>الفائدة البسيطة هي:</strong> فائدة تُحسب فقط على <strong>رأس المال الأصلي</strong> دون إضافة الفوائد السابقة. أي أن:
+        <ul class="lst" style="margin-top:8px">
+          <li>الفائدة لا تتراكم</li>
+          <li>تبقى الزيادة خطية مع الزمن</li>
+        </ul>
+      </div>
+
+      <div class="sub">ب. خصائص الفائدة البسيطة</div>
+      <ul class="lst">
+        <li>سهلة الحساب</li>
+        <li>تُستخدم غالباً في: القروض قصيرة الأجل، بعض المعاملات التجارية البسيطة</li>
+        <li>نادراً ما تُستخدم في تحليل المشاريع الهندسية طويلة الأجل</li>
+      </ul>
+
+      <div class="sub">ج. الصيغة الرياضية للفائدة البسيطة</div>
+      <div class="formula">FV = PV × (1 + i × n)</div>
+      <ul class="lst">
+        <li>PV = القيمة الحالية</li>
+        <li>FV = القيمة المستقبلية</li>
+        <li>i = معدل الفائدة السنوي</li>
+        <li>n = عدد السنوات</li>
+      </ul>
+
+      <div class="sub">د. تفسير اقتصادي</div>
+      <ul class="lst">
+        <li>نفس مبلغ الفائدة يُضاف كل سنة</li>
+        <li>لا يوجد تأثير تراكمي حقيقي للزمن</li>
+      </ul>
+
+      <div class="sub">هـ. مثال توضيحي (مفهومي)</div>
+      <p class="txt">إذا استثمرنا مبلغاً ثابتاً بفائدة بسيطة:</p>
+      <ul class="lst">
+        <li>النمو يكون ثابتاً</li>
+        <li>العلاقة بين الزمن والقيمة المستقبلية تكون خطية</li>
+      </ul>
+      <p class="txt">وهذا يجعلها:</p>
+      <ul class="lst">
+        <li>غير مناسبة لتحليل الاستثمارات طويلة الأجل</li>
+        <li>أقل دقة في الواقع الاقتصادي</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-5 الفائدة المركبة -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٥</div><h3>ثانياً: الفائدة المركبة (Compound Interest)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">أ. تعريف الفائدة المركبة</div>
+      <div class="def">
+        <strong>الفائدة المركبة هي:</strong> فائدة تُحسب على <strong>رأس المال + الفوائد المتراكمة.</strong> أي أن:
+        <ul class="lst" style="margin-top:8px">
+          <li>الفائدة تولّد فائدة</li>
+          <li>النمو يصبح متسارعاً مع الزمن</li>
+        </ul>
+      </div>
+
+      <div class="sub">ب. لماذا تُستخدم الفائدة المركبة؟</div>
+      <ul class="lst">
+        <li>تعكس الواقع الاقتصادي الحقيقي</li>
+        <li>تمثل سلوك الأسواق والاستثمارات</li>
+        <li>تُستخدم في جميع تحليلات الاقتصاد الهندسي تقريباً</li>
+      </ul>
+
+      <div class="sub">ج. الصيغة الرياضية للفائدة المركبة</div>
+      <div class="formula">FV = PV × (1 + i)^n</div>
+      <ul class="lst">
+        <li>PV = القيمة الحالية</li>
+        <li>FV = القيمة المستقبلية</li>
+        <li>i = معدل الفائدة</li>
+        <li>n = عدد الفترات الزمنية</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-6 مثال توضيحي مفهومي -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٦</div><h3>مثال توضيحي (مفهومي)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">إذا استثمرنا مبلغاً ثابتاً بفائدة بسيطة</div>
+        <ul class="lst" style="margin:0">
+          <li>النمو يكون ثابتاً والعلاقة بين الزمن والقيمة المستقبلية تكون خطية</li>
+        </ul>
+      </div>
+      <div class="ex">
+        <div class="et">أما بالفائدة المركبة</div>
+        <ul class="lst" style="margin:0">
+          <li>النمو يكون أسياً — أي كلما زاد الزمن زادت القيمة بشكل متسارع</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-7 الفرق الجوهري -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٧</div><h3>الفرق الجوهري بين الفائدة البسيطة والمركبة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <table>
+        <tr>
+          <th>المقارنة</th>
+          <th>فائدة بسيطة</th>
+          <th>فائدة مركبة</th>
+        </tr>
+        <tr>
+          <td>أساس الحساب</td>
+          <td>رأس المال فقط</td>
+          <td>رأس المال + الفوائد</td>
+        </tr>
+        <tr>
+          <td>النمو</td>
+          <td>خطي</td>
+          <td>أستى (متسارع)</td>
+        </tr>
+        <tr>
+          <td>الاستخدام في الهندسة</td>
+          <td>نادر</td>
+          <td>أساسي</td>
+        </tr>
+        <tr>
+          <td>الدقة</td>
+          <td>أقل</td>
+          <td>أعلى</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5-8 أثر الزمن في الفائدة المركبة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٨</div><h3>أثر الزمن في الفائدة المركبة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">كلما زاد الزمن:</p>
+      <ul class="lst">
+        <li>زاد تأثير الفائدة المركبة</li>
+        <li>زاد الفرق بينها وبين الفائدة البسيطة</li>
+      </ul>
+      <div class="hl">في المشاريع التقنية طويلة الأجل: تجاهل الفائدة المركبة يؤدي إلى أخطاء جسيمة في القرار.</div>
+    </div>
+  </div>
+
+  <!-- 5-9 تطبيقات هندسية للفائدة المركبة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-٩</div><h3>تطبيقات هندسية للفائدة المركبة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="sub">أولاً: في هندسة الاتصالات</div>
+      <ul class="lst">
+        <li>مشاريع بنية تحتية طويلة الأجل</li>
+        <li>عقود تشغيل وصيانة ممتدة</li>
+        <li>استثمارات في شبكات مستقبلية</li>
+      </ul>
+      <div class="sub">ثانياً: في هندسة الحاسب</div>
+      <ul class="lst">
+        <li>مراكز بيانات</li>
+        <li>تحديث الأنظمة</li>
+        <li>استثمارات برمجية طويلة الأمد</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-10 معدل الفائدة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١٠</div><h3>معدل الفائدة (Interest Rate)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="sub">أ. تعريف معدل الفائدة</div>
+      <div class="def">
+        <strong>معدل الفائدة هو:</strong> النسبة التي تمثل تكلفة استخدام المال خلال فترة زمنية محددة.
+      </div>
+
+      <div class="sub">ب. ما الذي يعكسه معدل الفائدة؟</div>
+      <ul class="lst">
+        <li>التضخم</li>
+        <li>المخاطر</li>
+        <li>كلفة الفرصة البديلة</li>
+        <li>طبيعة المشروع</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-11 اختيار معدل الفائدة في التحليل الهندسي -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١١</div><h3>اختيار معدل الفائدة في التحليل الهندسي</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="warn">
+        <div class="wt">⚠ تنبيه مهم</div>
+        <p style="font-size:.9rem">اختيار معدل فائدة غير مناسب يؤدي إلى: تقييم خاطئ للمشروع وقرار استثماري خاطئ.</p>
+      </div>
+      <p class="txt">لذلك يجب:</p>
+      <ul class="lst">
+        <li>اختيار معدل واقعي</li>
+        <li>يتناسب مع طبيعة المشروع الهندسي</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-12 أخطاء شائعة متعلقة بالفائدة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١٢</div><h3>أخطاء شائعة متعلقة بالفائدة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>استخدام الفائدة البسيطة بدل المركبة</li>
+        <li>تجاهل الزمن الطويل</li>
+        <li>الخلط بين المعدل الاسمي والحقيقي</li>
+        <li>المقارنة دون توحيد الزمن</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-13 لماذا هذه المحاضرة محورية -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١٣</div><h3>لماذا تُعد هذه المحاضرة محورية؟</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="txt">لأن:</p>
+      <ul class="lst">
+        <li>جميع الصيغ القادمة تعتمد عليها</li>
+        <li>أي خطأ هنا يتراكم في التحليل</li>
+        <li>هي الأساس لموضوعات: القيمة الحالية، القيمة السنوية، تقييم المشاريع</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5-14 خلاصة -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">٥-١٤</div><h3>خلاصة المحاضرة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <ul class="lst">
+        <li>الفائدة أداة ربط بين الزمن والمال</li>
+        <li>الفائدة المركبة هي الأساس في الاقتصاد الهندسي</li>
+        <li>الفائدة البسيطة محدودة الاستخدام</li>
+        <li>المهندس الواعي اقتصادياً يفهم أثر الفائدة جيداً</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── الأمثلة الرقمية ── -->
+  <div class="lec-head l5" style="margin-top:28px">
+    <div class="lnum" style="color:var(--l5)">أمثلة رقمية محلولة</div>
+    <h2>الفائدة البسيطة والفائدة المركبة</h2>
+  </div>
+
+  <!-- مثال 1 -->
+  <div class="sec open">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م١</div><h3>المثال (1): حساب الفائدة البسيطة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>رأس المال PV = 10,000 ريال</li>
+          <li>معدل الفائدة السنوي i = 8%</li>
+          <li>الزمن n = 3 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون (فائدة بسيطة):</div>
+      <div class="formula">FV = PV (1 + i × n)</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+FV = 10,000 (1 + 0.08 × 3)
+FV = 10,000 (1 + 0.24)
+FV = 10,000 × 1.24
+FV = 12,400 ريال
+      </div>
+      <div class="sub">التفسير:</div>
+      <ul class="lst">
+        <li>الفائدة السنوية = 800 ريال</li>
+        <li>مجموع الفائدة خلال 3 سنوات = 2,400 ريال</li>
+        <li>النمو <strong>ثابت وغير متراكم</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- مثال 2 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٢</div><h3>المثال (2): حساب الفائدة المركبة لنفس المعطيات</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات نفسها</div>
+        <ul class="lst" style="margin:0">
+          <li>PV = 10,000</li>
+          <li>i = 8%</li>
+          <li>n = 3 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون (فائدة مركبة):</div>
+      <div class="formula">FV = PV (1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+FV = 10,000 × (1.08)^3
+FV = 10,000 × 1.2597
+FV = 12,597 ريال
+      </div>
+      <div class="sub">المقارنة:</div>
+      <ul class="lst">
+        <li>فائدة بسيطة = 12,400</li>
+        <li>فائدة مركبة = 12,597</li>
+      </ul>
+      <div class="hl">✅ الفرق يظهر حتى في مدة قصيرة.</div>
+    </div>
+  </div>
+
+  <!-- مثال 3 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٣</div><h3>المثال (3): مقارنة واضحة بين الفائدة البسيطة والمركبة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>PV = 20,000 ريال</li>
+          <li>i = 10%</li>
+          <li>n = 5 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">الفائدة البسيطة:</div>
+      <div class="calc">
+FV = 20,000 × (1 + 0.10 × 5) = 20,000 × 1.5
+FV = 30,000 ريال
+      </div>
+      <div class="sub">الفائدة المركبة:</div>
+      <div class="calc">
+FV = 20,000 × (1.10)^5
+FV = 20,000 × 1.6105
+FV = 32,210 ريال
+      </div>
+      <div class="concl">
+        <h4>النتيجة</h4>
+        <ul class="lst" style="margin:0">
+          <li>الفرق = 2,210 ريال</li>
+          <li>كلما زاد الزمن ← زاد الفرق</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 4 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٤</div><h3>المثال (4): تطبيق هندسي (مشروع اتصالات)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <p>شركة اتصالات تستثمر:</p>
+        <ul class="lst" style="margin-top:8px;margin-bottom:0">
+          <li>50,000 ريال اليوم</li>
+          <li>معدل العائد = 12%</li>
+          <li>مدة المشروع = 6 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">باستخدام الفائدة المركبة:</div>
+      <div class="calc">
+FV = 50,000 × (1.12)^6
+FV = 50,000 × 1.9738
+FV = 98,690 ريال
+      </div>
+      <div class="hl"><strong>التفسير:</strong> رأس المال تضاعف تقريباً — تجاهل التركيب هنا يؤدي إلى تقليل العائد بشكل كبير.</div>
+    </div>
+  </div>
+
+  <!-- مثال 5 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٥</div><h3>المثال (5): خطأ شائع (استخدام فائدة بسيطة بدل مركبة)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>PV = 30,000</li>
+          <li>i = 9%</li>
+          <li>n = 10 سنوات</li>
+        </ul>
+      </div>
+      <div class="warn">
+        <div class="wt">❌ فائدة بسيطة (خطأ شائع):</div>
+      </div>
+      <div class="calc">
+FV = 30,000 × (1 + 0.09 × 10) = 30,000 × 1.9
+FV = 57,000 ريال
+      </div>
+      <div class="hl">✅ فائدة مركبة (الصحيح):</div>
+      <div class="calc">
+FV = 30,000 × (1.09)^10
+FV = 30,000 × 2.367
+FV = 71,010 ريال
+      </div>
+      <div class="concl">
+        <h4>الفرق</h4>
+        <p>71,010 − 57,000 = <strong>14,010 ريال</strong><br>
+        ❌ استخدام الفائدة البسيطة يقلل العائد بشكل كبير.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 6 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٦</div><h3>المثال (6): حساب القيمة الحالية باستخدام الفائدة المركبة</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>FV = 40,000 ريال</li>
+          <li>i = 10%</li>
+          <li>n = 4 سنوات</li>
+        </ul>
+      </div>
+      <div class="sub">القانون:</div>
+      <div class="formula">PV = FV / (1+i)^n</div>
+      <div class="sub">الحل:</div>
+      <div class="calc">
+PV = 40,000 / (1.10)^4
+PV = 40,000 / 1.4641
+PV = 27,320 ريال (تقريباً)
+      </div>
+      <div class="hl"><strong>التفسير:</strong> 40,000 بعد 4 سنوات ≠ 40,000 اليوم — قيمتها اليوم 27,320 فقط.</div>
+    </div>
+  </div>
+
+  <!-- مثال 7 -->
+  <div class="sec">
+    <div class="sec-head" onclick="tog(this)">
+      <div class="num">م٧</div><h3>المثال (7): تطبيق في هندسة الحاسب (خيار شراء)</h3><span class="chev">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="ex">
+        <div class="et">المعطيات</div>
+        <ul class="lst" style="margin:0">
+          <li>شراء نظام الآن = 70,000 ريال</li>
+          <li>أو بعد 3 سنوات بسعر 95,000 ريال</li>
+          <li>معدل الفائدة = 11%</li>
+        </ul>
+      </div>
+      <div class="sub">تحويل السعر المستقبلي إلى قيمة حالية:</div>
+      <div class="calc">
+PV = 95,000 / (1.11)^3
+PV = 95,000 / 1.3676
+PV = 69,450 ريال
+      </div>
+      <div class="sub">القرار:</div>
+      <ul class="lst">
+        <li>الشراء الآن = 70,000</li>
+        <li>الشراء لاحقاً (قيمة حالية) = 69,450</li>
+      </ul>
+      <div class="concl">
+        <h4>✅ الأفضل اقتصادياً = الشراء لاحقاً</h4>
+        <p>رغم الكلفة الاسمية الأعلى، قيمته الحالية أقل.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end l5 -->
+
+</div><!-- container -->
+
+<script>
+function show(n){
+  document.querySelectorAll('.lec').forEach(l=>l.classList.remove('active'));
+  document.getElementById('l'+n).classList.add('active');
+  const tabs=document.querySelectorAll('.tab');
+  tabs.forEach(t=>t.className='tab');
+  tabs[n-4].className='tab a'+n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tog(head){
+  head.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاضرات الاقتصاد الهندسي</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #161b27;
+    --card: #1e2535;
+    --border: #2a3347;
+    --accent1: #4f8ef7;
+    --accent2: #f7c948;
+    --accent3: #3ecf8e;
+    --accent4: #e05c5c;
+    --text: #e8eaf0;
+    --text-muted: #8b93a8;
+    --lecture1: #4f8ef7;
+    --lecture2: #3ecf8e;
+    --lecture3: #f7c948;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, #0f1117 0%, #1a2340 50%, #0f1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,142,247,0.12) 0%, transparent 70%);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(79,142,247,0.15);
+    border: 1px solid rgba(79,142,247,0.4);
+    color: var(--accent1);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    position: relative;
+  }
+
+  /* Navigation */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 18px 28px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active-l1 { color: var(--lecture1); border-bottom-color: var(--lecture1); }
+  .nav-tab.active-l2 { color: var(--lecture2); border-bottom-color: var(--lecture2); }
+  .nav-tab.active-l3 { color: var(--lecture3); border-bottom-color: var(--lecture3); }
+
+  /* Main layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Lecture header */
+  .lecture-header {
+    padding: 32px;
+    border-radius: 16px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .lecture-header.l1 { background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(79,142,247,0.05)); border: 1px solid rgba(79,142,247,0.3); }
+  .lecture-header.l2 { background: linear-gradient(135deg, rgba(62,207,142,0.15), rgba(62,207,142,0.05)); border: 1px solid rgba(62,207,142,0.3); }
+  .lecture-header.l3 { background: linear-gradient(135deg, rgba(247,201,72,0.15), rgba(247,201,72,0.05)); border: 1px solid rgba(247,201,72,0.3); }
+  .lecture-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+  .lecture-header h2 { font-family: 'Amiri', serif; font-size: 1.9rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .lecture-header .subtitle { font-size: 0.95rem; color: var(--text-muted); }
+
+  /* Section */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .section:hover { border-color: rgba(79,142,247,0.3); }
+  .section.l2:hover { border-color: rgba(62,207,142,0.3); }
+  .section.l3:hover { border-color: rgba(247,201,72,0.3); }
+
+  .section-head {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .l1 .section-num { background: rgba(79,142,247,0.2); color: var(--lecture1); }
+  .l2 .section-num { background: rgba(62,207,142,0.2); color: var(--lecture2); }
+  .l3 .section-num { background: rgba(247,201,72,0.2); color: var(--lecture3); }
+
+  .section-head h3 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+  .chevron { color: var(--text-muted); transition: transform 0.3s; font-size: 0.8rem; }
+  .section.open .chevron { transform: rotate(180deg); }
+
+  .section-body {
+    padding: 0 24px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .section.open .section-body { max-height: 4000px; padding: 0 24px 24px; }
+
+  /* Content elements */
+  p.text { margin-bottom: 14px; font-size: 0.95rem; color: #cdd0da; line-height: 1.9; }
+  
+  ul.list, ol.list {
+    padding-right: 20px;
+    margin-bottom: 14px;
+  }
+  ul.list li, ol.list li {
+    margin-bottom: 8px;
+    font-size: 0.93rem;
+    color: #c8ccda;
+    position: relative;
+  }
+  ul.list { list-style: none; padding-right: 0; }
+  ul.list li::before {
+    content: '◆';
+    color: var(--accent1);
+    font-size: 0.5rem;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .l2 ul.list li::before { color: var(--lecture2); }
+  .l3 ul.list li::before { color: var(--lecture3); }
+
+  .highlight-box {
+    background: rgba(79,142,247,0.08);
+    border-right: 3px solid var(--accent1);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 0.93rem;
+  }
+  .l2 .highlight-box { background: rgba(62,207,142,0.08); border-right-color: var(--lecture2); }
+  .l3 .highlight-box { background: rgba(247,201,72,0.08); border-right-color: var(--lecture3); }
+
+  .definition {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .definition strong { color: var(--accent2); }
+
+  .example-box {
+    background: rgba(62,207,142,0.06);
+    border: 1px dashed rgba(62,207,142,0.3);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .example-box .ex-title {
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  .warning-box {
+    background: rgba(224,92,92,0.08);
+    border: 1px solid rgba(224,92,92,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .warning-box .w-title { font-weight: 700; color: var(--accent4); margin-bottom: 8px; font-size: 0.85rem; }
+
+  .calc-box {
+    background: #0a0e1a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    direction: ltr;
+    text-align: left;
+    color: #a8d8a8;
+  }
+
+  .sub-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 16px 0 8px;
+    color: var(--accent2);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+  }
+  th {
+    background: rgba(255,255,255,0.06);
+    padding: 10px 14px;
+    text-align: right;
+    font-weight: 700;
+    border: 1px solid var(--border);
+    color: var(--accent2);
+  }
+  td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    color: #c8ccda;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .badge-blue { background: rgba(79,142,247,0.2); color: var(--accent1); }
+  .badge-green { background: rgba(62,207,142,0.2); color: var(--accent3); }
+  .badge-yellow { background: rgba(247,201,72,0.2); color: var(--accent2); }
+  .badge-red { background: rgba(224,92,92,0.2); color: var(--accent4); }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  .lecture-section { display: none; }
+  .lecture-section.active { display: block; }
+
+  /* Conclusion boxes */
+  .conclusion {
+    background: linear-gradient(135deg, rgba(79,142,247,0.1), rgba(62,207,142,0.1));
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .conclusion h4 { color: var(--accent1); margin-bottom: 10px; font-size: 1rem; }
+
+  @media (max-width: 600px) {
+    .nav-tabs { padding: 0 16px; }
+    .container { padding: 24px 16px 60px; }
+    .lecture-header { padding: 24px 20px; }
+    .section-head { padding: 16px 18px; }
+    .section.open .section-body { padding: 0 18px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">هندسة الاتصالات والمعلوماتية</div>
+  <h1>الاقتصاد الهندسي</h1>
+  <p>المحاضرات الأولى والثانية والثالثة — مستخرجة كاملة</p>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active-l1" onclick="showLecture(1)">📘 المحاضرة الأولى</div>
+  <div class="nav-tab" onclick="showLecture(2)">📗 المحاضرة الثانية</div>
+  <div class="nav-tab" onclick="showLecture(3)">📙 المحاضرة الثالثة</div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LECTURE 1 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="lecture-section active" id="lec1">
+
+  <div class="lecture-header l1">
+    <div class="lecture-num" style="color:var(--lecture1)">المحاضرة الأولى</div>
+    <h2>أساسيات الاقتصاد الهندسي للمهندسين</h2>
+    <div class="subtitle">Engineering Economics – Fundamentals for Engineers</div>
+  </div>
+
+  <!-- مقدمة -->
+  <div class="section l1 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م</div>
+      <h3>مقدمة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">يحتل الاقتصاد الهندسي أهمية خاصة للعاملين في مجال الهندسة والاقتصاد من مهندسين واقتصاديين وممولين وغيرهم، وهو أحد المناهج الدراسية لطلاب كليات الهندسة بفروعها المختلفة (المدنية والكهربائية والميكانيكية والبتروكيماوية والمعلوماتية).</p>
+      <p class="text">يحتاج طالب الهندسة بشكل خاص إلى التزود من هذا العلم بما يكفي لاتخاذ القرارات الهندسية التي تنطوي جميعها على أبعاد اقتصادية خلال ممارسته لمهنة الهندسة في حياته العملية.</p>
+    </div>
+  </div>
+
+  <!-- 1-1 ماهية الاقتصاد الهندسي -->
+  <div class="section l1 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-١</div>
+      <h3>ماهيّة الاقتصاد الهندسي</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">ما هو الاقتصاد الهندسي وأين تكمن أهميته؟ أول ردة فعل لطلاب الهندسة على هذه الأسئلة هي أن غيري سوف يعنى بالأمور المالية، ولست بحاجة إلى أن أفكر فيها.</p>
+      <div class="highlight-box">
+        <strong>الحقيقة:</strong> المشاريع الهندسية يجب ألا تكون خاضعة للتحقيق من الناحية الفيزيائية فقط، بل يجب أن تكون خاضعة للتحقيق من الناحية المادية أيضاً.
+      </div>
+      <div class="example-box">
+        <div class="ex-title">مثال توضيحي</div>
+        <p class="text" style="margin:0">يمكن صنع دراجة أطفال ثلاثية العجلات من إطارات الألمنيوم أو من مواد مركبة. قد يرى البعض أن الإطار المركب يمثل الخيار الأفضل لكونه أمتن وأخف بيد أنه من الصعب إيجاد سوق رائجة لدراجة ثلاثية العجلات يبلغ ثمنها ألف دولار.</p>
+      </div>
+      <p class="text">الاقتصاد الهندسي يعنى بتقويم المشاريع الهندسية بتقدير منظم للأرباح وتكلفة المشاريع التصميمية والتحليلية. أي أن الاقتصاد الهندسي يحدد الأرباح وتكاليف المشاريع الهندسية لمعرفة ما إذا كانت تدر أو تقتصد ما يكفي من المال لتبرير رؤوس الأموال المستثمرة فيها.</p>
+    </div>
+  </div>
+
+  <!-- 1-2 لماذا يحتاج المهندس للاقتصاد الهندسي -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٢</div>
+      <h3>لماذا يحتاج المهندس للاقتصاد الهندسي؟</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">قد يظن طالب الهندسة في سنواته الأولى أن دوره يقتصر على التصميم وإجراء الحسابات والقيام بعملية التنفيذ، لكن في الواقع العملي يُطلب من المهندس أن يُجيب عن مجموعة من الأسئلة مثل:</p>
+      <ul class="list">
+        <li>أي حل تقني هو الأفضل اقتصادياً؟</li>
+        <li>هل من الأفضل شراء معدات جديدة أم الاستمرار باستخدام القديمة؟</li>
+        <li>هل الاستثمار في تقنية أحدث مبرر اقتصادياً؟</li>
+        <li>متى يكون المشروع خاسراً رغم نجاحه تقنياً؟</li>
+      </ul>
+      <div class="highlight-box">
+        هذه الأسئلة لا يمكن الإجابة عنها بالمعادلات الهندسية وحدها، بل تتطلب تحليلاً اقتصادياً.
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-3 تعريف الاقتصاد الهندسي -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٣</div>
+      <h3>تعريف الاقتصاد الهندسي</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="definition">
+        <strong>الاقتصاد الهندسي:</strong> هو العلم الذي يهتم بـ <strong>تحليل وتقييم البدائل الهندسية المختلفة من الناحية الاقتصادية</strong>، بهدف اختيار البديل الذي يحقق أفضل استخدام للموارد المتاحة. أي أنه يركز على:
+        <ul class="list" style="margin-top:10px">
+          <li>المفاضلة بين حلول متعددة</li>
+          <li>مراعاة الكلفة والزمن والعائد</li>
+          <li>دعم القرار الهندسي بالأرقام الاقتصادية</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-4 الفرق بين الاقتصاد العام والهندسي -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٤</div>
+      <h3>الفرق بين الاقتصاد العام والاقتصاد الهندسي</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">من المهم التمييز بين الاقتصاد العام وبين الاقتصاد الهندسي لأن الاقتصاد العام يهتم بدراسة:</p>
+      <ul class="list">
+        <li>العرض والطلب</li>
+        <li>التضخم</li>
+        <li>البطالة</li>
+        <li>السياسة النقدية</li>
+        <li>الاقتصاد الكلي والجزئي</li>
+      </ul>
+      <div class="highlight-box">
+        وبمعنى آخر الاقتصاد العام يدرس الاقتصاد كظاهرة اجتماعية، بينما <strong>الاقتصاد الهندسي يدرس القرار الهندسي كاستثمار.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-5 موقع الاقتصاد الهندسي -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٥</div>
+      <h3>موقع الاقتصاد الهندسي في حياة مهندس الاتصالات والحاسبات</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="sub-title">في هندسة الاتصالات:</div>
+      <ul class="list">
+        <li>اختيار نوع الشبكة (الياف ضوئية – لاسلكية – هجينه)</li>
+        <li>تحديد سعة الشبكة مقابل الكلفة</li>
+        <li>جدوى توسيع شبكة قائمة</li>
+        <li>اختيار مورد المعدات</li>
+      </ul>
+      <div class="sub-title">في هندسة الحاسبات:</div>
+      <ul class="list">
+        <li>شراء خوادم محلية أو الاعتماد على الحوسبة السحابية</li>
+        <li>تطوير برنامج داخلي أو شراء برنامج جاهز</li>
+        <li>اختيار بنية النظام</li>
+        <li>تحديث العتاد أو الاستمرار باستخدامه</li>
+      </ul>
+      <div class="warning-box">
+        <div class="w-title">⚠ قاعدة مهمة</div>
+        في كل الحالات، الحل التقني الأفضل ليس دائماً الحل الاقتصادي الأفضل.
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-6 مفهوم الندرة والموارد المحدودة -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٦</div>
+      <h3>مفهوم الندرة والموارد المحدودة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">يعتبر مفهوم الندرة أحد الأسس الرئيسية للاقتصاد الهندسي والذي يعني أن الموارد المتاحة (المال – الوقت – المعدات – الطاقة) محدودة بينما الحاجات والرغبات غير محدودة.</p>
+      <p class="text">لذلك لا يستطيع المهندس تنفيذ كل الحلول الممكنة. بل عليه أن:</p>
+      <ul class="list">
+        <li>يوازن</li>
+        <li>يختار</li>
+        <li>يشرح قراره بالأرقام</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-7 القرار الهندسي كقرار اقتصادي -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٧</div>
+      <h3>القرار الهندسي كقرار اقتصادي</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">يعتبر القرار الهندسي في الحقيقة قرار استثماري حتى في أبسط القرارات مثل:</p>
+      <ul class="list">
+        <li>شراء جهاز</li>
+        <li>اختيار التقنية</li>
+        <li>تحديد مدة المشروع</li>
+      </ul>
+      <div class="sub-title">وهي قرارات تؤثر على:</div>
+      <ul class="list">
+        <li>الكلفة</li>
+        <li>الإيرادات</li>
+        <li>عمر المشروع</li>
+        <li>الأرباح المستقبلية</li>
+      </ul>
+      <div class="highlight-box">
+        ولهذا يعتبر الاقتصاد الهندسي <strong>لغة القرار بين المهندس والإدارة.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-8 مفهوم البدائل الهندسية -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٨</div>
+      <h3>مفهوم البدائل الهندسية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">من المبادئ الأساسية في الاقتصاد الهندسي: <strong>لا يوجد قرار اقتصادي دون وجود بدائل.</strong></p>
+      <div class="example-box">
+        <div class="ex-title">مثال</div>
+        <ul class="list" style="margin:0">
+          <li><span class="badge badge-blue">بديل A</span> استخدام تقنية قديمة بكلفة منخفضة</li>
+          <li><span class="badge badge-green">بديل B</span> استخدام تقنية حديثة بكلفة أعلى</li>
+          <li><span class="badge badge-yellow">بديل C</span> حل وسط</li>
+        </ul>
+      </div>
+      <p class="text">مهمة المهندس ليست اختيار أول حل خطر في باله. بل:</p>
+      <ul class="list">
+        <li>تحديد البدائل</li>
+        <li>تحليل كل بديل</li>
+        <li>مقارنة النتائج</li>
+        <li>اختيار البديل الأفضل اقتصادياً</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-9 العلاقة بين التقنية والكلفة -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-٩</div>
+      <h3>العلاقة بين التقنية والكلفة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li>كلما ارتفع المستوى التقني كلما ارتفعت الكلفة</li>
+        <li>ارتفاع الكلفة يجب أن يرافقه ارتفاع بالعائد</li>
+      </ul>
+      <div class="highlight-box">
+        الاقتصاد الهندسي لا يسأل: ما هو الحل الأفضل تقنياً؟ بل يسأل: <strong>هل العائد من هذا الحل يبرر الكلفة؟</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-10 دور الزمن -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-١٠</div>
+      <h3>دور الزمن في القرارات الهندسية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">يعتبر الزمن عنصراً أساسياً في الاقتصاد الهندسي لذلك يجب نأخذ بعين الاعتبار:</p>
+      <ul class="list">
+        <li>المال اليوم ليس كمال الغد</li>
+        <li>المشروع القصير يختلف عن المشروع الطويل</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 1-11 صفات المهندس الواعي اقتصادياً -->
+  <div class="section l1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١-١١</div>
+      <h3>صفات المهندس الواعي اقتصادياً</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li>لا ينحاز للحلول المكلفة دون مبرر</li>
+        <li>يبرر قراراته بالأرقام</li>
+        <li>يفهم لغة الإدارة والتمويل</li>
+        <li>يوازن بين الأداء والكلفة</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- end lec1 -->
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LECTURE 2 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="lecture-section" id="lec2">
+
+  <div class="lecture-header l2">
+    <div class="lecture-num" style="color:var(--lecture2)">المحاضرة الثانية</div>
+    <h2>مبادئ الاقتصاد الهندسي وعملية صنع القرار الاقتصادي</h2>
+    <div class="subtitle">Engineering Economics Principles & Decision Making Process</div>
+  </div>
+
+  <!-- 2-1 مبادئ الاقتصاد الهندسي -->
+  <div class="section l2 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٢-١</div>
+      <h3>مبادئ الاقتصاد الهندسي السبعة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">لا بد لتطور ودراسة وتطبيق أي علم أن نبدأ من قاعدة أساسية، ويعرف الأساس الذي يقوم عليه الاقتصاد الهندسي على أنه مجموعة من المبادئ والمفاهيم الأساسية التي توفر المفاهيم المنهجية. ويمكن مناقشة أسس العلم بدلالة سبعة مبادئ:</p>
+
+      <div class="sub-title"><span class="badge badge-green">١</span> مبدأ البدائل</div>
+      <p class="text">يقضي الموقف باتخاذ قرار ما، إلى الاختيار بين بديلين أو أكثر. ومن المهم تطوير البدائل وتعريفها في هذه العملية التقويم المفصل وذلك بسبب الأثر الناجم على جودة القرار. وعلى المهندسين والإداريين أن يولوا أهمية قصوى لهذه المسؤولية. فالخلق والإبتكار أساسيان في هذه العملية.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٢</span> التركيز على الاختلافات</div>
+      <p class="text">الاختلافات في النتائج المستقبلية للبدائل وهي المهمة في عملية المقارنة بين البدائل، ويجب أخذها في الحسبان عند اتخاذ القرار.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٣</span> استخدام وجهة نظر ثابتة</div>
+      <p class="text">إن النتائج المستقبلية للبدائل قد تكون اقتصادية أو غير اقتصادية، وبالتالي يجب تطويرها باتساق انطلاقاً من وجهة نظر محدودة. حيث أنه من الطبيعي اعتماد القرار مُتخذ القرار والذي يكون غالباً تصور مالك المؤسسة. إلا أنه من المهم أولاً تحديد وجهة النظر التي قام عليها القرار، واستخدامه بثبات في التوصيف والدراسة ومقارنة البدائل.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٤</span> استخدام وحدة قياس مشتركة</div>
+      <p class="text">من شأن استخدام وحدة قياس مشتركة في تعداد أكبر قدر ممكن من النتائج المستقبلية للبدائل، أن يسهل التحليل ومقارنة النتائج.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٥</span> دراسة كل المعايير ذات الصلة</div>
+      <p class="text">يتطلب انتقاء البدائل المفضلة (اتخاذ القرار) استخدام معيار أو عدة معايير، كما أن عملية اتخاذ القرار لا بد أن تنظر في ان واحد إلى معيار واحد قد يكون عدة معايير. النتائج التي جرى تعدادها في الوحدة النقدية وإلى تلك الكلاسيكية التي حددت بطريقة وصفية أو بوحدات قياس مختلفة.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٦</span> أظهار ما هو مشكوك فيه</div>
+      <p class="text">يدخل الشك في صلب النتائج المستقبلية للبدائل ويجب الاعتراف به عند تحليل هذه البدائل ومقارنتها.</p>
+
+      <div class="sub-title"><span class="badge badge-green">٧</span> مراجعة القرارات المُتخذة</div>
+      <p class="text">يتضمن القرار الحسن مقارنة الحسن الأولية للبديل المختار لاحقاً بالنتائج الفعلية التي تحققت بقدر ما هو ممكن وعملي.</p>
+    </div>
+  </div>
+
+  <!-- 2-2 عملية صنع القرار الهندسي الاقتصادي -->
+  <div class="section l2 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٢-٢</div>
+      <h3>عملية صنع القرار الهندسي الاقتصادي (٧ خطوات)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">تتم عملية صنع القرار الاقتصادي بتطبيق المبادئ السابقة وفق مايلي:</p>
+      <ul class="list">
+        <li><strong>الخطوة ١:</strong> تحديد المشكلة والأهداف بوضوح</li>
+        <li><strong>الخطوة ٢:</strong> تطوير البدائل الممكنة للحل</li>
+        <li><strong>الخطوة ٣:</strong> تحديد التدفقات النقدية المتعلقة بكل بديل</li>
+        <li><strong>الخطوة ٤:</strong> اختيار معيار للمقارنة مثل (صافي القيمة الحالية، معدل العائد) بالدولار</li>
+        <li><strong>الخطوة ٥:</strong> تحليل ومقارنة البدائل باستخدام الأدوات الكمية</li>
+        <li><strong>الخطوة ٦:</strong> اختيار أفضل بديل بناءً على التحليل</li>
+        <li><strong>الخطوة ٧:</strong> مراقبة الأداء وتقييم النتائج بعد التنفيذ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2-3 مفاهيم أساسية -->
+  <div class="section l2">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٢-٣</div>
+      <h3>مفاهيم أساسية في عملية القرار</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="definition">
+        <strong>١- أطراف التحليل:</strong> من يتحمل التكاليف ويحصل على المنافع (فرد – شركة – مجتمع)
+      </div>
+      <div class="definition">
+        <strong>٢- التكاليف والأعباء:</strong> أنواعها الأولية: (ثابتة – متغيرة – مباشرة أو غير مباشرة)
+      </div>
+      <div class="definition">
+        <strong>٣- التدفق النقدي:</strong> حركة الدخل (التدفقات الداخلة) والنفقات (التدفقات الخارجة)
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال تطبيقي كامل -->
+  <div class="section l2">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م.ت</div>
+      <h3>مثال تطبيقي كامل: اختيار منصة سحابية (AWS vs Azure)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المشكلة</div>
+        <p class="text" style="margin:0">تحتاج شركة ناشئة في مجال تطبيقات الهاتف إلى اختيار منصة سحابية مثل AWS أو Azure لتشغيل تطبيقها الجديد لمدة ٣ سنوات. كيف يتخذ المهندس القرار الأمثل اقتصادياً؟</p>
+      </div>
+
+      <p class="text">سوف نقوم بتطبيق المبادئ السبعة بخطوة بخطوة:</p>
+
+      <div class="sub-title">الخطوة ١ و٢: تحديد المشكلة ووضع الافتراضات</div>
+      <p class="text">الافتراضات: عدد المستخدمين متوقع ١٠٠،٠٠٠ مستخدم في السنة الأولى مع نمو ٢٠٪ سنوياً. حركة بيانات ٥٠ تيرا بايت شهرياً.</p>
+
+      <div class="sub-title">الخطوة ٣: تحديد التدفقات النقدية لكل بديل</div>
+      <p class="text">نفترض التقديرات السنوية هي التكاليف السنوية المتوقعة:</p>
+      
+      <table>
+        <tr>
+          <th>السنة</th>
+          <th>البديل أ (AWS)</th>
+          <th>البديل ب (Azure)</th>
+        </tr>
+        <tr>
+          <td>السنة ٠ (استثمار ابتدائي)</td>
+          <td>-20,000 دولار</td>
+          <td>-15,000 دولار</td>
+        </tr>
+        <tr>
+          <td>السنة ١</td>
+          <td>25,000 دولار</td>
+          <td>30,000 دولار</td>
+        </tr>
+        <tr>
+          <td>السنة ٢</td>
+          <td>28,000 دولار</td>
+          <td>30,000 دولار</td>
+        </tr>
+        <tr>
+          <td>السنة ٣</td>
+          <td>30,000 دولار</td>
+          <td>28,000 دولار</td>
+        </tr>
+      </table>
+      <p class="text" style="font-size:0.8rem;color:var(--text-muted)">ملاحظة: الأرقام الافتراضية للتوضيح، في الواقع يجب حسابها بدقة باستخدام حاسبات التسعير الرسمية.</p>
+
+      <div class="sub-title">الخطوة ٤ و٥: اختيار معيار المقارنة والتحليل</div>
+      <p class="text">نستخدم صافي القيمة الحالية (NPV) بمعدل خصم ١٠٪ (يعكس تكلفة رأس المال والمخاطرة).</p>
+
+      <div class="sub-title">حساب NPV للبديل أ (AWS):</div>
+      <div class="calc-box">
+NPV(A) = -20,000
+       + 25,000 / (1+0.1)^1
+       + 28,000 / (1+0.1)^2
+       + 30,000 / (1+0.1)^3
+
+NPV(A) = -20,000 + 22,727 + 23,140 + 22,539
+
+NPV(A) = 47,026 دولار
+      </div>
+
+      <div class="sub-title">حساب NPV للبديل ب (Azure):</div>
+      <div class="calc-box">
+NPV(B) = -15,000
+       + 30,000 / (1+0.1)^1
+       + 30,000 / (1+0.1)^2
+       + 28,000 / (1+0.1)^3
+
+NPV(B) = -15,000 + 27,273 + 24,793 + 21,024
+
+NPV(B) = 48,870 دولار ... (أفضل)
+      </div>
+
+      <div class="sub-title">الخطوة ٦ و٧: اتخاذ القرار والمراجعة</div>
+      <div class="conclusion">
+        <h4>✅ القرار</h4>
+        <p>بناءً على تحليل صافي القيمة الحالية، البديل ب (Azure) له قيمة حالية أعلى قليلاً أي (48,870) دولار مقابل (47,026) دولار. قد يكون الخيار الاقتصادي الأفضل خاصةً مع انخفاض تكاليف البداية.</p>
+        <p style="margin-top:8px"><strong>المراجعة:</strong> يجب الموازنة مع المعايير غير الاقتصادية (مهارات الفريق). كما يجب تحليل الحساسية: ماذا لو كان النمو ١٠٪ فقط أو ٣٠٪؟ أي بديل أكثر مرونة؟</p>
+      </div>
+
+      <div class="highlight-box">
+        <strong>الخلاصة:</strong> هذا المثال يوضح كيف يحول الاقتصاد الهندسي قراراً تقنياً (اختيار منصة برمجية) الى مقارنة اقتصادية كمية باستخدام مبادئه الأساسية، والذي هو الجوهر والتفكير المنهجي والتركيز على الفروق الاقتصادية بين الخيارات.
+      </div>
+    </div>
+  </div>
+
+  <!-- معلومات اضافية من الصفحة الاخيرة للمحاضرة 2 -->
+  <div class="section l2">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٢-٤</div>
+      <h3>المعايير الاقتصادية وغير الاقتصادية عند اتخاذ القرار</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="sub-title">المعايير الاقتصادية:</div>
+      <ul class="list">
+        <li>التكلفة الاجمالية</li>
+        <li>التكلفة حسب الطلب</li>
+      </ul>
+      <div class="sub-title">المعايير غير الاقتصادية:</div>
+      <ul class="list">
+        <li>سهولة الاستخدام</li>
+        <li>دعم اللغات البرمجية</li>
+        <li>تكامل النظام البيئي</li>
+      </ul>
+      <p class="text">عند اتخاذ القرار، يجب مراعاة كلا نوعي المعايير مجتمعَين.</p>
+      
+      <div class="sub-title">خطوات تطبيق عملية القرار (ملخص):</div>
+      <ol class="list" style="list-style:decimal; padding-right: 20px;">
+        <li>اجعل عدم التأكد صريحاً — لا تدخل أي مبدأ الشك (نعترف بأن عدد المستخدمين وحركة البيانات مجرد توقعات، لذلك سنحلل لاحقاً حساسية القرار للتغيير في هذه الأرقام)</li>
+        <li>أعد زيارة قراراتك — بعد سنة من التشغيل، تراجع الأداء الفعلي مقابل التوقعات، قد نغير الخطة إذا كان النمو الفعلي أسرع أو أبطأ مما توقعنا</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- end lec2 -->
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LECTURE 3 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="lecture-section" id="lec3">
+
+  <div class="lecture-header l3">
+    <div class="lecture-num" style="color:var(--lecture3)">المحاضرة الثالثة</div>
+    <h2>مفاهيم الكلفة وتصنيفاتها في الاقتصاد الهندسي</h2>
+    <div class="subtitle">Engineering Economics – Cost Concepts and Classifications</div>
+  </div>
+
+  <!-- 1. مقدمة المحاضرة الثالثة -->
+  <div class="section l3 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١</div>
+      <h3>مقدمة المحاضرة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">في المحاضرة السابقة تم التعرف على مفهوم الاقتصاد الهندسي ودوره في دعم القرار الهندسي. في هذه المحاضرة ننتقل إلى أحد أهم الأسس العملية للاقتصاد الهندسي، وهو <strong>مفهوم الكلفة.</strong></p>
+      <div class="warning-box">
+        <div class="w-title">⚠ تنبيه مهم</div>
+        لا يمكن لأي مهندس أن يتخذ قراراً اقتصادياً صحيحاً دون:
+        <ul class="list" style="margin-top:8px">
+          <li>فهم معنى الكلفة</li>
+          <li>معرفة أنواعها</li>
+          <li>التمييز بين التكاليف المؤثرة وغير المؤثرة في القرار</li>
+        </ul>
+      </div>
+      <div class="highlight-box">
+        كثير من الأخطاء الهندسية لا تكون أخطاء تقنية، بل <strong>أخطاء في تقدير الكلفة أو في تصنيفها.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. تعريف الكلفة -->
+  <div class="section l3 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٢</div>
+      <h3>تعريف الكلفة (Cost)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="definition">
+        <strong>الكلفة هي:</strong> كل ما يتم التضحية به من موارد (مالية أو غير مالية) من أجل الحصول على منفعة أو تحقيق هدف معين.
+      </div>
+      <p class="text">لا تقتصر الكلفة على المال فقط بل قد تشمل:</p>
+      <ul class="list">
+        <li>الوقت</li>
+        <li>الجهد</li>
+        <li>الطاقة</li>
+        <li>الموارد البشرية</li>
+        <li>الفرص الضائعة</li>
+      </ul>
+      <div class="highlight-box">
+        في الاقتصاد الهندسي، يتم التركيز غالباً على <strong>الكلفة القابلة للقياس المالي</strong> لأنها الأساس في التحليل والمقارنة.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. أهمية فهم الكلفة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٣</div>
+      <h3>أهمية فهم الكلفة للمهندس</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">فهم الكلفة يساعد المهندس على:</p>
+      <ul class="list">
+        <li>تقدير ميزانيات المشاريع</li>
+        <li>مقارنة البدائل الهندسية</li>
+        <li>تبرير القرارات أمام الإدارة المالي</li>
+        <li>تجنب الهدر المالي</li>
+        <li>تحسين كفاءة استخدام الموارد</li>
+      </ul>
+      <div class="warning-box">
+        <div class="w-title">المهندس الذي لا يفهم الكلفة قد:</div>
+        <ul class="list" style="margin-top:6px">
+          <li>يختار حلاً ممتازاً تقنياً لكنه خاسر اقتصادياً</li>
+          <li>يتسبب في تجاوز الميزانيات</li>
+          <li>يفشل مشروعه رغم نجاحه الفني</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. الكلفة في المشاريع الهندسية -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٤</div>
+      <h3>الكلفة في المشاريع الهندسية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <p class="text">في المشاريع الهندسية، تظهر الكلفة في مراحل متعددة:</p>
+      <ul class="list">
+        <li>مرحلة التصميم</li>
+        <li>مرحلة التنفيذ</li>
+        <li>مرحلة التشغيل</li>
+        <li>مرحلة الصيانة</li>
+        <li>مرحلة الاستبدال أو الإنهاء</li>
+      </ul>
+      <div class="highlight-box">
+        ولهذا فإن الاقتصاد الهندسي لا ينظر إلى الكلفة اللحظية فقط، بل إلى <strong>كلفة دورة الحياة الكاملة للمشروع.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. تصنيف الكلفة حسب طبيعتها -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٥</div>
+      <h3>تصنيف الكلفة حسب طبيعتها</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      
+      <div class="sub-title">5.1 الكلفة الثابتة (Fixed Cost)</div>
+      <p class="text">هي الكلفة التي:</p>
+      <ul class="list">
+        <li>لا تتغير بتغير حجم الإنتاج أو الاستخدام</li>
+        <li>تُدفع بغض النظر عن مستوى النشاط</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>إيجار مبنى</li>
+          <li>رواتب إدارية ثابتة</li>
+          <li>كلفة تراخيص برمجية سنوية</li>
+        </ul>
+        <div class="divider"></div>
+        <strong style="font-size:0.85rem;color:var(--lecture3)">في هندسة الاتصالات والحاسب:</strong>
+        <ul class="list" style="margin-top:8px">
+          <li>كلفة ترخيص نظام تشغيل خادم</li>
+          <li>كلفة استئجار مركز بيانات</li>
+        </ul>
+      </div>
+
+      <div class="sub-title">5.2 الكلفة المتغيرة (Variable Cost)</div>
+      <p class="text">هي الكلفة التي:</p>
+      <ul class="list">
+        <li>تتغير مع حجم الإنتاج أو الاستخدام</li>
+        <li>ترتبط مباشرة بمستوى النشاط</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>استهلاك الطاقة</li>
+          <li>كلفة الصيانة المتكررة</li>
+          <li>كلفة البيانات في الشبكات</li>
+        </ul>
+      </div>
+      <div class="example-box">
+        <div class="ex-title">مثال تطبيقي</div>
+        <p style="margin:0;font-size:0.93rem">كلما زاد عدد المستخدمين في شبكة اتصالات، زادت كلفة التشغيل.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. تصنيف الكلفة حسب علاقتها بالقرار -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٦</div>
+      <h3>تصنيف الكلفة حسب علاقتها بالقرار</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="sub-title">6.1 الكلفة ذات الصلة بالقرار (Relevant Cost)</div>
+      <p class="text">هي الكلفة التي:</p>
+      <ul class="list">
+        <li>تتأثر بالقرار</li>
+        <li>تختلف من بديل إلى آخر</li>
+      </ul>
+      <div class="highlight-box">
+        هذه الكلفة <strong>يجب أخذها بالحسبان</strong> عند المقارنة.
+      </div>
+
+      <div class="sub-title">6.2 الكلفة غير ذات الصلة (Irrelevant Cost)</div>
+      <p class="text">هي الكلفة التي:</p>
+      <ul class="list">
+        <li>لا تتغير مهما كان القرار</li>
+        <li>لا تؤثر على اختيار البديل</li>
+      </ul>
+      <div class="definition">
+        <strong>قاعدة مهمة:</strong> الكلفة التي لا تتغير بين البدائل لا تؤثر على القرار.
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. الكلفة الغارقة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٧</div>
+      <h3>الكلفة الغارقة (Sunk Cost)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="definition">
+        <strong>الكلفة الغارقة هي:</strong> كلفة تم دفعها في الماضي ولا يمكن استردادها مهما كان القرار الحالي.
+      </div>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>كلفة جهاز تم شراؤه سابقاً</li>
+          <li>كلفة دراسة أو بحث تم إنجازه</li>
+        </ul>
+      </div>
+      <div class="warning-box">
+        <div class="w-title">⚠ خطأ شائع</div>
+        كثير من المهندسين يقعون في خطأ:
+        <p style="margin-top:6px;font-size:0.9rem;color:#e8a8a8">"لا يمكننا تغيير القرار لأننا دفعنا الكثير سابقاً"</p>
+        <p style="margin-top:6px;font-size:0.9rem">وهذا تفكير خاطئ اقتصادياً، لأن: الكلفة الغارقة لا يجب أن تؤثر على القرار الحالي.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. كلفة الفرصة البديلة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٨</div>
+      <h3>كلفة الفرصة البديلة (Opportunity Cost)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="definition">
+        <strong>كلفة الفرصة البديلة هي:</strong> قيمة أفضل بديل تم التخلي عنه عند اختيار بديل معين.
+      </div>
+      <div class="example-box">
+        <div class="ex-title">مثال مبسط</div>
+        <p style="margin:0;font-size:0.93rem">إذا استُخدم مبلغ مالي في مشروع A، فإن العائد الممكن من مشروع B هو <strong>كلفة فرصة بديلة.</strong></p>
+      </div>
+      <div class="sub-title">في الهندسة:</div>
+      <ul class="list">
+        <li>اختيار مشروع يعني التخلي عن مشروع آخر</li>
+        <li>اختيار تقنية يعني التخلي عن تقنية بديلة</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. الكلفة المباشرة وغير المباشرة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">٩</div>
+      <h3>الكلفة المباشرة وغير المباشرة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="sub-title">9.1 الكلفة المباشرة (Direct Cost)</div>
+      <ul class="list">
+        <li>ترتبط مباشرة بالمشروع</li>
+        <li>يسهل تتبعها</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>كلفة معدات</li>
+          <li>كلفة كابلات</li>
+          <li>كلفة أجهزة شبكات</li>
+        </ul>
+      </div>
+
+      <div class="sub-title">9.2 الكلفة غير المباشرة (Indirect Cost)</div>
+      <ul class="list">
+        <li>لا ترتبط مباشرة بوحدة إنتاج محددة</li>
+        <li>لكنها ضرورية للمشروع</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>الإدارة</li>
+          <li>الخدمات العامة</li>
+          <li>الإشراف</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. الكلفة الرأسمالية والتشغيلية -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١٠</div>
+      <h3>الكلفة الرأسمالية والكلفة التشغيلية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="sub-title">10.1 الكلفة الرأسمالية (Capital Cost)</div>
+      <ul class="list">
+        <li>تُدفع في بداية المشروع</li>
+        <li>طويلة الأجل</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>شراء أجهزة</li>
+          <li>إنشاء بنية تحتية</li>
+          <li>بناء مركز بيانات</li>
+        </ul>
+      </div>
+
+      <div class="sub-title">10.2 الكلفة التشغيلية (Operating Cost)</div>
+      <ul class="list">
+        <li>تُدفع أثناء التشغيل</li>
+        <li>متكررة</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">أمثلة</div>
+        <ul class="list" style="margin:0">
+          <li>صيانة</li>
+          <li>كهرباء</li>
+          <li>تحديثات برمجية</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. الكلفة الظاهرة والخفية -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١١</div>
+      <h3>الكلفة الظاهرة والكلفة الخفية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li><strong>الكلفة الظاهرة:</strong> واضحة ومسجلة</li>
+        <li><strong>الكلفة الخفية:</strong> غير واضحة مباشرة لكنها مؤثرة</li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-title">مثال على كلفة خفية</div>
+        <ul class="list" style="margin:0">
+          <li>توقف النظام</li>
+          <li>فقدان سمعة</li>
+          <li>انخفاض الإنتاجية</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. تطبيقات على هندسة الاتصالات والحاسب -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١٢</div>
+      <h3>تطبيقات على هندسة الاتصالات والحاسب</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="sub-title">مثال (1): خوادم محلية vs حوسبة سحابية</div>
+      <table>
+        <tr>
+          <th>البند</th>
+          <th>خوادم محلية</th>
+          <th>سحابية</th>
+        </tr>
+        <tr>
+          <td>كلفة رأسمالية</td>
+          <td>عالية</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>صيانة مستمرة</td>
+          <td>✓</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>كلفة تشغيلية</td>
+          <td>—</td>
+          <td>عالية نسبياً</td>
+        </tr>
+        <tr>
+          <td>مرونة أعلى</td>
+          <td>—</td>
+          <td>✓</td>
+        </tr>
+      </table>
+      <div class="highlight-box">
+        الاختيار يعتمد على <strong>تحليل الكلفة</strong> وليس التقنية فقط.
+      </div>
+
+      <div class="sub-title">مثال (2): تحديث شبكة قائمة</div>
+      <ul class="list">
+        <li>الاحتفاظ بالتجهيزات القديمة</li>
+        <li>أو الاستثمار في معدات جديدة</li>
+      </ul>
+      <p class="text">الاقتصاد الهندسي يحدد:</p>
+      <ul class="list">
+        <li>متى يكون التحديث مجدياً</li>
+        <li>ومتى يكون الاستمرار أفضل</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 13. أخطاء شائعة في تقدير الكلفة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١٣</div>
+      <h3>أخطاء شائعة في تقدير الكلفة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li>تجاهل الكلفة الخفية</li>
+        <li>الاعتماد على الكلفة الأولية فقط</li>
+        <li>الخلط بين الكلفة الغارقة وكلفة الفرصة البديلة</li>
+        <li>تجاهل الزمن</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 14. خلاصة المحاضرة الثالثة -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">١٤</div>
+      <h3>خلاصة المحاضرة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li>الكلفة مفهوم أساسي في الاقتصاد الهندسي</li>
+        <li>ليست كل التكاليف مهمة للقرار</li>
+        <li>التصنيف الصحيح للكلفة أساس القرار السليم</li>
+        <li>المهندس الناجح يفهم الكلفة كما يفهم المعادلات</li>
+      </ul>
+      <div class="conclusion">
+        <h4>المعادلة الذهبية</h4>
+        <p>القرار الهندسي الصحيح = تحليل تقني + تحليل اقتصادي</p>
+        <p style="margin-top:8px;color:var(--text-muted);font-size:0.9rem">الأمثلة الرقمية هي قلب الاقتصاد الهندسي.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- الأمثلة الرقمية المحلولة -->
+  <div class="lecture-header l3" style="margin-top:32px">
+    <div class="lecture-num" style="color:var(--lecture3)">أمثلة رقمية محلولة</div>
+    <h2>تطبيقات على مفاهيم الكلفة وتصنيفاتها</h2>
+  </div>
+
+  <!-- مثال 1 -->
+  <div class="section l3 open">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م١</div>
+      <h3>المثال (1): الكلفة الثابتة والمتغيرة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <p>شركة اتصالات تمتلك مركز بيانات، والتكاليف كالتالي:</p>
+        <ul class="list" style="margin-top:8px">
+          <li><strong>إيجار المركز: 10,000 ريال شهرياً</strong></li>
+          <li><strong>رواتب إدارية: 5,000 ريال شهرياً</strong></li>
+          <li><strong>كلفة الكهرباء لكل خادم: 300 ريال شهرياً</strong></li>
+          <li>عدد الخوادم: 20 خادم</li>
+        </ul>
+      </div>
+      <div class="sub-title">المطلوب:</div>
+      <ol class="list" style="list-style:decimal;padding-right:20px">
+        <li>تحديد الكلفة الثابتة</li>
+        <li>تحديد الكلفة المتغيرة</li>
+        <li>حساب الكلفة الكلية الشهرية</li>
+      </ol>
+      <div class="divider"></div>
+      <div class="sub-title">الحل:</div>
+      <p><strong>أولاً: الكلفة الثابتة</strong></p>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+الإيجار = 10,000
+الرواتب = 5,000
+─────────────────
+الكلفة الثابتة = 15,000 ريال
+      </div>
+      <p><strong>ثانياً: الكلفة المتغيرة</strong></p>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+كلفة الكهرباء = 300 × 20 = 6,000 ريال
+      </div>
+      <p><strong>ثالثاً: الكلفة الكلية</strong></p>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+الكلفة الكلية = 15,000 + 6,000 = 21,000 ريال
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 2 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٢</div>
+      <h3>المثال (2): الكلفة ذات الصلة وغير ذات الصلة بالقرار</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <p>شركة برمجيات تدرس خيارين:</p>
+        <ul class="list" style="margin-top:8px">
+          <li><strong>الخيار A:</strong> الاستمرار باستخدام خادم قديم</li>
+          <li><strong>الخيار B:</strong> شراء خادم جديد</li>
+        </ul>
+      </div>
+      <table>
+        <tr>
+          <th>البند</th>
+          <th>الخيار A</th>
+          <th>الخيار B</th>
+        </tr>
+        <tr>
+          <td>صيانة سنوية</td>
+          <td>2,000</td>
+          <td>8,000</td>
+        </tr>
+        <tr>
+          <td>استهلاك كهرباء</td>
+          <td>2,000</td>
+          <td>4,000</td>
+        </tr>
+        <tr>
+          <td>كلفة شراء</td>
+          <td>0</td>
+          <td>25,000</td>
+        </tr>
+      </table>
+      <div class="sub-title">المطلوب: تحديد التكاليف ذات الصلة بالقرار</div>
+      <div class="divider"></div>
+      <div class="sub-title">الحل:</div>
+      <ul class="list">
+        <li>كلفة الصيانة ← <span class="badge badge-green">ذات صلة ✓</span></li>
+        <li>كلفة الكهرباء ← <span class="badge badge-green">ذات صلة ✓</span></li>
+        <li>كلفة شراء الخادم الجديد ← <span class="badge badge-green">ذات صلة ✓</span></li>
+      </ul>
+      <div class="highlight-box">
+        جميع التكاليف هنا <strong>مؤثرة في القرار</strong> ويجب أخذها بالحسبان.
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 3 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٣</div>
+      <h3>المثال (3): الكلفة الغارقة (Sunk Cost)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <p>تم شراء نظام شبكي قبل سنتين بكلفة <strong>40,000 ريال.</strong><br>
+        اليوم تبيّن أنه غير مناسب ويُدرس استبداله.</p>
+      </div>
+      <div class="sub-title">السؤال: هل يجب أخذ كلفة الـ 40,000 ريال بالحسبان عند اتخاذ قرار الاستبدال؟</div>
+      <div class="divider"></div>
+      <div class="warning-box">
+        <div class="w-title">الجواب: ❌ لا</div>
+        لأن:
+        <ul class="list" style="margin-top:8px">
+          <li>هذه الكلفة دُفعت في الماضي</li>
+          <li>لا يمكن استردادها</li>
+          <li>لا تتغير مهما كان القرار</li>
+        </ul>
+      </div>
+      <div class="highlight-box">
+        <strong>النتيجة:</strong> كلفة 40,000 ريال هي <strong>كلفة غارقة</strong> ولا تؤثر على القرار الحالي.
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 4 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٤</div>
+      <h3>المثال (4): كلفة الفرصة البديلة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <p>شركة تمتلك مبلغ 100,000 ريال وتتفاضل بين:</p>
+        <ul class="list" style="margin-top:8px">
+          <li><strong>مشروع A:</strong> عائد سنوي = 12%</li>
+          <li><strong>مشروع B:</strong> عائد سنوي = 8%</li>
+        </ul>
+      </div>
+      <div class="sub-title">المطلوب: حساب كلفة الفرصة البديلة عند اختيار المشروع B</div>
+      <div class="divider"></div>
+      <div class="sub-title">الحل:</div>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+العائد من A = 12,000 ريال
+العائد من B = 8,000 ريال
+─────────────────────────
+كلفة الفرصة البديلة = 12,000 - 8,000 = 4,000 ريال
+      </div>
+      <div class="highlight-box">
+        أي باختيار مشروع B، تتخلى الشركة عن <strong>4,000 ريال</strong> إضافية كان يمكن كسبها من مشروع A.
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 5 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٥</div>
+      <h3>المثال (5): الكلفة المباشرة وغير المباشرة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <p>مشروع تركيب شبكة داخل مؤسسة:</p>
+        <ul class="list" style="margin-top:8px">
+          <li>معدات شبكات: 60,000 ريال</li>
+          <li>كابلات: 15,000 ريال</li>
+          <li>رواتب إدارة المشروع: 10,000 ريال</li>
+          <li>كهرباء المكتب: 3,000 ريال</li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <div class="sub-title">الحل:</div>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+الكلفة المباشرة:
+  المعدات + الكابلات = 75,000 ريال
+
+الكلفة غير المباشرة:
+  الرواتب + الكهرباء = 13,000 ريال
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 6 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٦</div>
+      <h3>المثال (6): الكلفة الرأسمالية والتشغيلية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات — مركز بيانات جديد</div>
+        <ul class="list" style="margin-top:8px">
+          <li>شراء خوادم: 120,000 ريال</li>
+          <li>صيانة سنوية: 10,000 ريال</li>
+          <li>كهرباء سنوية: 8,000 ريال</li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+الكلفة الرأسمالية = 120,000 ريال
+
+الكلفة التشغيلية السنوية = 10,000 + 8,000 = 18,000 ريال
+      </div>
+    </div>
+  </div>
+
+  <!-- مثال 7 -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">م٧</div>
+      <h3>المثال (7): مقارنة بديلين باستخدام الكلفة</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="example-box">
+        <div class="ex-title">المعطيات</div>
+        <table style="margin-top:8px">
+          <tr>
+            <th>البند</th>
+            <th>نظام محلي</th>
+            <th>نظام سحابي</th>
+          </tr>
+          <tr>
+            <td>كلفة أولية</td>
+            <td>0</td>
+            <td>80,000</td>
+          </tr>
+          <tr>
+            <td>كلفة سنوية</td>
+            <td>30,000</td>
+            <td>15,000</td>
+          </tr>
+        </table>
+        <p style="margin-top:10px;font-size:0.85rem;color:var(--text-muted)">مدة المشروع: 4 سنوات</p>
+      </div>
+      <div class="divider"></div>
+      <div class="sub-title">الحل:</div>
+      <div class="calc-box" style="direction:rtl;text-align:right">
+النظام المحلي:
+  0 + (30,000 × 4) = 140,000
+
+النظام السحابي:
+  80,000 + (15,000 × 4) = 140,000
+      </div>
+      <div class="highlight-box">
+        التكاليف الإجمالية متساوية! لكن <strong>النظام السحابي أفضل</strong> لأنه يوفر كلفة أولية أقل مما يُتيح استخدام رأس المال في مكان آخر. أيضاً يوفر مرونة أعلى.
+      </div>
+    </div>
+  </div>
+
+  <!-- خلاصة تطبيقية -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">✓</div>
+      <h3>خلاصة تطبيقية</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="list">
+        <li>الأرقام تكشف ما لا تكشفه الانطباعات</li>
+        <li>القرار الهندسي الصحيح = تحليل تقني + تحليل اقتصادي</li>
+        <li>الأمثلة الرقمية هي قلب الاقتصاد الهندسي</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- أسئلة تدريبية -->
+  <div class="section l3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <div class="section-num">❓</div>
+      <h3>أسئلة تدريبية (للطلبة)</h3>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ol class="list" style="list-style:decimal;padding-right:20px">
+        <li>عرّف الكلفة الغارقة مع مثال.</li>
+        <li>متى تكون الكلفة غير ذات صلة بالقرار؟</li>
+        <li>احسب كلفة الفرصة البديلة عند اختيار مشروع بعائد أقل.</li>
+        <li>صنّف التكاليف التالية (ثابتة/متغيرة).</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- end lec3 -->
+
+</div><!-- container -->
+
+<script>
+function showLecture(num) {
+  document.querySelectorAll('.lecture-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('lec' + num).classList.add('active');
+  
+  const tabs = document.querySelectorAll('.nav-tab');
+  tabs.forEach(t => t.className = 'nav-tab');
+  tabs[num - 1].className = 'nav-tab active-l' + num;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleSection(head) {
+  const section = head.parentElement;
+  section.classList.toggle('open');
+}
+</script>
+</body>
+</html>
