@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 06 — True Stories | Final Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1e1e1e;
+    --border: #2a2a2a;
+    --accent: #e8a020;
+    --accent2: #c0392b;
+    --accent3: #2980b9;
+    --accent4: #27ae60;
+    --correct: #27ae60;
+    --wrong: #c0392b;
+    --text: #f0ece4;
+    --muted: #888;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  header {
+    background: linear-gradient(135deg, #1a0a00 0%, #2d1500 50%, #0d0d0d 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 36px 40px 28px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); color: var(--accent); letter-spacing: -1px; }
+  header p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .score-bar { display: flex; gap: 24px; margin-top: 14px; flex-wrap: wrap; }
+  .score-pill { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 30px; padding: 6px 18px; font-size: .82rem; font-weight: 600; color: var(--text); }
+  .score-pill span { color: var(--accent); }
+
+  /* NAV TABS */
+  .tab-nav { display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 20px 0; max-width: 860px; margin: 0 auto; }
+  .tab-btn {
+    padding: 8px 18px; border-radius: 8px 8px 0 0; border: 1px solid var(--border); border-bottom: none;
+    background: var(--surface); color: var(--muted); font-size: .82rem; font-weight: 600; cursor: pointer;
+    transition: all .2s; letter-spacing: .5px; text-transform: uppercase;
+  }
+  .tab-btn:hover { color: var(--text); background: #222; }
+  .tab-btn.active { background: var(--card); color: var(--accent); border-color: var(--accent); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+
+  .tab-section { display: none; padding-top: 32px; }
+  .tab-section.active { display: block; }
+
+  .section-label { display: flex; align-items: center; gap: 14px; margin: 40px 0 18px; }
+  .section-label .tag { color: #fff; font-size: .7rem; font-weight: 700; letter-spacing: 2px; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; }
+  .tag-grammar { background: #8e44ad; }
+  .tag-vocab  { background: #2980b9; }
+  .tag-reading { background: #c0392b; }
+  .tag-practice { background: #27ae60; }
+  .section-label h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--accent); }
+  .section-label .page-ref { margin-left: auto; color: var(--muted); font-size: .78rem; border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; transition: border-color .2s; }
+  .q-card:hover { border-color: #444; }
+  .q-header { padding: 16px 20px 14px; display: flex; gap: 12px; align-items: flex-start; }
+  .q-num { background: var(--accent); color: #000; font-weight: 800; font-size: .75rem; min-width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .q-text { font-size: .97rem; line-height: 1.55; color: var(--text); }
+  .q-text em { color: #aaa; font-style: italic; }
+  .q-text strong { color: var(--accent); }
+
+  .options { padding: 0 20px 18px 60px; display: grid; gap: 8px; }
+  .opt { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; cursor: pointer; font-size: .9rem; transition: all .15s; display: flex; align-items: center; gap: 10px; user-select: none; }
+  .opt:hover { background: rgba(255,255,255,.07); border-color: #555; }
+  .opt .opt-letter { background: var(--border); border-radius: 4px; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: var(--muted); flex-shrink: 0; transition: all .15s; }
+  .opt.selected { border-color: var(--accent); background: rgba(232,160,32,.08); }
+  .opt.selected .opt-letter { background: var(--accent); color: #000; }
+  .opt.correct { border-color: var(--correct); background: rgba(39,174,96,.1); }
+  .opt.correct .opt-letter { background: var(--correct); color: #fff; }
+  .opt.wrong { border-color: var(--wrong); background: rgba(192,57,43,.1); }
+  .opt.wrong .opt-letter { background: var(--wrong); color: #fff; }
+  .opt.disabled { cursor: default; pointer-events: none; }
+
+  .feedback { margin: 0 20px 16px 60px; padding: 10px 14px; border-radius: 8px; font-size: .85rem; font-weight: 500; display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(39,174,96,.12); color: #2ecc71; border: 1px solid rgba(39,174,96,.3); }
+  .feedback.no { background: rgba(192,57,43,.12); color: #e74c3c; border: 1px solid rgba(192,57,43,.3); }
+
+  .actions { text-align: center; margin-top: 40px; padding-bottom: 20px; }
+  .submit-btn { background: var(--accent); color: #000; border: none; padding: 14px 44px; border-radius: 8px; font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 20px rgba(232,160,32,.3); }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(232,160,32,.4); }
+
+  .result-box { display: none; background: linear-gradient(135deg, #1a1a0a, #0d0d0d); border: 2px solid var(--accent); border-radius: 12px; padding: 40px; text-align: center; margin-top: 32px; }
+  .result-box.show { display: block; }
+  .result-score { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--accent); font-weight: 900; }
+  .result-label { color: var(--muted); margin-top: 8px; font-size: 1rem; }
+  .result-grade { display: inline-block; margin-top: 20px; font-size: 1.3rem; font-weight: 700; padding: 8px 28px; border-radius: 8px; }
+  .grade-a { background: rgba(39,174,96,.2); color: #2ecc71; border: 1px solid #2ecc71; }
+  .grade-b { background: rgba(52,152,219,.2); color: #3498db; border: 1px solid #3498db; }
+  .grade-c { background: rgba(243,156,18,.2); color: #f39c12; border: 1px solid #f39c12; }
+  .grade-d { background: rgba(192,57,43,.2); color: #e74c3c; border: 1px solid #e74c3c; }
+  .retry-btn { display: inline-block; margin-top: 20px; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 10px 32px; border-radius: 8px; font-size: .9rem; cursor: pointer; transition: background .15s; }
+  .retry-btn:hover { background: rgba(232,160,32,.1); }
+
+  .progress-track { height: 3px; background: var(--border); position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width .4s ease; width: 0%; }
+
+  @media(max-width:600px) {
+    header { padding: 20px 16px; }
+    .tab-nav { padding: 16px 12px 0; gap: 4px; }
+    .tab-btn { padding: 6px 10px; font-size: .72rem; }
+    main { padding: 0 12px 60px; }
+    .options { padding-left: 40px; }
+    .feedback { margin-left: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Unit 06 · True Stories — Final Exam</h1>
+  <p>Cutting Edge Intermediate · Grammar · Vocabulary · Reading · Reported Speech · Past Perfect</p>
+  <div class="score-bar">
+    <div class="score-pill">Total: <span id="total-q">0</span></div>
+    <div class="score-pill">Answered: <span id="answered-q">0</span></div>
+    <div class="score-pill">Correct: <span id="correct-q" style="color:#2ecc71">0</span></div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('grammar')">📐 Grammar</button>
+  <button class="tab-btn" onclick="switchTab('vocab')">📚 Vocabulary</button>
+  <button class="tab-btn" onclick="switchTab('reading')">📖 Reading</button>
+  <button class="tab-btn" onclick="switchTab('practice')">✏️ Practice</button>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — GRAMMAR
+══════════════════════════════════════════ -->
+<div class="tab-section active" id="tab-grammar">
+
+  <div class="section-label">
+    <span class="tag tag-grammar">Grammar</span>
+    <h2>Past Perfect — Rules &amp; Form</h2>
+    <span class="page-ref">p.57 Grammar</span>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="q1">
+    <div class="q-header"><div class="q-num">1</div>
+      <div class="q-text">In <em>"Both of their adoptive fathers had died a few years before they met."</em> — which verb is in the <strong>Past Perfect</strong>?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q1','A')"><span class="opt-letter">A</span> met</div>
+      <div class="opt" onclick="choose(this,'q1','B')"><span class="opt-letter">B</span> had died</div>
+      <div class="opt" onclick="choose(this,'q1','C')"><span class="opt-letter">C</span> Both verbs are Past perfect</div>
+      <div class="opt" onclick="choose(this,'q1','D')"><span class="opt-letter">D</span> Neither — both are Past simple</div>
+    </div>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="q2">
+    <div class="q-header"><div class="q-num">2</div>
+      <div class="q-text">How is the <strong>Past Perfect formed</strong>?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q2','A')"><span class="opt-letter">A</span> have + past participle</div>
+      <div class="opt" onclick="choose(this,'q2','B')"><span class="opt-letter">B</span> was/were + -ing form</div>
+      <div class="opt" onclick="choose(this,'q2','C')"><span class="opt-letter">C</span> had + past participle</div>
+      <div class="opt" onclick="choose(this,'q2','D')"><span class="opt-letter">D</span> would + infinitive</div>
+    </div>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="q3">
+    <div class="q-header"><div class="q-num">3</div>
+      <div class="q-text">Which explanation about the Past perfect is <strong>INCORRECT</strong>?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q3','A')"><span class="opt-letter">A</span> The Past perfect describes actions that happened a long time ago</div>
+      <div class="opt" onclick="choose(this,'q3','B')"><span class="opt-letter">B</span> We use the Past perfect to describe events that happened before a past moment</div>
+      <div class="opt" onclick="choose(this,'q3','C')"><span class="opt-letter">C</span> Both A and B are incorrect</div>
+      <div class="opt" onclick="choose(this,'q3','D')"><span class="opt-letter">D</span> A is correct and B is also correct</div>
+    </div>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="q4">
+    <div class="q-header"><div class="q-num">4</div>
+      <div class="q-text">Tom Patterson first ______ (meet) his identical twin Steve Tazumi four years ago.</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q4','A')"><span class="opt-letter">A</span> had met</div>
+      <div class="opt" onclick="choose(this,'q4','B')"><span class="opt-letter">B</span> meets</div>
+      <div class="opt" onclick="choose(this,'q4','C')"><span class="opt-letter">C</span> met</div>
+      <div class="opt" onclick="choose(this,'q4','D')"><span class="opt-letter">D</span> was meeting</div>
+    </div>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="q5">
+    <div class="q-header"><div class="q-num">5</div>
+      <div class="q-text">Both men ______ (compete) seriously as weightlifters <em>before</em> they met.</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q5','A')"><span class="opt-letter">A</span> competed</div>
+      <div class="opt" onclick="choose(this,'q5','B')"><span class="opt-letter">B</span> had competed</div>
+      <div class="opt" onclick="choose(this,'q5','C')"><span class="opt-letter">C</span> have competed</div>
+      <div class="opt" onclick="choose(this,'q5','D')"><span class="opt-letter">D</span> were competing</div>
+    </div>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="q6">
+    <div class="q-header"><div class="q-num">6</div>
+      <div class="q-text">Their children ______ (be born) in the same years.</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q6','A')"><span class="opt-letter">A</span> were born</div>
+      <div class="opt" onclick="choose(this,'q6','B')"><span class="opt-letter">B</span> born</div>
+      <div class="opt" onclick="choose(this,'q6','C')"><span class="opt-letter">C</span> had been born</div>
+      <div class="opt" onclick="choose(this,'q6','D')"><span class="opt-letter">D</span> have been born</div>
+    </div>
+    <div class="feedback" id="fb-q6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="q7">
+    <div class="q-header"><div class="q-num">7</div>
+      <div class="q-text">Both men ______ (divorce) a woman named Linda and ______ (remarry) a woman named Betty.</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q7','A')"><span class="opt-letter">A</span> divorced / remarried</div>
+      <div class="opt" onclick="choose(this,'q7','B')"><span class="opt-letter">B</span> had divorced / had remarried</div>
+      <div class="opt" onclick="choose(this,'q7','C')"><span class="opt-letter">C</span> have divorced / have remarried</div>
+      <div class="opt" onclick="choose(this,'q7','D')"><span class="opt-letter">D</span> were divorcing / were remarrying</div>
+    </div>
+    <div class="feedback" id="fb-q7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" id="q8">
+    <div class="q-header"><div class="q-num">8</div>
+      <div class="q-text"><em>"She spoke French well because she ______ (live) in Paris as a child."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q8','A')"><span class="opt-letter">A</span> lived</div>
+      <div class="opt" onclick="choose(this,'q8','B')"><span class="opt-letter">B</span> has lived</div>
+      <div class="opt" onclick="choose(this,'q8','C')"><span class="opt-letter">C</span> had lived</div>
+      <div class="opt" onclick="choose(this,'q8','D')"><span class="opt-letter">D</span> was living</div>
+    </div>
+    <div class="feedback" id="fb-q8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" id="q9">
+    <div class="q-header"><div class="q-num">9</div>
+      <div class="q-text"><em>"They ______ (already sell) all the tickets, so we didn't get into the concert."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q9','A')"><span class="opt-letter">A</span> already sold</div>
+      <div class="opt" onclick="choose(this,'q9','B')"><span class="opt-letter">B</span> had already sold</div>
+      <div class="opt" onclick="choose(this,'q9','C')"><span class="opt-letter">C</span> have already sold</div>
+      <div class="opt" onclick="choose(this,'q9','D')"><span class="opt-letter">D</span> were already selling</div>
+    </div>
+    <div class="feedback" id="fb-q9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" id="q10">
+    <div class="q-header"><div class="q-num">10</div>
+      <div class="q-text"><em>"My grandparents ______ (never fly) before, so they were nervous."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q10','A')"><span class="opt-letter">A</span> never flew</div>
+      <div class="opt" onclick="choose(this,'q10','B')"><span class="opt-letter">B</span> have never flown</div>
+      <div class="opt" onclick="choose(this,'q10','C')"><span class="opt-letter">C</span> had never flown</div>
+      <div class="opt" onclick="choose(this,'q10','D')"><span class="opt-letter">D</span> were never flying</div>
+    </div>
+    <div class="feedback" id="fb-q10"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-grammar">Grammar</span>
+    <h2>Reported Speech — Rules &amp; Tenses</h2>
+    <span class="page-ref">p.58 Grammar</span>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card" id="q11">
+    <div class="q-header"><div class="q-num">11</div>
+      <div class="q-text">Direct: <em>"I'm hiring another worker to help you."</em><br>In reported speech, present continuous becomes which tense?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q11','A')"><span class="opt-letter">A</span> Past simple</div>
+      <div class="opt" onclick="choose(this,'q11','B')"><span class="opt-letter">B</span> Past perfect</div>
+      <div class="opt" onclick="choose(this,'q11','C')"><span class="opt-letter">C</span> Past continuous</div>
+      <div class="opt" onclick="choose(this,'q11','D')"><span class="opt-letter">D</span> Past simple passive</div>
+    </div>
+    <div class="feedback" id="fb-q11"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card" id="q12">
+    <div class="q-header"><div class="q-num">12</div>
+      <div class="q-text">Direct: <em>"I've just had a dream about you."</em> → Correct reported speech form:</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q12','A')"><span class="opt-letter">A</span> He said that he has just had a dream about me.</div>
+      <div class="opt" onclick="choose(this,'q12','B')"><span class="opt-letter">B</span> He said that he'd just had a dream about me.</div>
+      <div class="opt" onclick="choose(this,'q12','C')"><span class="opt-letter">C</span> He said that he will have a dream about me.</div>
+      <div class="opt" onclick="choose(this,'q12','D')"><span class="opt-letter">D</span> He said that he is having a dream about me.</div>
+    </div>
+    <div class="feedback" id="fb-q12"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card" id="q13">
+    <div class="q-header"><div class="q-num">13</div>
+      <div class="q-text">Direct: <em>"We'll get married one day."</em> → Reported: <em>"He always said that we ______ get married one day."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q13','A')"><span class="opt-letter">A</span> will</div>
+      <div class="opt" onclick="choose(this,'q13','B')"><span class="opt-letter">B</span> would</div>
+      <div class="opt" onclick="choose(this,'q13','C')"><span class="opt-letter">C</span> shall</div>
+      <div class="opt" onclick="choose(this,'q13','D')"><span class="opt-letter">D</span> could</div>
+    </div>
+    <div class="feedback" id="fb-q13"></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card" id="q14">
+    <div class="q-header"><div class="q-num">14</div>
+      <div class="q-text">What is the <strong>word order</strong> in reported questions? (p.58 Grammar Q4)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q14','A')"><span class="opt-letter">A</span> Inverted — same as direct questions (verb before subject)</div>
+      <div class="opt" onclick="choose(this,'q14','B')"><span class="opt-letter">B</span> The same as in statements — no inversion of subject and verb</div>
+      <div class="opt" onclick="choose(this,'q14','C')"><span class="opt-letter">C</span> The verb always comes first</div>
+      <div class="opt" onclick="choose(this,'q14','D')"><span class="opt-letter">D</span> The subject is omitted entirely</div>
+    </div>
+    <div class="feedback" id="fb-q14"></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-card" id="q15">
+    <div class="q-header"><div class="q-num">15</div>
+      <div class="q-text">We use <em>if</em> and <em>whether</em> in reported questions when…?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q15','A')"><span class="opt-letter">A</span> The original question was a wh-question</div>
+      <div class="opt" onclick="choose(this,'q15','B')"><span class="opt-letter">B</span> The original question was a yes/no question</div>
+      <div class="opt" onclick="choose(this,'q15','C')"><span class="opt-letter">C</span> There is a time expression in the question</div>
+      <div class="opt" onclick="choose(this,'q15','D')"><span class="opt-letter">D</span> The reporting verb is "say" (not tell)</div>
+    </div>
+    <div class="feedback" id="fb-q15"></div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-card" id="q16">
+    <div class="q-header"><div class="q-num">16</div>
+      <div class="q-text">Direct: <em>"Why were you late?"</em> → Reported: ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q16','A')"><span class="opt-letter">A</span> The teacher asked me why was I late.</div>
+      <div class="opt" onclick="choose(this,'q16','B')"><span class="opt-letter">B</span> The teacher asked me why I was late.</div>
+      <div class="opt" onclick="choose(this,'q16','C')"><span class="opt-letter">C</span> The teacher said why I was late.</div>
+      <div class="opt" onclick="choose(this,'q16','D')"><span class="opt-letter">D</span> The teacher asked why am I late.</div>
+    </div>
+    <div class="feedback" id="fb-q16"></div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-card" id="q17">
+    <div class="q-header"><div class="q-num">17</div>
+      <div class="q-text">Direct: <em>"Are you going home?"</em> → Reported: ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q17','A')"><span class="opt-letter">A</span> He asked us if we were going home.</div>
+      <div class="opt" onclick="choose(this,'q17','B')"><span class="opt-letter">B</span> He asked us if we are going home.</div>
+      <div class="opt" onclick="choose(this,'q17','C')"><span class="opt-letter">C</span> He asked us were we going home.</div>
+      <div class="opt" onclick="choose(this,'q17','D')"><span class="opt-letter">D</span> He said us if we were going home.</div>
+    </div>
+    <div class="feedback" id="fb-q17"></div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-card" id="q18">
+    <div class="q-header"><div class="q-num">18</div>
+      <div class="q-text">Direct: <em>"How are you?"</em> → Reported: <em>"I didn't ask him ______"</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q18','A')"><span class="opt-letter">A</span> how was he.</div>
+      <div class="opt" onclick="choose(this,'q18','B')"><span class="opt-letter">B</span> how he is.</div>
+      <div class="opt" onclick="choose(this,'q18','C')"><span class="opt-letter">C</span> how he was.</div>
+      <div class="opt" onclick="choose(this,'q18','D')"><span class="opt-letter">D</span> how is he.</div>
+    </div>
+    <div class="feedback" id="fb-q18"></div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-card" id="q19">
+    <div class="q-header"><div class="q-num">19</div>
+      <div class="q-text">F: <em>"What happened to your copies?"</em> → Hopkins asked him ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q19','A')"><span class="opt-letter">A</span> what happened to his copies.</div>
+      <div class="opt" onclick="choose(this,'q19','B')"><span class="opt-letter">B</span> what had happened to his copies.</div>
+      <div class="opt" onclick="choose(this,'q19','C')"><span class="opt-letter">C</span> what does happen to his copies.</div>
+      <div class="opt" onclick="choose(this,'q19','D')"><span class="opt-letter">D</span> if happened his copies what.</div>
+    </div>
+    <div class="feedback" id="fb-q19"></div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-card" id="q20">
+    <div class="q-header"><div class="q-num">20</div>
+      <div class="q-text">F: <em>"I lent my last one to a friend and she lost it."</em> → Feifer said that ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q20','A')"><span class="opt-letter">A</span> he lent his last one to a friend and she lost it.</div>
+      <div class="opt" onclick="choose(this,'q20','B')"><span class="opt-letter">B</span> he had lent his last one to a friend and she had lost it.</div>
+      <div class="opt" onclick="choose(this,'q20','C')"><span class="opt-letter">C</span> he has lent his last one to a friend and she has lost it.</div>
+      <div class="opt" onclick="choose(this,'q20','D')"><span class="opt-letter">D</span> he would lend his last one to a friend.</div>
+    </div>
+    <div class="feedback" id="fb-q20"></div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-card" id="q21">
+    <div class="q-header"><div class="q-num">21</div>
+      <div class="q-text">H: <em>"I'll give it back to you when filming is finished."</em> → Hopkins said that ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q21','A')"><span class="opt-letter">A</span> he will give it back to him when filming is finished.</div>
+      <div class="opt" onclick="choose(this,'q21','B')"><span class="opt-letter">B</span> he would give it back to him when filming was finished.</div>
+      <div class="opt" onclick="choose(this,'q21','C')"><span class="opt-letter">C</span> he gives it back when filming finished.</div>
+      <div class="opt" onclick="choose(this,'q21','D')"><span class="opt-letter">D</span> he had given it back when filming was finished.</div>
+    </div>
+    <div class="feedback" id="fb-q21"></div>
+  </div>
+
+</div><!-- end tab-grammar -->
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — VOCABULARY
+══════════════════════════════════════════ -->
+<div class="tab-section" id="tab-vocab">
+
+  <div class="section-label">
+    <span class="tag tag-vocab">Vocab</span>
+    <h2>Say or Tell</h2>
+    <span class="page-ref">p.59 ex.1a &amp; ex.2</span>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-card" id="q22">
+    <div class="q-header"><div class="q-num">22</div>
+      <div class="q-text">Do you often ______ jokes?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q22','A')"><span class="opt-letter">A</span> say</div>
+      <div class="opt" onclick="choose(this,'q22','B')"><span class="opt-letter">B</span> tell</div>
+      <div class="opt" onclick="choose(this,'q22','C')"><span class="opt-letter">C</span> speak</div>
+      <div class="opt" onclick="choose(this,'q22','D')"><span class="opt-letter">D</span> talk</div>
+    </div>
+    <div class="feedback" id="fb-q22"></div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-card" id="q23">
+    <div class="q-header"><div class="q-num">23</div>
+      <div class="q-text">Can you ______ hello, goodbye and thank you in four different languages?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q23','A')"><span class="opt-letter">A</span> tell</div>
+      <div class="opt" onclick="choose(this,'q23','B')"><span class="opt-letter">B</span> speak</div>
+      <div class="opt" onclick="choose(this,'q23','C')"><span class="opt-letter">C</span> say</div>
+      <div class="opt" onclick="choose(this,'q23','D')"><span class="opt-letter">D</span> talk</div>
+    </div>
+    <div class="feedback" id="fb-q23"></div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-card" id="q24">
+    <div class="q-header"><div class="q-num">24</div>
+      <div class="q-text">Would you ______ sorry to the other driver after a minor car accident?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q24','A')"><span class="opt-letter">A</span> tell</div>
+      <div class="opt" onclick="choose(this,'q24','B')"><span class="opt-letter">B</span> say</div>
+      <div class="opt" onclick="choose(this,'q24','C')"><span class="opt-letter">C</span> speak</div>
+      <div class="opt" onclick="choose(this,'q24','D')"><span class="opt-letter">D</span> talk</div>
+    </div>
+    <div class="feedback" id="fb-q24"></div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-card" id="q25">
+    <div class="q-header"><div class="q-num">25</div>
+      <div class="q-text">Can you ______ the difference between British and American English?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q25','A')"><span class="opt-letter">A</span> say</div>
+      <div class="opt" onclick="choose(this,'q25','B')"><span class="opt-letter">B</span> speak</div>
+      <div class="opt" onclick="choose(this,'q25','C')"><span class="opt-letter">C</span> tell</div>
+      <div class="opt" onclick="choose(this,'q25','D')"><span class="opt-letter">D</span> talk</div>
+    </div>
+    <div class="feedback" id="fb-q25"></div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="q-card" id="q26">
+    <div class="q-header"><div class="q-num">26</div>
+      <div class="q-text">Which phrase goes with <strong>SAY</strong> (not tell)?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q26','A')"><span class="opt-letter">A</span> ___ jokes</div>
+      <div class="opt" onclick="choose(this,'q26','B')"><span class="opt-letter">B</span> ___ someone off</div>
+      <div class="opt" onclick="choose(this,'q26','C')"><span class="opt-letter">C</span> ___ a prayer</div>
+      <div class="opt" onclick="choose(this,'q26','D')"><span class="opt-letter">D</span> ___ the truth</div>
+    </div>
+    <div class="feedback" id="fb-q26"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-vocab">Vocab</span>
+    <h2>Word Meanings — p.56 &amp; p.58</h2>
+    <span class="page-ref">Unit 6 Vocabulary List</span>
+  </div>
+
+  <!-- Q27 -->
+  <div class="q-card" id="q27">
+    <div class="q-header"><div class="q-num">27</div>
+      <div class="q-text">What does <strong>Twist</strong> mean? (p.56)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q27','A')"><span class="opt-letter">A</span> something that God has chosen</div>
+      <div class="opt" onclick="choose(this,'q27','B')"><span class="opt-letter">B</span> change</div>
+      <div class="opt" onclick="choose(this,'q27','C')"><span class="opt-letter">C</span> surprised</div>
+      <div class="opt" onclick="choose(this,'q27','D')"><span class="opt-letter">D</span> a bad dream</div>
+    </div>
+    <div class="feedback" id="fb-q27"></div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="q-card" id="q28">
+    <div class="q-header"><div class="q-num">28</div>
+      <div class="q-text">What does <strong>Fate</strong> mean? (p.56)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q28','A')"><span class="opt-letter">A</span> change</div>
+      <div class="opt" onclick="choose(this,'q28','B')"><span class="opt-letter">B</span> a bad dream</div>
+      <div class="opt" onclick="choose(this,'q28','C')"><span class="opt-letter">C</span> something that God has chosen</div>
+      <div class="opt" onclick="choose(this,'q28','D')"><span class="opt-letter">D</span> exactly the same</div>
+    </div>
+    <div class="feedback" id="fb-q28"></div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="q-card" id="q29">
+    <div class="q-header"><div class="q-num">29</div>
+      <div class="q-text">What does <strong>Identical</strong> mean? (p.56)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q29','A')"><span class="opt-letter">A</span> someone who adopted or raised you</div>
+      <div class="opt" onclick="choose(this,'q29','B')"><span class="opt-letter">B</span> behaviours, manners</div>
+      <div class="opt" onclick="choose(this,'q29','C')"><span class="opt-letter">C</span> exactly the same</div>
+      <div class="opt" onclick="choose(this,'q29','D')"><span class="opt-letter">D</span> surprised</div>
+    </div>
+    <div class="feedback" id="fb-q29"></div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="q-card" id="q30">
+    <div class="q-header"><div class="q-num">30</div>
+      <div class="q-text">What does <strong>Optimistic</strong> mean? (p.56)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q30','A')"><span class="opt-letter">A</span> someone who adopted or raised you</div>
+      <div class="opt" onclick="choose(this,'q30','B')"><span class="opt-letter">B</span> step by step</div>
+      <div class="opt" onclick="choose(this,'q30','C')"><span class="opt-letter">C</span> someone who looks at the positives rather than the negatives</div>
+      <div class="opt" onclick="choose(this,'q30','D')"><span class="opt-letter">D</span> a bad dream</div>
+    </div>
+    <div class="feedback" id="fb-q30"></div>
+  </div>
+
+  <!-- Q31 -->
+  <div class="q-card" id="q31">
+    <div class="q-header"><div class="q-num">31</div>
+      <div class="q-text">What does <strong>Autobiography</strong> mean? (p.58)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q31','A')"><span class="opt-letter">A</span> words of a song</div>
+      <div class="opt" onclick="choose(this,'q31','B')"><span class="opt-letter">B</span> high school</div>
+      <div class="opt" onclick="choose(this,'q31','C')"><span class="opt-letter">C</span> a story about a person's life written by the person himself/herself</div>
+      <div class="opt" onclick="choose(this,'q31','D')"><span class="opt-letter">D</span> boss, employer</div>
+    </div>
+    <div class="feedback" id="fb-q31"></div>
+  </div>
+
+  <!-- Q32 -->
+  <div class="q-card" id="q32">
+    <div class="q-header"><div class="q-num">32</div>
+      <div class="q-text">What does <strong>Lyrics</strong> mean? (p.58)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q32','A')"><span class="opt-letter">A</span> writer</div>
+      <div class="opt" onclick="choose(this,'q32','B')"><span class="opt-letter">B</span> words of a song</div>
+      <div class="opt" onclick="choose(this,'q32','C')"><span class="opt-letter">C</span> very</div>
+      <div class="opt" onclick="choose(this,'q32','D')"><span class="opt-letter">D</span> a plane journey/trip</div>
+    </div>
+    <div class="feedback" id="fb-q32"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-vocab">Vocab</span>
+    <h2>Word Meanings — p.60 &amp; p.61</h2>
+    <span class="page-ref">Unit 6 Vocabulary List</span>
+  </div>
+
+  <!-- Q33 -->
+  <div class="q-card" id="q33">
+    <div class="q-header"><div class="q-num">33</div>
+      <div class="q-text">What does <strong>Assess</strong> mean? (p.60)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q33','A')"><span class="opt-letter">A</span> clear</div>
+      <div class="opt" onclick="choose(this,'q33','B')"><span class="opt-letter">B</span> a plane journey/trip</div>
+      <div class="opt" onclick="choose(this,'q33','C')"><span class="opt-letter">C</span> test</div>
+      <div class="opt" onclick="choose(this,'q33','D')"><span class="opt-letter">D</span> get ready for a dangerous situation</div>
+    </div>
+    <div class="feedback" id="fb-q33"></div>
+  </div>
+
+  <!-- Q34 -->
+  <div class="q-card" id="q34">
+    <div class="q-header"><div class="q-num">34</div>
+      <div class="q-text">What does <strong>Brace for impact</strong> mean? (p.60)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q34','A')"><span class="opt-letter">A</span> be able to stay alive</div>
+      <div class="opt" onclick="choose(this,'q34','B')"><span class="opt-letter">B</span> luckily</div>
+      <div class="opt" onclick="choose(this,'q34','C')"><span class="opt-letter">C</span> get ready for a dangerous situation</div>
+      <div class="opt" onclick="choose(this,'q34','D')"><span class="opt-letter">D</span> a big ship</div>
+    </div>
+    <div class="feedback" id="fb-q34"></div>
+  </div>
+
+  <!-- Q35 -->
+  <div class="q-card" id="q35">
+    <div class="q-header"><div class="q-num">35</div>
+      <div class="q-text">What does <strong>Fortunately</strong> mean? (p.60)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q35','A')"><span class="opt-letter">A</span> unluckily</div>
+      <div class="opt" onclick="choose(this,'q35','B')"><span class="opt-letter">B</span> at once, right away</div>
+      <div class="opt" onclick="choose(this,'q35','C')"><span class="opt-letter">C</span> luckily</div>
+      <div class="opt" onclick="choose(this,'q35','D')"><span class="opt-letter">D</span> step by step</div>
+    </div>
+    <div class="feedback" id="fb-q35"></div>
+  </div>
+
+  <!-- Q36 -->
+  <div class="q-card" id="q36">
+    <div class="q-header"><div class="q-num">36</div>
+      <div class="q-text">What does <strong>Gradually</strong> mean? (p.61)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q36','A')"><span class="opt-letter">A</span> at once, right away</div>
+      <div class="opt" onclick="choose(this,'q36','B')"><span class="opt-letter">B</span> step by step</div>
+      <div class="opt" onclick="choose(this,'q36','C')"><span class="opt-letter">C</span> clearly</div>
+      <div class="opt" onclick="choose(this,'q36','D')"><span class="opt-letter">D</span> at the end</div>
+    </div>
+    <div class="feedback" id="fb-q36"></div>
+  </div>
+
+  <!-- Q37 -->
+  <div class="q-card" id="q37">
+    <div class="q-header"><div class="q-num">37</div>
+      <div class="q-text">What does <strong>Immediately</strong> mean? (p.61)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q37','A')"><span class="opt-letter">A</span> step by step</div>
+      <div class="opt" onclick="choose(this,'q37','B')"><span class="opt-letter">B</span> at the end</div>
+      <div class="opt" onclick="choose(this,'q37','C')"><span class="opt-letter">C</span> at once, right away</div>
+      <div class="opt" onclick="choose(this,'q37','D')"><span class="opt-letter">D</span> unluckily</div>
+    </div>
+    <div class="feedback" id="fb-q37"></div>
+  </div>
+
+  <!-- Q38 -->
+  <div class="q-card" id="q38">
+    <div class="q-header"><div class="q-num">38</div>
+      <div class="q-text">What does <strong>Eventually</strong> mean? (p.61)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q38','A')"><span class="opt-letter">A</span> clearly</div>
+      <div class="opt" onclick="choose(this,'q38','B')"><span class="opt-letter">B</span> luckily</div>
+      <div class="opt" onclick="choose(this,'q38','C')"><span class="opt-letter">C</span> at the end</div>
+      <div class="opt" onclick="choose(this,'q38','D')"><span class="opt-letter">D</span> step by step</div>
+    </div>
+    <div class="feedback" id="fb-q38"></div>
+  </div>
+
+  <!-- Q39 -->
+  <div class="q-card" id="q39">
+    <div class="q-header"><div class="q-num">39</div>
+      <div class="q-text">What does <strong>Obviously</strong> mean? (p.61)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q39','A')"><span class="opt-letter">A</span> at once, right away</div>
+      <div class="opt" onclick="choose(this,'q39','B')"><span class="opt-letter">B</span> at the end</div>
+      <div class="opt" onclick="choose(this,'q39','C')"><span class="opt-letter">C</span> clearly</div>
+      <div class="opt" onclick="choose(this,'q39','D')"><span class="opt-letter">D</span> unluckily</div>
+    </div>
+    <div class="feedback" id="fb-q39"></div>
+  </div>
+
+  <!-- Q40 -->
+  <div class="q-card" id="q40">
+    <div class="q-header"><div class="q-num">40</div>
+      <div class="q-text">What does <strong>Unfortunately</strong> mean? (p.61)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q40','A')"><span class="opt-letter">A</span> luckily</div>
+      <div class="opt" onclick="choose(this,'q40','B')"><span class="opt-letter">B</span> unluckily</div>
+      <div class="opt" onclick="choose(this,'q40','C')"><span class="opt-letter">C</span> clearly</div>
+      <div class="opt" onclick="choose(this,'q40','D')"><span class="opt-letter">D</span> at the end</div>
+    </div>
+    <div class="feedback" id="fb-q40"></div>
+  </div>
+
+</div><!-- end tab-vocab -->
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — READING
+══════════════════════════════════════════ -->
+<div class="tab-section" id="tab-reading">
+
+  <div class="section-label">
+    <span class="tag tag-reading">Reading</span>
+    <h2>A Twist of Fate — Comprehension</h2>
+    <span class="page-ref">p.56 ex.2A &amp; 2B</span>
+  </div>
+
+  <!-- Q41 -->
+  <div class="q-card" id="q41">
+    <div class="q-header"><div class="q-num">41</div>
+      <div class="q-text">What <strong>kind of story</strong> is "A Twist of Fate"? (p.56 ex.2A)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q41','A')"><span class="opt-letter">A</span> a ghost story</div>
+      <div class="opt" onclick="choose(this,'q41','B')"><span class="opt-letter">B</span> a crime story</div>
+      <div class="opt" onclick="choose(this,'q41','C')"><span class="opt-letter">C</span> a 'human interest' story</div>
+      <div class="opt" onclick="choose(this,'q41','D')"><span class="opt-letter">D</span> science fiction</div>
+    </div>
+    <div class="feedback" id="fb-q41"></div>
+  </div>
+
+  <!-- Q42 -->
+  <div class="q-card" id="q42">
+    <div class="q-header"><div class="q-num">42</div>
+      <div class="q-text">Where did Tamara and Adriana <strong>first meet</strong>? (p.56 ex.2B Q1)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q42','A')"><span class="opt-letter">A</span> At a university library</div>
+      <div class="opt" onclick="choose(this,'q42','B')"><span class="opt-letter">B</span> At a local McDonald's restaurant</div>
+      <div class="opt" onclick="choose(this,'q42','C')"><span class="opt-letter">C</span> At a birthday party</div>
+      <div class="opt" onclick="choose(this,'q42','D')"><span class="opt-letter">D</span> On a university campus</div>
+    </div>
+    <div class="feedback" id="fb-q42"></div>
+  </div>
+
+  <!-- Q43 -->
+  <div class="q-card" id="q43">
+    <div class="q-header"><div class="q-num">43</div>
+      <div class="q-text">Why was their first meeting <strong>shocking</strong>? (p.56 ex.2B Q2)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q43','A')"><span class="opt-letter">A</span> Because they had the same name</div>
+      <div class="opt" onclick="choose(this,'q43','B')"><span class="opt-letter">B</span> Because they looked so alike</div>
+      <div class="opt" onclick="choose(this,'q43','C')"><span class="opt-letter">C</span> Because they were wearing identical clothes</div>
+      <div class="opt" onclick="choose(this,'q43','D')"><span class="opt-letter">D</span> Because they lived in the same street</div>
+    </div>
+    <div class="feedback" id="fb-q43"></div>
+  </div>
+
+  <!-- Q44 -->
+  <div class="q-card" id="q44">
+    <div class="q-header"><div class="q-num">44</div>
+      <div class="q-text">Who <strong>first realised</strong> the girls were sisters? (p.56 ex.2B Q3)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q44','A')"><span class="opt-letter">A</span> Adriana herself</div>
+      <div class="opt" onclick="choose(this,'q44','B')"><span class="opt-letter">B</span> Their Mexican mother</div>
+      <div class="opt" onclick="choose(this,'q44','C')"><span class="opt-letter">C</span> Justin Lattore, a friend of Adriana's, when he saw Tamara at her birthday party</div>
+      <div class="opt" onclick="choose(this,'q44','D')"><span class="opt-letter">D</span> A professor at their university</div>
+    </div>
+    <div class="feedback" id="fb-q44"></div>
+  </div>
+
+  <!-- Q45 -->
+  <div class="q-card" id="q45">
+    <div class="q-header"><div class="q-num">45</div>
+      <div class="q-text">What is their relationship like <strong>now</strong>? (p.56 ex.2B Q5)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q45','A')"><span class="opt-letter">A</span> They don't talk anymore</div>
+      <div class="opt" onclick="choose(this,'q45','B')"><span class="opt-letter">B</span> They feel like sisters but the relationship is more like friends</div>
+      <div class="opt" onclick="choose(this,'q45','C')"><span class="opt-letter">C</span> They live together as flatmates</div>
+      <div class="opt" onclick="choose(this,'q45','D')"><span class="opt-letter">D</span> They are rivals at university</div>
+    </div>
+    <div class="feedback" id="fb-q45"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-reading">Reading</span>
+    <h2>True Coincidences — Who said it?</h2>
+    <span class="page-ref">p.58 ex.2a</span>
+  </div>
+
+  <!-- Q46 -->
+  <div class="q-card" id="q46">
+    <div class="q-header"><div class="q-num">46</div>
+      <div class="q-text">Who said: <em>"We'll get married one day."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q46','A')"><span class="opt-letter">A</span> Josh's girlfriend</div>
+      <div class="opt" onclick="choose(this,'q46','B')"><span class="opt-letter">B</span> Mark Twain</div>
+      <div class="opt" onclick="choose(this,'q46','C')"><span class="opt-letter">C</span> Jung Xiu</div>
+      <div class="opt" onclick="choose(this,'q46','D')"><span class="opt-letter">D</span> Liam's manager</div>
+    </div>
+    <div class="feedback" id="fb-q46"></div>
+  </div>
+
+  <!-- Q47 -->
+  <div class="q-card" id="q47">
+    <div class="q-header"><div class="q-num">47</div>
+      <div class="q-text">Who said: <em>"I came in with the comet and I expect to go out with it."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q47','A')"><span class="opt-letter">A</span> Jung Xiu</div>
+      <div class="opt" onclick="choose(this,'q47','B')"><span class="opt-letter">B</span> Mark Twain</div>
+      <div class="opt" onclick="choose(this,'q47','C')"><span class="opt-letter">C</span> Josh's girlfriend</div>
+      <div class="opt" onclick="choose(this,'q47','D')"><span class="opt-letter">D</span> Liam Bentley</div>
+    </div>
+    <div class="feedback" id="fb-q47"></div>
+  </div>
+
+  <!-- Q48 -->
+  <div class="q-card" id="q48">
+    <div class="q-header"><div class="q-num">48</div>
+      <div class="q-text">Who said: <em>"I'm hiring another worker to help you."</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q48','A')"><span class="opt-letter">A</span> Mark Twain</div>
+      <div class="opt" onclick="choose(this,'q48','B')"><span class="opt-letter">B</span> Josh's girlfriend</div>
+      <div class="opt" onclick="choose(this,'q48','C')"><span class="opt-letter">C</span> Jung Xiu</div>
+      <div class="opt" onclick="choose(this,'q48','D')"><span class="opt-letter">D</span> Liam's manager</div>
+    </div>
+    <div class="feedback" id="fb-q48"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-reading">Reading</span>
+    <h2>Josh Peltz — IT REALLY HAPPENED TO ME</h2>
+    <span class="page-ref">p.60 ex.2a &amp; ex.3</span>
+  </div>
+
+  <!-- Q49 -->
+  <div class="q-card" id="q49">
+    <div class="q-header"><div class="q-num">49</div>
+      <div class="q-text">As the plane was going down, what did Josh think about? (p.60 ex.2a Q1)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q49','A')"><span class="opt-letter">A</span> Getting a life jacket from the overhead locker</div>
+      <div class="opt" onclick="choose(this,'q49','B')"><span class="opt-letter">B</span> His wife Tesa and their two children</div>
+      <div class="opt" onclick="choose(this,'q49','C')"><span class="opt-letter">C</span> Calling the emergency services</div>
+      <div class="opt" onclick="choose(this,'q49','D')"><span class="opt-letter">D</span> Reading the safety instructions immediately</div>
+    </div>
+    <div class="feedback" id="fb-q49"></div>
+  </div>
+
+  <!-- Q50 -->
+  <div class="q-card" id="q50">
+    <div class="q-header"><div class="q-num">50</div>
+      <div class="q-text">What did Josh do when he was finally safe? (p.60 ex.2a Q2)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q50','A')"><span class="opt-letter">A</span> He immediately called his wife</div>
+      <div class="opt" onclick="choose(this,'q50','B')"><span class="opt-letter">B</span> He helped other passengers onto the ferry</div>
+      <div class="opt" onclick="choose(this,'q50','C')"><span class="opt-letter">C</span> He went to the men's room (toilet) and cried</div>
+      <div class="opt" onclick="choose(this,'q50','D')"><span class="opt-letter">D</span> He spoke to journalists about the crash</div>
+    </div>
+    <div class="feedback" id="fb-q50"></div>
+  </div>
+
+  <!-- Q51 -->
+  <div class="q-card" id="q51">
+    <div class="q-header"><div class="q-num">51</div>
+      <div class="q-text">What was the <strong>FIRST</strong> event in the correct order? (p.60 ex.3)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q51','A')"><span class="opt-letter">A</span> Josh read the emergency information</div>
+      <div class="opt" onclick="choose(this,'q51','B')"><span class="opt-letter">B</span> The captain made an announcement</div>
+      <div class="opt" onclick="choose(this,'q51','C')"><span class="opt-letter">C</span> An explosion happened not long after take-off</div>
+      <div class="opt" onclick="choose(this,'q51','D')"><span class="opt-letter">D</span> Some passengers screamed loudly</div>
+    </div>
+    <div class="feedback" id="fb-q51"></div>
+  </div>
+
+  <!-- Q52 -->
+  <div class="q-card" id="q52">
+    <div class="q-header"><div class="q-num">52</div>
+      <div class="q-text">In the correct sequence, which came first: <em>b</em> (Josh opened door) or <em>j</em> (passengers went on wing)?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q52','A')"><span class="opt-letter">A</span> j came before b</div>
+      <div class="opt" onclick="choose(this,'q52','B')"><span class="opt-letter">B</span> b came before j</div>
+      <div class="opt" onclick="choose(this,'q52','C')"><span class="opt-letter">C</span> They happened at the same time</div>
+      <div class="opt" onclick="choose(this,'q52','D')"><span class="opt-letter">D</span> b was the very last event</div>
+    </div>
+    <div class="feedback" id="fb-q52"></div>
+  </div>
+
+</div><!-- end tab-reading -->
+
+<!-- ══════════════════════════════════════════
+     TAB 4 — PRACTICE
+══════════════════════════════════════════ -->
+<div class="tab-section" id="tab-practice">
+
+  <div class="section-label">
+    <span class="tag tag-practice">Practice</span>
+    <h2>Story Types — F / T / B</h2>
+    <span class="page-ref">p.56 ex.1b</span>
+  </div>
+
+  <!-- Q53 -->
+  <div class="q-card" id="q53">
+    <div class="q-header"><div class="q-num">53</div>
+      <div class="q-text">What is the correct label for <strong>crime stories / mysteries</strong>?<br><em>(F = usually fictional, T = usually true, B = can be both)</em></div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q53','A')"><span class="opt-letter">A</span> T — usually true</div>
+      <div class="opt" onclick="choose(this,'q53','B')"><span class="opt-letter">B</span> B — can be both</div>
+      <div class="opt" onclick="choose(this,'q53','C')"><span class="opt-letter">C</span> F — usually fictional</div>
+      <div class="opt" onclick="choose(this,'q53','D')"><span class="opt-letter">D</span> Neither</div>
+    </div>
+    <div class="feedback" id="fb-q53"></div>
+  </div>
+
+  <!-- Q54 -->
+  <div class="q-card" id="q54">
+    <div class="q-header"><div class="q-num">54</div>
+      <div class="q-text">Which story type is labelled <strong>B</strong> (can be both fictional and true)?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q54','A')"><span class="opt-letter">A</span> biographies</div>
+      <div class="opt" onclick="choose(this,'q54','B')"><span class="opt-letter">B</span> ghost stories</div>
+      <div class="opt" onclick="choose(this,'q54','C')"><span class="opt-letter">C</span> adventure stories</div>
+      <div class="opt" onclick="choose(this,'q54','D')"><span class="opt-letter">D</span> anecdotes</div>
+    </div>
+    <div class="feedback" id="fb-q54"></div>
+  </div>
+
+  <!-- Q55 -->
+  <div class="q-card" id="q55">
+    <div class="q-header"><div class="q-num">55</div>
+      <div class="q-text">Which TWO story types are labelled <strong>T</strong> (usually true)?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q55','A')"><span class="opt-letter">A</span> romantic stories &amp; ghost stories</div>
+      <div class="opt" onclick="choose(this,'q55','B')"><span class="opt-letter">B</span> anecdotes &amp; 'human interest' stories</div>
+      <div class="opt" onclick="choose(this,'q55','C')"><span class="opt-letter">C</span> biographies &amp; adventure stories</div>
+      <div class="opt" onclick="choose(this,'q55','D')"><span class="opt-letter">D</span> anecdotes &amp; biographies</div>
+    </div>
+    <div class="feedback" id="fb-q55"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-practice">Practice</span>
+    <h2>Adverbs for Telling Stories</h2>
+    <span class="page-ref">p.61 ex.1</span>
+  </div>
+
+  <!-- Q56 -->
+  <div class="q-card" id="q56">
+    <div class="q-header"><div class="q-num">56</div>
+      <div class="q-text"><em>"The audience were completely silent."</em> → Which adverb sentence matches?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q56','A')"><span class="opt-letter">A</span> Unfortunately, she never saw her only grandchild.</div>
+      <div class="opt" onclick="choose(this,'q56','B')"><span class="opt-letter">B</span> Suddenly, a mobile phone rang and everyone turned and stared.</div>
+      <div class="opt" onclick="choose(this,'q56','C')"><span class="opt-letter">C</span> Fortunately, I had my credit card in my pocket.</div>
+      <div class="opt" onclick="choose(this,'q56','D')"><span class="opt-letter">D</span> Obviously, she was very disappointed.</div>
+    </div>
+    <div class="feedback" id="fb-q56"></div>
+  </div>
+
+  <!-- Q57 -->
+  <div class="q-card" id="q57">
+    <div class="q-header"><div class="q-num">57</div>
+      <div class="q-text"><em>"Robert really loves French food and culture."</em> → Which adverb sentence matches?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q57','A')"><span class="opt-letter">A</span> Thankfully, they were all OK.</div>
+      <div class="opt" onclick="choose(this,'q57','B')"><span class="opt-letter">B</span> Eventually, they found the piece of evidence.</div>
+      <div class="opt" onclick="choose(this,'q57','C')"><span class="opt-letter">C</span> Surprisingly, though, he's never visited France.</div>
+      <div class="opt" onclick="choose(this,'q57','D')"><span class="opt-letter">D</span> Unfortunately, she never saw her only grandchild.</div>
+    </div>
+    <div class="feedback" id="fb-q57"></div>
+  </div>
+
+  <!-- Q58 -->
+  <div class="q-card" id="q58">
+    <div class="q-header"><div class="q-num">58</div>
+      <div class="q-text"><em>"Hannah found out today that she didn't get that job she applied for."</em> → Which matches?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q58','A')"><span class="opt-letter">A</span> Suddenly, a mobile phone rang.</div>
+      <div class="opt" onclick="choose(this,'q58','B')"><span class="opt-letter">B</span> Obviously, she was very disappointed.</div>
+      <div class="opt" onclick="choose(this,'q58','C')"><span class="opt-letter">C</span> Fortunately, I had my credit card.</div>
+      <div class="opt" onclick="choose(this,'q58','D')"><span class="opt-letter">D</span> Thankfully, they were all OK.</div>
+    </div>
+    <div class="feedback" id="fb-q58"></div>
+  </div>
+
+  <!-- Q59 -->
+  <div class="q-card" id="q59">
+    <div class="q-header"><div class="q-num">59</div>
+      <div class="q-text"><em>"Marianne and Laura were great friends at university."</em> → Which adverb sentence matches?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q59','A')"><span class="opt-letter">A</span> Surprisingly, he's never visited France.</div>
+      <div class="opt" onclick="choose(this,'q59','B')"><span class="opt-letter">B</span> Immediately, I ran over to see if she was alright.</div>
+      <div class="opt" onclick="choose(this,'q59','C')"><span class="opt-letter">C</span> However, they gradually lost touch over the years.</div>
+      <div class="opt" onclick="choose(this,'q59','D')"><span class="opt-letter">D</span> Obviously, she was very disappointed.</div>
+    </div>
+    <div class="feedback" id="fb-q59"></div>
+  </div>
+
+  <div class="section-label">
+    <span class="tag tag-practice">Practice</span>
+    <h2>Remember These Words</h2>
+    <span class="page-ref">p.147–149</span>
+  </div>
+
+  <!-- Q60 -->
+  <div class="q-card" id="q60">
+    <div class="q-header"><div class="q-num">60</div>
+      <div class="q-text">A story about supernatural events and dead people returning is ______</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q60','A')"><span class="opt-letter">A</span> an adventure story</div>
+      <div class="opt" onclick="choose(this,'q60','B')"><span class="opt-letter">B</span> a crime story</div>
+      <div class="opt" onclick="choose(this,'q60','C')"><span class="opt-letter">C</span> a ghost story</div>
+      <div class="opt" onclick="choose(this,'q60','D')"><span class="opt-letter">D</span> a romantic story</div>
+    </div>
+    <div class="feedback" id="fb-q60"></div>
+  </div>
+
+  <!-- Q61 -->
+  <div class="q-card" id="q61">
+    <div class="q-header"><div class="q-num">61</div>
+      <div class="q-text"><em>"In your family, do you usually ______ a prayer before meals?"</em> (answer key ex.3, item 3)</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q61','A')"><span class="opt-letter">A</span> tell</div>
+      <div class="opt" onclick="choose(this,'q61','B')"><span class="opt-letter">B</span> say</div>
+      <div class="opt" onclick="choose(this,'q61','C')"><span class="opt-letter">C</span> speak</div>
+      <div class="opt" onclick="choose(this,'q61','D')"><span class="opt-letter">D</span> talk</div>
+    </div>
+    <div class="feedback" id="fb-q61"></div>
+  </div>
+
+  <!-- Q62 -->
+  <div class="q-card" id="q62">
+    <div class="q-header"><div class="q-num">62</div>
+      <div class="q-text">From the answer key ex.2: <strong>1→b, 2→f, 3→a, 4→?, 5→e, 6→c</strong>. What does item <strong>4</strong> match?</div>
+    </div>
+    <div class="options">
+      <div class="opt" onclick="choose(this,'q62','A')"><span class="opt-letter">A</span> a</div>
+      <div class="opt" onclick="choose(this,'q62','B')"><span class="opt-letter">B</span> b</div>
+      <div class="opt" onclick="choose(this,'q62','C')"><span class="opt-letter">C</span> c</div>
+      <div class="opt" onclick="choose(this,'q62','D')"><span class="opt-letter">D</span> d</div>
+    </div>
+    <div class="feedback" id="fb-q62"></div>
+  </div>
+
+  <div class="actions">
+    <button class="submit-btn" onclick="submitAll()">Submit All Answers →</button>
+    <div class="result-box" id="result-box">
+      <div class="result-score" id="result-score">0/62</div>
+      <div class="result-label">Questions answered correctly</div>
+      <div id="result-grade" class="result-grade"></div>
+      <br>
+      <button class="retry-btn" onclick="retryExam()">↺ Try Again</button>
+    </div>
+  </div>
+
+</div><!-- end tab-practice -->
+
+</main>
+<div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+<script>
+// ── ANSWER KEY ──
+const ANSWERS = {
+  // GRAMMAR — Past Perfect
+  q1:'B', q2:'C', q3:'A', q4:'C', q5:'B', q6:'C', q7:'B',
+  q8:'C', q9:'B', q10:'C',
+  // GRAMMAR — Reported Speech
+  q11:'C', q12:'B', q13:'B', q14:'B', q15:'B',
+  q16:'B', q17:'A', q18:'C', q19:'B', q20:'B', q21:'B',
+  // VOCAB — say/tell
+  q22:'B', q23:'C', q24:'B', q25:'C', q26:'C',
+  // VOCAB — word meanings p56/p58
+  q27:'B', q28:'C', q29:'C', q30:'C', q31:'C', q32:'B',
+  // VOCAB — word meanings p60/p61
+  q33:'C', q34:'C', q35:'C', q36:'B', q37:'C', q38:'C', q39:'C', q40:'B',
+  // READING — A Twist of Fate
+  q41:'C', q42:'B', q43:'B', q44:'C', q45:'B',
+  // READING — Who said it
+  q46:'C', q47:'B', q48:'D',
+  // READING — Josh Peltz
+  q49:'B', q50:'C', q51:'C', q52:'B',
+  // PRACTICE — Story types
+  q53:'C', q54:'C', q55:'B',
+  // PRACTICE — Adverbs
+  q56:'B', q57:'C', q58:'B', q59:'C',
+  // PRACTICE — Remember
+  q60:'C', q61:'B', q62:'D'
+};
+
+const FEEDBACK_TEXT = {
+  q1:'"had died" is Past perfect — had + past participle',
+  q2:'Past perfect = had + past participle',
+  q3:'Explanation 1 is INCORRECT — Past perfect ≠ long time ago',
+  q4:'"met" — Past simple (completed action 4 years ago)',
+  q5:'"had competed" — Past perfect (happened before they met)',
+  q6:'"had been born" — Past perfect passive',
+  q7:'"had divorced / had remarried" — both Past perfect',
+  q8:'"had lived" — Past perfect (before she spoke French well)',
+  q9:'"had already sold" — Past perfect',
+  q10:'"had never flown" — Past perfect negative',
+  q11:'Present continuous → Past continuous in reported speech',
+  q12:'Present perfect → Past perfect: he\'d just had a dream',
+  q13:'will → would in reported speech',
+  q14:'No inversion in reported questions — same word order as statements',
+  q15:'if / whether are used in yes/no reported questions',
+  q16:'No inversion: "why I was late" (NOT "why was I")',
+  q17:'Yes/no question → use "if": "if we were going home"',
+  q18:'"how he was" — statement word order in reported question',
+  q19:'Tense shifts back: "happened" → "had happened"',
+  q20:'"lent / lost" → "had lent / had lost" in reported speech',
+  q21:'"I\'ll give" → "he would give" in reported speech',
+  q22:'tell jokes (NOT say jokes)',
+  q23:'say hello / goodbye / thank you',
+  q24:'say sorry (NOT tell sorry)',
+  q25:'tell the difference between',
+  q26:'"say a prayer" — say: prayer, sorry, hello/goodbye, yes/no',
+  q27:'Twist = change (p.56)',
+  q28:'Fate = something that God has chosen (p.56)',
+  q29:'Identical = exactly the same (p.56)',
+  q30:'Optimistic = someone who looks at the positives rather than the negatives (p.56)',
+  q31:'Autobiography = a story about a person\'s life written by themselves (p.58)',
+  q32:'Lyrics = words of a song (p.58)',
+  q33:'Assess = test (p.60)',
+  q34:'Brace for impact = get ready for a dangerous situation (p.60)',
+  q35:'Fortunately = luckily (p.60)',
+  q36:'Gradually = step by step (p.61)',
+  q37:'Immediately = at once, right away (p.61)',
+  q38:'Eventually = at the end (p.61)',
+  q39:'Obviously = clearly (p.61)',
+  q40:'Unfortunately = unluckily (p.61)',
+  q41:'It\'s a \'human interest\' story (p.56 ex.2A)',
+  q42:'They first met at a local McDonald\'s restaurant',
+  q43:'Because they looked so alike',
+  q44:'Justin Lattore, a friend of Adriana\'s, at Tamara\'s birthday party',
+  q45:'They feel like sisters but the relationship is more like friends',
+  q46:'Jung Xiu said "We\'ll get married one day."',
+  q47:'Mark Twain said "I came in with the comet..."',
+  q48:'Liam\'s manager said "I\'m hiring another worker..."',
+  q49:'Josh thought about his wife Tesa and their two children',
+  q50:'He went to the men\'s room and cried for a few minutes',
+  q51:'f = 1st event: An explosion happened not long after take-off',
+  q52:'b (opened door) came before j (walked out on wing)',
+  q53:'Crime stories / mysteries → F (usually fictional)',
+  q54:'Adventure stories can be both fictional and true → B',
+  q55:'Anecdotes (T) and \'human interest\' stories (T)',
+  q56:'Sentence 1 (silent audience) matches e: "Suddenly a phone rang..."',
+  q57:'Sentence 6 (loves French culture) matches b: "Surprisingly, never visited France"',
+  q58:'Sentence 8 (didn\'t get the job) matches g: "Obviously, she was very disappointed"',
+  q59:'Sentence 9 (great friends at uni) matches c: "gradually lost touch"',
+  q60:'A ghost story = supernatural / dead people',
+  q61:'"say a prayer" — item 3 = say',
+  q62:'4→d (answer key: 1b, 2f, 3a, 4d, 5e, 6c)'
+};
+
+const ALL_IDS = Object.keys(ANSWERS);
+const state = {};
+let answered = 0;
+let correct = 0;
+const total = ALL_IDS.length;
+document.getElementById('total-q').textContent = total;
+
+function choose(el, qid, letter) {
+  if (state[qid]) return;
+  state[qid] = letter;
+  const opts = el.parentElement.querySelectorAll('.opt');
+  const correctLetter = ANSWERS[qid];
+  const isRight = letter === correctLetter;
+  opts.forEach(o => {
+    const l = o.querySelector('.opt-letter').textContent;
+    o.classList.add('disabled');
+    if (l === correctLetter) o.classList.add('correct');
+    else if (l === letter && !isRight) o.classList.add('wrong');
+  });
+  const fb = document.getElementById('fb-' + qid);
+  if (isRight) {
+    fb.textContent = '✓ Correct! ' + FEEDBACK_TEXT[qid];
+    fb.className = 'feedback ok show';
+    correct++;
+    document.getElementById('correct-q').textContent = correct;
+  } else {
+    fb.textContent = '✗ Incorrect. ' + FEEDBACK_TEXT[qid];
+    fb.className = 'feedback no show';
+  }
+  answered++;
+  document.getElementById('answered-q').textContent = answered;
+  document.getElementById('progress-fill').style.width = Math.round((answered/total)*100) + '%';
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function submitAll() {
+  ALL_IDS.forEach(qid => {
+    if (!state[qid]) {
+      const card = document.getElementById(qid);
+      if (!card) return;
+      const correctLetter = ANSWERS[qid];
+      card.querySelectorAll('.opt').forEach(o => {
+        o.classList.add('disabled');
+        if (o.querySelector('.opt-letter').textContent === correctLetter) o.classList.add('correct');
+      });
+      const fb = document.getElementById('fb-' + qid);
+      fb.textContent = '— Not answered. ' + FEEDBACK_TEXT[qid];
+      fb.className = 'feedback no show';
+      answered++;
+    }
+  });
+  document.getElementById('answered-q').textContent = answered;
+  document.getElementById('progress-fill').style.width = '100%';
+  const pct = Math.round((correct / total) * 100);
+  document.getElementById('result-score').textContent = correct + '/' + total + ' (' + pct + '%)';
+  const gradeEl = document.getElementById('result-grade');
+  if (pct >= 90) { gradeEl.textContent = '🏆 Excellent — A'; gradeEl.className = 'result-grade grade-a'; }
+  else if (pct >= 75) { gradeEl.textContent = '👍 Good — B'; gradeEl.className = 'result-grade grade-b'; }
+  else if (pct >= 60) { gradeEl.textContent = '📚 Pass — C'; gradeEl.className = 'result-grade grade-c'; }
+  else { gradeEl.textContent = '📖 Needs Revision — D'; gradeEl.className = 'result-grade grade-d'; }
+  // switch to practice tab to show result
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-practice').classList.add('active');
+  document.querySelectorAll('.tab-btn')[3].classList.add('active');
+  document.getElementById('result-box').classList.add('show');
+  document.getElementById('result-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function retryExam() { location.reload(); }
+</script>
+</body>
+</html>
