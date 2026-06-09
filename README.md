@@ -10,8 +10,9 @@
 ## Computer_Skills:
  A-نظري
 
-###  [Learning_Lectures](/lectures_combined.html) 
-###  [Quiz_For_All](/quiz-all-lectures.html)
+### [Learning_Lectures](/lectures_combined.html) 
+### [Quiz_For_All_0](/quiz-all-lectures.html)
+### [Quiz_For_All_1](/quiz-model2.html)
  B-عملي
 
 ### [Word](/word_lecture.html) 
