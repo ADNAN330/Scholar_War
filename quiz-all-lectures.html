@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنك أسئلة – مهارات الحاسوب</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg:       #f0f4f8;
+    --surface:  #ffffff;
+    --card:     #ffffff;
+    --border:   #dde3ec;
+    --border-l: #c8d2e0;
+
+    --blue:     #2563eb;
+    --blue-l:   #eff4ff;
+    --blue-b:   #bfcfff;
+    --teal:     #0891b2;
+    --teal-l:   #ecfeff;
+    --green:    #16a34a;
+    --green-l:  #f0fdf4;
+    --green-b:  #bbf7d0;
+    --orange:   #ea580c;
+    --orange-l: #fff7ed;
+    --orange-b: #fed7aa;
+    --red:      #dc2626;
+    --red-l:    #fef2f2;
+    --red-b:    #fecaca;
+    --purple:   #7c3aed;
+    --purple-l: #f5f3ff;
+    --purple-b: #ddd6fe;
+
+    --text:     #1e2535;
+    --muted:    #64748b;
+    --dim:      #94a3b8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 2rem 1.5rem 1.6rem;
+    text-align: center;
+    position: relative;
+  }
+  .eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--teal); font-weight: 600; margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800; color: var(--text); margin-bottom: 0.25rem;
+  }
+  header p { color: var(--muted); font-size: 0.85rem; }
+
+  /* ── Tabs ── */
+  .tabs-wrap {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 20;
+    overflow-x: auto;
+  }
+  .tabs {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+  }
+  .tab-btn {
+    flex: 1 1 auto;
+    min-width: 130px;
+    padding: 0.8rem 1rem;
+    background: none; border: none; border-bottom: 3px solid transparent;
+    color: var(--muted); font-family: 'Tajawal', sans-serif;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    transition: color .2s, border-color .2s, background .2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { background: var(--bg); color: var(--text); }
+  .tab-btn.active { color: var(--blue); border-color: var(--blue); background: var(--blue-l); }
+
+  /* ── Panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Container ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* ── Score bar ── */
+  .score-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.4rem;
+    margin-bottom: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .score-label { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+  .score-count {
+    font-size: 1.15rem; font-weight: 800; color: var(--blue);
+  }
+  .score-count span { color: var(--muted); font-weight: 400; font-size: 0.85rem; }
+  .reset-btn {
+    background: var(--blue); color: #fff;
+    border: none; border-radius: 8px;
+    padding: 0.4rem 1rem; font-family: 'Tajawal', sans-serif;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .reset-btn:hover { background: #1d4ed8; }
+  .progress-wrap { width: 100%; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--teal)); border-radius: 99px; transition: width .4s; }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color .2s;
+  }
+  .q-card.answered { border-color: var(--border-l); }
+
+  .q-head {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .q-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--blue-l); color: var(--blue);
+    font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-text { font-size: 0.93rem; font-weight: 600; color: var(--text); line-height: 1.6; }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .option {
+    display: flex; align-items: flex-start; gap: 0.65rem;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.65rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.86rem; color: var(--text);
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .option:hover:not(.locked) { border-color: var(--blue); background: var(--blue-l); }
+  .option.locked { cursor: default; }
+  .option.correct {
+    border-color: var(--green) !important;
+    background: var(--green-l) !important;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .option.wrong {
+    border-color: var(--red) !important;
+    background: var(--red-l) !important;
+    color: var(--red);
+  }
+  .opt-letter {
+    flex-shrink: 0;
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--surface); border: 1.5px solid var(--border-l);
+    font-size: 0.72rem; font-weight: 700; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .option.correct .opt-letter { background: var(--green); border-color: var(--green); color: #fff; }
+  .option.wrong .opt-letter   { background: var(--red);   border-color: var(--red);   color: #fff; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600;
+    align-items: center; gap: 0.5rem;
+  }
+  .feedback.show { display: flex; }
+  .feedback.ok  { background: var(--green-l); color: var(--green); border: 1px solid var(--green-b); }
+  .feedback.err { background: var(--red-l);   color: var(--red);   border: 1px solid var(--red-b); }
+
+  /* ── Lecture badge ── */
+  .lec-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.9rem; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 700; margin-bottom: 1.4rem;
+  }
+  .b-lec2 { background: var(--orange-l); color: var(--orange); border: 1px solid var(--orange-b); }
+  .b-lec3 { background: var(--purple-l); color: var(--purple); border: 1px solid var(--purple-b); }
+  .b-lec4 { background: var(--blue-l);   color: var(--blue);   border: 1px solid var(--blue-b); }
+  .b-lec5 { background: var(--teal-l);   color: var(--teal);   border: 1px solid #a5f3fc; }
+  .b-lec9 { background: var(--green-l);  color: var(--green);  border: 1px solid var(--green-b); }
+
+  footer {
+    text-align: center; padding: 1.2rem;
+    font-size: 0.72rem; color: var(--dim);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">مهارات الحاسوب · جامعة قاسيون · 2025/2026</div>
+  <h1>بنك الأسئلة التفاعلي</h1>
+  <p>د.م. إميل جرجس روميه — اختر المحاضرة وابدأ</p>
+</header>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('lec2')">📘 مح. ثانية<br><small>المكونات المادية</small></button>
+    <button class="tab-btn" onclick="switchTab('lec3')">🔢 مح. ثالثة<br><small>نظم الترميز</small></button>
+    <button class="tab-btn" onclick="switchTab('lec4')">💾 مح. رابعة<br><small>المكونات البرمجية</small></button>
+    <button class="tab-btn" onclick="switchTab('lec5')">🪟 مح. خامسة<br><small>Windows 11</small></button>
+    <button class="tab-btn" onclick="switchTab('lec9')">🌐 مح. تاسعة<br><small>الشبكات والإنترنت</small></button>
+  </div>
+</div>
+
+<!-- ════════════ LEC 2 ════════════ -->
+<div id="lec2" class="panel active">
+<div class="container">
+  <div class="lec-badge b-lec2">📘 المحاضرة الثانية – المكونات المادية للحاسوب</div>
+  <div class="score-bar">
+    <div>
+      <div class="score-label">درجاتك</div>
+      <div class="score-count" id="score-lec2">0 <span>/ 0</span></div>
+    </div>
+    <div class="progress-wrap" style="flex:1;margin:0 1rem"><div class="progress-fill" id="prog-lec2" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetPanel('lec2')">إعادة تعيين</button>
+  </div>
+  <div id="qs-lec2"></div>
+</div>
+</div>
+
+<!-- ════════════ LEC 3 ════════════ -->
+<div id="lec3" class="panel">
+<div class="container">
+  <div class="lec-badge b-lec3">🔢 المحاضرة الثالثة – نظم الترميز وتمثيل المعلومات</div>
+  <div class="score-bar">
+    <div>
+      <div class="score-label">درجاتك</div>
+      <div class="score-count" id="score-lec3">0 <span>/ 0</span></div>
+    </div>
+    <div class="progress-wrap" style="flex:1;margin:0 1rem"><div class="progress-fill" id="prog-lec3" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetPanel('lec3')">إعادة تعيين</button>
+  </div>
+  <div id="qs-lec3"></div>
+</div>
+</div>
+
+<!-- ════════════ LEC 4 ════════════ -->
+<div id="lec4" class="panel">
+<div class="container">
+  <div class="lec-badge b-lec4">💾 المحاضرة الرابعة – المكونات البرمجية للحاسوب</div>
+  <div class="score-bar">
+    <div>
+      <div class="score-label">درجاتك</div>
+      <div class="score-count" id="score-lec4">0 <span>/ 0</span></div>
+    </div>
+    <div class="progress-wrap" style="flex:1;margin:0 1rem"><div class="progress-fill" id="prog-lec4" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetPanel('lec4')">إعادة تعيين</button>
+  </div>
+  <div id="qs-lec4"></div>
+</div>
+</div>
+
+<!-- ════════════ LEC 5 ════════════ -->
+<div id="lec5" class="panel">
+<div class="container">
+  <div class="lec-badge b-lec5">🪟 المحاضرة الخامسة – نظام التشغيل Windows 11</div>
+  <div class="score-bar">
+    <div>
+      <div class="score-label">درجاتك</div>
+      <div class="score-count" id="score-lec5">0 <span>/ 0</span></div>
+    </div>
+    <div class="progress-wrap" style="flex:1;margin:0 1rem"><div class="progress-fill" id="prog-lec5" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetPanel('lec5')">إعادة تعيين</button>
+  </div>
+  <div id="qs-lec5"></div>
+</div>
+</div>
+
+<!-- ════════════ LEC 9 ════════════ -->
+<div id="lec9" class="panel">
+<div class="container">
+  <div class="lec-badge b-lec9">🌐 المحاضرة التاسعة – شبكات الاتصال والإنترنت</div>
+  <div class="score-bar">
+    <div>
+      <div class="score-label">درجاتك</div>
+      <div class="score-count" id="score-lec9">0 <span>/ 0</span></div>
+    </div>
+    <div class="progress-wrap" style="flex:1;margin:0 1rem"><div class="progress-fill" id="prog-lec9" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetPanel('lec9')">إعادة تعيين</button>
+  </div>
+  <div id="qs-lec9"></div>
+</div>
+</div>
+
+<footer>مادة مهارات الحاسوب · جامعة قاسيون الخاصة للعلوم والتكنولوجيا · 2025/2026</footer>
+
+<script>
+// ── DATA ──
+const DATA = {
+  lec2: [
+    { q:"أي مما يلي يمثل الأقسام الأربعة الرئيسية للبنية المادية (Hardware) للحاسوب كاملاً؟", opts:["لوحة المفاتيح، الشاشة، المعالج، القرص الصلب","وحدات الدخل، وحدات الإخراج، وحدة المعالجة المركزية، وحدة الذاكرة","اللوحة الأم، وحدة التغذية، المعالج، ذواكر RAM","نظام BIOS، نظام التشغيل، برامج القيادة، البرمجيات التطبيقية"], ans:1 },
+    { q:"في لوحة المفاتيح القياسية، تقع أزرار التحكم بالاتجاهات ومفاتيح مثل Ctrl و Alt و Shift ضمن:", opts:["قسم مفاتيح الوظائف (Function Keys)","قسم الكتابة الرئيسي (Alphanumeric Keys)","قسم مفاتيح التحكم (Control Keys)","قسم الآلة الحاسبة الرقمية (Numeric Keypad)"], ans:2 },
+    { q:"أي نوع من الفأرة يعتمد في عمله على الأشعة تحت الحمراء ويتميز بالدقة العالية والقدرة على العمل لاسلكياً؟", opts:["الفأرة التقليدية الميكانيكية","الفأرة الضوئية (Optical Mouse)","الفأرة الليزرية (Laser Mouse)","لوحة اللمس (Touchpad)"], ans:2 },
+    { q:"ما هو الجهاز المستخدم في البنوك والمصارف لقراءة البيانات المطبوعة بحبر خاص على الشيكات؟", opts:["قارئ المحارف المغناطيسية (MICR)","قارئ الأشرطة المغناطيسية (MSR)","قارئ العلامات الضوئية (OMR)","قارئ الخطوط المتوازية (Barcode Reader)"], ans:0 },
+    { q:"يُستخدم قارئ العلامات الضوئية (OMR) بشكل أساسي في:", opts:["قراءة الرموز التعبيرية والروابط الذكية","تصحيح أوراق الامتحانات المؤتمتة والاستمارات","قراءة الخطوط المتوازية للمنتجات في نقاط البيع","مسح الصور الفوتوغرافية وتحويلها إلى بيانات رقمية"], ans:1 },
+    { q:"شاشة اللمس (Touch Screen) تُصنف علمياً في الهيكل العام للحاسوب على أنها:", opts:["وحدة إدخال فقط","وحدة إخراج فقط","وحدة إدخال وإخراج معاً","وحدة معالجة فرعية"], ans:2 },
+    { q:"أي من الخصائص التالية لشاشات العرض تعبر عن \"الزمن الذي تستغرقه البكسلات لتغيير لونها\":", opts:["السطوع (Brightness)","التباين (Contrast)","الدقة (Resolution)","زمن الاستجابة (Response Time)"], ans:3 },
+    { q:"ما هي تقنية شاشات العرض المسطحة التي تمتاز بالإضاءة الذاتية للبكسلات دون حاجة لإضاءة خلفية؟", opts:["شاشات CRT","شاشات LCD","شاشات LED","شاشات OLED"], ans:3 },
+    { q:"إذا كنت بحاجة لطباعة صور فوتوغرافية ملونة عالية الدقة، فإن الطابعة الأنسب هي:", opts:["الطابعة الإبرية (Dot Matrix)","الطابعة النافثة للحبر (Ink Jet)","الطابعة الليزرية (Laser Jet)","الراسمة (Plotter)"], ans:1 },
+    { q:"تمتاز الطابعات الليزرية (Laser Jet) عن غيرها بـ:", opts:["الاعتماد على خراطيش الحبر السائل لإعطاء ألوان طبيعية","التكلفة المنخفضة جداً عند الشراء لأول مرة","السرعة العالية جداً والاقتصادية عند طباعة الكميات الكبيرة","القدرة على طباعة المخططات الهندسية العملاقة"], ans:2 },
+    { q:"تُستخدم \"الراسمات\" (Plotters) بشكل أساسي لطباعة:", opts:["المستندات النصية السريعة والتقارير اليومية","الصور الشخصية الصغيرة بدقة فائقة","المخططات الهندسية واللافتات الإعلانية الكبيرة","الفواتير الكربونية متعددة الطبقات"], ans:2 },
+    { q:"أين تقع منافذ توصيل الشاشة (VGA/HDMI) ومنافذ الشبكة ومأخذ التغذية الكهربائية في صندوق النظام؟", opts:["في الواجهة الأمامية للـ Case","في الواجهة الخلفية للـ Case","على شريحة المعالج مباشرة","داخل وحدة التغذية الكهربائية (Power Supply)"], ans:1 },
+    { q:"ما هي الوظيفة الأساسية لوحدة التغذية الكهربائية (Power Supply) في الحاسوب؟", opts:["توليد طاقة كهربائية ذاتية عند انقطاع التيار","تحويل التيار المتناوب (AC) إلى مستمر (DC) بتوترات مختلفة","تنظيم سرعة دوران مروحة تبريد المعالج","تخزين الطاقة الاحتياطية لتشغيل الذاكرة RAM"], ans:1 },
+    { q:"تقاس سرعة وحدة المعالجة المركزية (CPU) بـ:", opts:["البايت (Byte) ومضاعفاتها","الميغاهرتز (MHz) والجيجاهرتز (GHz)","البكسل (Pixel) في الثانية","عدد البتات (32-bit أو 64-bit)"], ans:1 },
+    { q:"أي جزء من أجزاء المعالج يعد المسؤول الأول عن تنظيم وتنسيق انتقال المعلومات والتعليمات دون أخطاء؟", opts:["وحدة الحساب والمنطق (ALU)","المسجلات (Registers)","وحدة التحكم (Control Unit)","وحدة الفاصلة العائمة (FPU)"], ans:2 },
+    { q:"عند العمل على برامج الأوفيس، فإن الوحدة المسؤولة عن معالجة البيانات داخل الـ ALU هي:", opts:["وحدة الأعداد الصحيحة (Integer Unit)","وحدة الفاصلة العائمة (Floating Point Unit)","الذاكرة المخبأة (Cache)","مسجلات الحالة"], ans:0 },
+    { q:"ما هي الميزة الأساسية للذاكرة المخبأة (Cache Memory)؟", opts:["سعتها التخزينية الضخمة التي تفوق الـ RAM","احتفاظها بالبيانات بشكل دائم حتى عند إغلاق الحاسب","سرعتها الفائقة وتخزينها للمعلومات المتكررة الطلب","اتصالها المباشر بمنافذ الـ USB الخارجية"], ans:2 },
+    { q:"أي من الذواكر التالية يُحمل عليها نظام التشغيل عند الإقلاع وتفقد محتوياتها عند انقطاع الكهرباء؟", opts:["الذاكرة ROM","الذاكرة RAM","الذاكرة المخبأة Cache","القرص الصلب SSD"], ans:1 },
+    { q:"ما هو وجه الاختلاف الرئيسي بين أقراص SSD وأقراص NVMe؟", opts:["أقراص SSD تعتمد على أجزاء ميكانيكية بينما NVMe إلكترونية بالكامل","أقراص NVMe تتصل مباشرة باللوحة الأم عبر PCI Express وهي أسرع بكثير","أقراص SSD تفقد بياناتها عند انقطاع الكهرباء بعكس NVMe","أقراص NVMe أرخص ثمناً وأقل كفاءة من SSD"], ans:1 },
+    { q:"يتم إدارة وتحديد منافذ الاتصال (USB وغيرها) برمجياً في نظام التشغيل من خلال أداة:", opts:["لوحة التحكم (Control Panel)","إدارة الأجهزة (Device Manager)","نظام الـ BIOS","معالج النصوص (Word)"], ans:1 }
+  ],
+  lec3: [
+    { q:"ما هو أساس نظام العد السداسي عشر (Hexadecimal) وما هي الرموز المستخدمة فيه؟", opts:["الأساس 16، والرموز من 0 إلى 16","الأساس 16، والرموز من 0 إلى 9 والأحرف من A إلى F","الأساس 15، والرموز من 1 إلى 15 والأحرف من A إلى F","الأساس 16، والرموز من 0 إلى 9 والأحرف من A إلى G"], ans:1 },
+    { q:"الحرف (D) في نظام العد السداسي عشر يكافئ في النظام العشري القيمة:", opts:["11","12","13","14"], ans:2 },
+    { q:"عند تمثيل العدد (9876)₁₀ بناءً على أوزان خاناته، فإن الرقم 8 يضرب بـ:", opts:["10¹","10²","10³","10⁻²"], ans:1 },
+    { q:"يطلق على الخانة الثنائية الواقعة في أقصى يمين العدد الثنائي اسم:", opts:["الخانة الأكبر وزناً (MSB)","الكلمة المزدوجة (Double Word)","الخانة الأقل وزناً (LSB)","البايت الموسع (Extended Byte)"], ans:2 },
+    { q:"تحويل العدد الثنائي الصحيح (10001)₂ إلى النظام العشري يعطي:", opts:["9","15","17","33"], ans:2 },
+    { q:"عند تحويل الجزء الكسري العشري 0.3125 إلى النظام الثنائي، فإن الناتج يكون:", opts:["(0.1011)₂","(0.0101)₂","(0.1100)₂","(0.0011)₂"], ans:1 },
+    { q:"ما هو الناتج العشري للعدد الثماني (226)₈؟", opts:["150","166","182","226"], ans:0 },
+    { q:"لتحويل العدد الثماني (357.543)₈ إلى النظام الثنائي، نقوم باستبدال كل رقم ثماني بـ:", opts:["خانتين ثنائيتين (2 Bits)","ثلاث خانات ثنائية (3 Bits)","أربع خانات ثنائية (4 Bits)","بايت كامل (8 Bits)"], ans:1 },
+    { q:"عند تقسيم العدد الثنائي إلى مجموعات رباعية (من اليمين إلى اليسار)، فإننا نحوله إلى النظام:", opts:["العشري","الثماني","السداسي عشر","الثنائي المتمم"], ans:2 },
+    { q:"لا يمكن التحويل مباشرة بين النظامين الثماني والسداسي عشر، بل يجب المرور أولاً عبر النظام:", opts:["العشري فقط","الثنائي","المتمم الثنائي","نظام ASCII"], ans:1 },
+    { q:"ما هو ناتج عملية الجمع الثنائية: (110)₂ + (011)₂؟", opts:["(111)₂","(101)₂","(1001)₂","(1101)₂"], ans:2 },
+    { q:"في الجمع الثنائي، القيمة 1 + 1 تعطي:", opts:["2","0 ومحمول (Carry) يساوي 0","0 ومحمول (Carry) يساوي 1","1 ومحمول (Carry) يساوي 1"], ans:2 },
+    { q:"ما هي الخطوات الصحيحة لإيجاد المتمم الثنائي (2's Complement)؟", opts:["إضافة 1 للعدد ثم قلب الأصفار والواحدات","قلب الأصفار والواحدات فقط","قلب الأصفار والواحدات ثم إضافة 1 للناتج","ضرب العدد في القيمة (-2)"], ans:2 },
+    { q:"ما هو ناتج عملية الضرب الثنائي: (101)₂ × (111)₂؟", opts:["(110011)₂","(100011)₂","(111111)₂","(101101)₂"], ans:1 },
+    { q:"الـ Mega Byte (MB) الواحدة تساوي بالضبط:", opts:["1000 Kilo Bytes","1024 Bytes","1024 Kilo Bytes","1024 Giga Bytes"], ans:2 },
+    { q:"نظام الترميز الذي يعتمد على 7 بت لتمثيل البيانات ويعطي 128 رمزاً مختلفاً هو:", opts:["نظام ASCII","نظام ASCII الموسع","نظام EBCDIC","نظام Unicode"], ans:0 },
+    { q:"ما الذي يميز نظام الترميز العالمي (Unicode) عن أنظمة الـ ASCII؟", opts:["أنه يمثل الرموز في 8 بت فقط ليكون أسرع","أنه مخصص حصرياً لحواسيب شركة IBM العملاقة","أنه يمثل الحرف بـ 16 بت مما يسمح باستيعاب كافة لغات العالم","أنه يعتمد على نظام العد الثماني في التشفير"], ans:2 },
+    { q:"نظام الترميز المكون من 8 بت والذي يُستخدم حصرياً في حواسيب شركة IBM هو:", opts:["ASCII","ASCII الموسع","EBCDIC","Unicode"], ans:2 },
+    { q:"في العمليات المنطقية، متى تعطي بوابة الضرب المنطقي (AND) النتيجة 1؟", opts:["إذا كان أحد المدخلين على الأقل يساوي 1","إذا كان كلا المدخلين يساوي 1 فقط","إذا كان كلا المدخلين يساوي 0","عندما تختلف قيم المدخلات عن بعضها"], ans:1 },
+    { q:"العملية المنطقية التي تعطي النتيجة 0 فقط عندما يكون كلا المدخلين A و B يساوي 0 هي:", opts:["العملية AND","العملية OR","العملية NOT","العملية المتممة"], ans:1 }
+  ],
+  lec4: [
+    { q:"أي مما يلي يمثل الأنواع الثلاثة الأساسية للبرمجيات حسب الوظيفة؟", opts:["برمجيات تطبيقية، برمجيات ليزرية، لغات تجميع","برمجيات النظام، لغات البرمجة، برمجيات التطبيقات","نظام التشغيل، التعريفات، برامج مكافحة الفيروسات","لغات الجيل الأول، الجيل الثاني، الجيل الثالث"], ans:1 },
+    { q:"أين يكون نظام الإدخال والإخراج الأساسي (BIOS) مخزناً داخل الحاسب؟", opts:["على القرص الصلب الثابت HDD","في ذاكرة الوصول العشوائي RAM مؤقتاً","بشكل دائم في ذاكرة الـ ROM على اللوحة الأم","داخل كرت الشاشة الخارجي"], ans:2 },
+    { q:"عملية الفحص الذاتي لقطع الحاسب المادية عند الإقلاع تسمى:", opts:["Driver Setup","POST (Power On Self Test)","Defragmentation","BIOS Flash"], ans:1 },
+    { q:"أي مما يلي لا يعد من الوظائف الأساسية لنظام التشغيل (OS)؟", opts:["التعرف على الأجهزة وتأمين قنوات الاتصال بينها","إدارة الذاكرة الرئيسية وتوزيعها على البرامج","فحص سلامة اللوحة الأم وإصدار أصوات (Beeps) عند وجود خلل قبل الإقلاع","توفير واجهة تخاطب بين المستخدم والآلة"], ans:2 },
+    { q:"يُصنف نظام التشغيل Windows على أنه نظام:", opts:["مستخدم واحد ومهمة واحدة (Single-user, Single-tasking)","مستخدم واحد ومتعدد المهام (Single-user, Multi-tasking)","متعدد المستخدمين ومهمة واحدة (Multi-user, Single-tasking)","نظام مفتوح المصدر ومجاني بالكامل"], ans:1 },
+    { q:"ما هو وجه الشبه والاختلاف بين نظامي Linux و Windows؟", opts:["كلاهما مغلق المصدر، لكن Linux مخصص للتصميم والوسائط العالية","كلاهما أنظمة تشغيل، لكن Linux مفتوح المصدر ومجاني بينما Windows مغلق المصدر وتجاري","كلاهما لا يدعم الواجهة الرسومية (GUI)","كلاهما من إنتاج شركة Apple العالمية"], ans:1 },
+    { q:"ما هي البرامج المسؤولة عن جعل نظام التشغيل قادراً على التعرف وتشغيل القطع المادية مثل الطابعات وبطاقات الصوت؟", opts:["البرامج المساعدة (Utility Programs)","لغات الجيل الرابع (4GL)","برامج تشغيل المكونات (Drivers / التعريفات)","برمجيات التطبيقات العامة"], ans:2 },
+    { q:"برنامج إلغاء التجزئة (Disk Defragmenter) يُصنف برمجياً كـ:", opts:["لغة برمجة منخفضة المستوى","برنامج مساعد (Utility Program) تابع لبرمجيات النظام","تطبيق عام من تطبيقات الأوفيس","نظام تشغيل فرعي"], ans:1 },
+    { q:"اللغة الوحيدة التي يفهمها الحاسب مباشرة دون الحاجة لأي وسيط أو مترجم هي:", opts:["لغة التجميع (Assembly)","لغة الآلة (Machine Language)","لغة C++","لغة الجيل الرابع (4GL)"], ans:1 },
+    { q:"الأداة أو البرنامج الذي يقوم بتحويل لغة التجميع (Assembly) إلى لغة الآلة يُعرف بـ:", opts:["المترجم (Compiler)","المفسر (Interpreter)","المجمّع (Assembler)","معالج النصوص"], ans:2 },
+    { q:"لغات البرمجة عالية المستوى (High-Level) تتميز بأنها:", opts:["تستخدم الأصفار والواحدات فقط وتعتمد على نوع المعالج","تستخدم كلمات قريبة من لغة الإنسان وصيغ رياضية وتحتاج لمترجم","يفهمها الحاسب مباشرة دون أي برامج وسيطة","مخصصة فقط للأطفال لتصميم الروبوتات"], ans:1 },
+    { q:"لغات البرمجة التي تهدف لتقليل وقت كتابة الأكواد وتعتمد على تحديد \"ماذا تريد\" وليس \"كيف تفعل\" هي:", opts:["لغات المستوى المنخفض","لغة التجميع","لغات الجيل الرابع (4GL)","لغة الآلة الثنائية"], ans:2 },
+    { q:"لغة البرمجة المصممة خصيصاً لتعليم الأطفال البرمجة وتطبيقات الروبوتات المبسطة هي:", opts:["Prolog","LISP","LOGO","Pascal"], ans:2 },
+    { q:"لغات مثل (Prolog) و (LISP) تستخدم بشكل متخصص وأساسي في مجال:", opts:["تصميم صفحات الويب الثابتة","تطبيقات الذكاء الاصطناعي (AI)","إنشاء الجداول الحسابية وإدارة المستودعات","تعريف كروت الشاشة والصوت"], ans:1 },
+    { q:"أي من البرامج التالية يُستخدم لتخزين البيانات، تحليلها، وإجراء العمليات الجدولية الحسابية الإلكترونية؟", opts:["Microsoft Word","Microsoft Excel","Microsoft PowerPoint","Microsoft Access"], ans:1 }
+  ],
+  lec5: [
+    { q:"الحد الأدنى المطلوب لسعة ذاكرة الوصول العشوائي (RAM) لتشغيل نظام Windows 11 بكفاءة هو:", opts:["1 GB","2 GB","4 GB","8 GB"], ans:2 },
+    { q:"أي من الأدوات التالية تم دمجها في Windows 11 لتقدم خدمات الذكاء الصناعي للمستخدم؟", opts:["Snap Layouts","Microsoft Teams","Microsoft Copilot","Device Manager"], ans:2 },
+    { q:"تقع منطقة التنبيهات والإعلام (Notification Area) التي تحتوي على الساعة والتاريخ والبطارية ضمن:", opts:["قائمة إبدأ (Start Menu)","الجانب الأيمن من شريط المهام (Taskbar)","أيقونة جهاز الكومبيوتر (This PC)","لوحة التحكم (Control Panel)"], ans:1 },
+    { q:"لتثبيت تطبيق معين وجعله يظهر بشكل دائم على شريط المهام، ننقر فوقه بالزر الأيمن ونختار:", opts:["Pin to Start","Pin to taskbar","Unpin from taskbar","Create Shortcut"], ans:1 },
+    { q:"أي من الأقسام التالية لا يتواجد داخل الهيكل التصميمي لقائمة إبدأ (Start) في Windows 11؟", opts:["البرامج المثبتة (Pinned)","البرامج الموصى بها (Recommended)","أداة إدارة الأجهزة (Device Manager)","زر التحكم بالطاقة وحساب المستخدم"], ans:2 },
+    { q:"الأيقونة الأساسية على سطح المكتب والتي يتم من خلالها التحكم بنظام التشغيل وإدارة البرامج المثبتة هي:", opts:["جهاز الكومبيوتر (This PC)","لوحة التحكم (Control Panel)","ملفات المستخدم","سلة المهملات"], ans:1 },
+    { q:"ما هي الطريقة الصحيحة لفتح أيقونة أو مجلد متواجد على سطح المكتب؟", opts:["النقر مرة واحدة بالزر الأيسر","النقر مرتين متتاليتين (Double Click) بالزر الأيسر","الضغط المستمر مع السحب والإفلات","النقر مرة واحدة بالزر الأيمن واختيار تخصيص"], ans:1 },
+    { q:"للوصول إلى نافذة مواصفات النظام (About) لمعرفة نوع المعالج وحجم الـ RAM عبر أيقونة This PC، نتبع المسار:", opts:["النقر بالزر الأيسر مرتين → Settings","النقر بالزر الأيمن → Properties → System → About","الدخول إلى Control Panel → Accounts","النقر بالزر الأيمن → Personalization"], ans:1 },
+    { q:"يتطلب نظام التشغيل Windows 11 معالجاً ببنية توافقية من نوع:", opts:["32-bit فقط","64-bit","16-bit","لا يهم نوع البنية التوافقية للمعالج"], ans:1 },
+    { q:"أي خيار في إعدادات الحسابات (Accounts) يسمح لك بتفعيل ميزة التعرف على الوجه وبصمة الإصبع؟", opts:["معلوماتك (Your Info)","خيارات تسجيل الدخول (Sign-in Options)","أفراد العائلة (Family)","مستخدمون آخرون"], ans:1 },
+    { q:"ميزة \"النسخ الاحتياطي لـ Windows\" في إعدادات الحسابات تقوم بـ:", opts:["فحص الفيروسات وحذف الملفات المؤقتة","مزامنة مجلدات OneDrive وحفظ التفضيلات وقائمة التطبيقات سحابياً","زيادة مساحة القرص الصلب المادية","إعادة تثبيت ويندوز من جديد وحذف الحساب"], ans:1 },
+    { q:"لتغيير سمة مظهر نظام التشغيل، خلفية سطح المكتب، والألوان، نتوجه في الإعدادات إلى قسم:", opts:["النظام (System)","التخصيص (Personalization)","التطبيقات (Apps)","الخصوصية والأمان"], ans:1 },
+    { q:"لمعرفة حالة تحديثات نظام التشغيل وتاريخ آخر فحص لها، يمكن للمستخدم معاينة ذلك مباشرة في:", opts:["شريط المهام بجانب الساعة","القسم العلوي من نافذة الإعدادات الرئيسية (Settings)","قائمة إبدأ بجانب زر الطاقة","داخل سلة المهملات"], ans:1 },
+    { q:"كم تبلغ مساحة التخزين الدنيا المطلوبة في القرص الصلب لتثبيت نظام Windows 11؟", opts:["16 GB","32 GB","64 GB","128 GB"], ans:2 },
+    { q:"خيار \"الوصول إلى العمل أو المدرسة\" في إعدادات الحسابات يُستخدم لـ:", opts:["تحديد موقع المدرسة الجغرافي على الخريطة","ربط جهاز الحاسوب بمصادر المؤسسات التعليمية أو العمل","قفل الحاسوب وتحديد أوقات معينة للاستخدام أثناء المذاكرة","تحميل الألعاب التعليمية الخاصة بالأطفال"], ans:1 }
+  ],
+  lec9: [
+    { q:"ما هي المكونات الأربعة الأساسية لإنشاء شبكة حاسوبية؟", opts:["الشاشة، لوحة المفاتيح، الفأرة، نظام التشغيل","المخدم (Server)، محطات العمل (Clients)، كابلات الاتصال، بطاقة الشبكة","بروتوكول HTTP، لغة HTML، المتصفح، محرك البحث","المودم، خط الهاتف، الفلتر، القمر الصناعي"], ans:1 },
+    { q:"يتميز الحاسوب المخدم (Server) في الشبكة بـ:", opts:["أنه حاسوب ذو إمكانيات عادية جداً ويستخدمه موظف واحد","سرعته العالية وقدرته التخزينية الكبيرة والتحكم بجميع مكونات الشبكة","أنه يعمل لاسلكياً فقط ولا يمكن ربطه بالكابلات","مسؤوليته عن تصميم لغة الـ HTML للموقع"], ans:1 },
+    { q:"الشبكة التي تربط مجموعة حواسيب ضمن منطقة جغرافية محدودة جداً (منزل، مكتب، مدرسة) تسمى:", opts:["شبكة WAN","شبكة LAN","شبكة الإنترنت العالمية","شبكة الأقمار الصناعية"], ans:1 },
+    { q:"ما هو الفرق الجوهري بين شبكتي \"الانترانت\" (Intranet) و \"الاكسترانت\" (Extranet)؟", opts:["الانترانت شبكة عالمية عامة، والاكسترانت شبكة سلكية مغلقة","الانترانت خاصة بموظفي مؤسسة واحدة، بينما الاكسترانت تربط عدة شبكات انترانت","الانترانت لا تحتاج لجدار حماية، بعكس الاكسترانت","الانترانت تعتمد على الأقمار الصناعية، بينما الاكسترانت تعتمد على خطوط الهاتف"], ans:1 },
+    { q:"أي من طرق الاتصال بالإنترنت تعتبر القديمة والبطيئة جداً وتقوم بإشغال خط الهاتف الأرضي أثناء العمل؟", opts:["الاتصال العريض ADSL","الاتصال الهاتفي (Dial-up Connection)","الاتصال اللاسلكي Wi-Fi","الاتصال عبر تقنية Wi Max"], ans:1 },
+    { q:"عند استخدام اتصال من نوع ADSL، ما هي وظيفة جهاز الفلتر (Splitter)؟", opts:["تسريع تحميل الملفات من الإنترنت","الفصل بين إشارة الإنترنت وإشارة الهاتف لمنع التشويش","توزيع الإنترنت لاسلكياً لمسافة 50 كيلومتراً","حماية الجهاز من الهجمات الإلكترونية"], ans:1 },
+    { q:"ما هي التقنية اللاسلكية الحديثة التي تمتاز بالسرعة العالية وتغطية مدى واسع يصل إلى حوالي 50 كم؟", opts:["تقنية الـ Wi-Fi","تقنية الـ Bluetooth","تقنية الـ Wi Max","الاتصال الهاتفي Dial-up"], ans:2 },
+    { q:"ما هو الترتيب الصحيح لمراحل عمل محركات البحث (Search Engines) عند طلب معلومة؟", opts:["الترتيب → الفهرسة → المسح (الزحف)","المسح (الزحف) → الفهرسة → ترتيب النتائج","التحميل (Download) → الرفع (Upload) → التصفح","التشفير → فك التشفير → العرض"], ans:1 },
+    { q:"أي مما يلي يعد \"متصفح إنترنت\" (Browser) وليس محرك بحث؟", opts:["Google","Baidu","Mozilla Firefox","DuckDuckGo"], ans:2 },
+    { q:"ما الفرق بين بروتوكول HTTP وبروتوكول HTTPS؟", opts:["HTTP يستخدم لنقل الملفات الضخمة و HTTPS لتصميم الصفحات","HTTPS هو النسخة الأكثر أماناً لأنه يعتمد على تشفير البيانات لضمان الخصوصية","HTTP مخصص للشبكات اللاسلكية و HTTPS للشبكات السلكية LAN","لا يوجد أي فرق بينهما وهما مصطلحان لشيء واحد"], ans:1 },
+    { q:"البروتوكول المسؤول عن نقل الملفات (رفعاً وتنزيلاً ومشاركة) من وإلى الإنترنت هو:", opts:["HTTP","HTTPS","FTP","HTML"], ans:2 },
+    { q:"يُعرف نظام الأمان الذي يقوم بتقييد حركة البيانات وحظر الهجمات بين الشبكة الداخلية والإنترنت بـ:", opts:["المودم (Modem)","الجدار الناري (Firewall)","مستكشف الإنترنت (Explorer)","المخدم الرئيسي (Server)"], ans:1 },
+    { q:"عند تفكيك عنوان الإنترنت: https://www.qpu.edu.sy، فإن الجزء (edu) يعبر عن:", opts:["اسم المؤسسة","طبيعة النشاط (تعليمي)","رمز البلد (سوريا)","البروتوكول المستخدم للاتصال"], ans:1 },
+    { q:"أي من اللواحق التالية تعبر عن أن الموقع يتبع لمنظمة أو هيئة غير ربحية؟", opts:[".com",".net",".gov",".org"], ans:3 },
+    { q:"اللاحقة المستخدمة في نهاية الـ URL للدلالة على أن الموقع يتبع لجمهورية مصر العربية هي:", opts:[".sy",".eg",".lb",".usa"], ans:1 }
+  ]
+};
+
+// ── State ──
+const state = {};
+Object.keys(DATA).forEach(lec => {
+  state[lec] = { answered: new Array(DATA[lec].length).fill(null) };
+});
+
+// ── Render ──
+const LETTERS = ['أ','ب','ج','د'];
+
+function renderPanel(lec) {
+  const container = document.getElementById('qs-' + lec);
+  const qs = DATA[lec];
+  container.innerHTML = qs.map((q, qi) => {
+    const answered = state[lec].answered[qi];
+    const isAnswered = answered !== null;
+    return `<div class="q-card${isAnswered ? ' answered' : ''}" id="qcard-${lec}-${qi}">
+      <div class="q-head">
+        <div class="q-num">${qi + 1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="options">
+        ${q.opts.map((opt, oi) => {
+          let cls = 'option';
+          if (isAnswered) {
+            cls += ' locked';
+            if (oi === q.ans) cls += ' correct';
+            else if (oi === answered) cls += ' wrong';
+          }
+          return `<div class="${cls}" onclick="choose('${lec}',${qi},${oi})">
+            <span class="opt-letter">${LETTERS[oi]}</span>
+            <span>${opt}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      ${isAnswered ? `<div class="feedback show ${answered === q.ans ? 'ok' : 'err'}">
+        ${answered === q.ans ? '✅ إجابة صحيحة!' : `❌ إجابة خاطئة — الصحيحة: ${LETTERS[q.ans]}) ${q.opts[q.ans]}`}
+      </div>` : ''}
+    </div>`;
+  }).join('');
+  updateScore(lec);
+}
+
+function choose(lec, qi, oi) {
+  if (state[lec].answered[qi] !== null) return;
+  state[lec].answered[qi] = oi;
+  renderPanel(lec);
+  // scroll to next unanswered
+  const next = state[lec].answered.findIndex((v, i) => i > qi && v === null);
+  if (next !== -1) {
+    setTimeout(() => {
+      const el = document.getElementById(`qcard-${lec}-${next}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 200);
+  }
+}
+
+function updateScore(lec) {
+  const ans = state[lec].answered;
+  const total = ans.filter(v => v !== null).length;
+  const correct = ans.filter((v, i) => v === DATA[lec][i].ans).length;
+  document.getElementById('score-' + lec).innerHTML =
+    `${correct} <span>/ ${total} (من ${DATA[lec].length})</span>`;
+  const pct = total ? (correct / total) * 100 : 0;
+  document.getElementById('prog-' + lec).style.width = pct + '%';
+}
+
+function resetPanel(lec) {
+  state[lec].answered = new Array(DATA[lec].length).fill(null);
+  renderPanel(lec);
+}
+
+// ── Tabs ──
+function switchTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick') === `switchTab('${id}')`) b.classList.add('active');
+  });
+}
+
+// ── Init ──
+Object.keys(DATA).forEach(lec => renderPanel(lec));
+</script>
+</body>
+</html>
