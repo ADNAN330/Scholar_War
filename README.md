@@ -13,6 +13,7 @@
 ### [Learning_Lectures](/lectures_combined.html) 
 ### [Quiz_For_All_0](/quiz-all-lectures.html)
 ### [Quiz_For_All_1](/quiz-model2.html)
+### [Quiz_Computer_Memory](/quiz_computer_memory.html)
  B-عملي
 
 ### [Word](/word_lecture.html) 
