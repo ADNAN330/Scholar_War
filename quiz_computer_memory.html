@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نماذج اختبار — ROM, HDD, RAM, BIOS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #22263a;
+    --border: #2e3350;
+    --accent: #5b6af0;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --text: #e8eaf6;
+    --muted: #7c83a8;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.4rem;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Tags row */
+  .tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .tag {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 0.3rem 1rem;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-weight: 600;
+  }
+
+  /* Tab switcher */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.6rem 1.6rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent;
+    color: #fff;
+  }
+
+  /* Model panel */
+  .model-panel { display: none; }
+  .model-panel.active { display: block; }
+
+  .model-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .model-number {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .model-title { font-size: 1.2rem; font-weight: 700; }
+  .model-desc { font-size: 0.88rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* Questions */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+  }
+  .question-card:hover { border-color: var(--accent); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .q-num {
+    min-width: 30px; height: 30px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; color: var(--accent2);
+    margin-top: 2px;
+  }
+  .q-text { font-size: 1rem; font-weight: 600; line-height: 1.6; }
+
+  .options { display: grid; gap: 0.5rem; }
+
+  .option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.93rem;
+    color: var(--text);
+    text-align: right;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .option:hover { border-color: var(--accent); background: var(--card); }
+  .option.correct { border-color: var(--green); background: rgba(52,211,153,0.1); color: var(--green); }
+  .option.wrong   { border-color: var(--red);   background: rgba(248,113,113,0.1); color: var(--red); }
+  .option.reveal  { border-color: var(--green); background: rgba(52,211,153,0.06); color: var(--green); opacity: 0.7; }
+  .option.disabled { pointer-events: none; }
+
+  .opt-letter {
+    width: 26px; height: 26px;
+    background: var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .option.correct .opt-letter { background: var(--green); color: #0f1117; }
+  .option.wrong   .opt-letter { background: var(--red);   color: #fff; }
+  .option.reveal  .opt-letter { background: var(--green); color: #0f1117; }
+
+  .feedback {
+    margin-top: 0.8rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .feedback.wrong-fb   { background: rgba(248,113,113,0.12); color: var(--red);   border: 1px solid rgba(248,113,113,0.3); }
+
+  /* Score bar */
+  .score-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .score-label { color: var(--muted); font-size: 0.9rem; }
+  .score-value { font-size: 1.4rem; font-weight: 900; color: var(--accent2); }
+  .progress-wrap { flex: 1; min-width: 120px; }
+  .progress-track {
+    background: var(--border);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s;
+    width: 0%;
+  }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  .max-w { max-width: 780px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="max-w">
+
+  <header>
+    <h1>🖥️ نماذج الاختبار</h1>
+    <p>ذاكرة الحاسوب ومكوناته الأساسية</p>
+    <div class="tags">
+      <span class="tag">ROM</span>
+      <span class="tag">Hard Disk</span>
+      <span class="tag">RAM</span>
+      <span class="tag">BIOS</span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchModel(1)">النموذج الأول</button>
+    <button class="tab-btn"       onclick="switchModel(2)">النموذج الثاني</button>
+    <button class="tab-btn"       onclick="switchModel(3)">النموذج الثالث</button>
+  </div>
+
+  <!-- ===================== MODEL 1 ===================== -->
+  <div class="model-panel active" id="model-1">
+    <div class="model-header">
+      <div class="model-number">١</div>
+      <div>
+        <div class="model-title">النموذج الأول — المفاهيم الأساسية</div>
+        <div class="model-desc">١٠ أسئلة — اختر الإجابة الصحيحة</div>
+      </div>
+    </div>
+    <div class="score-bar">
+      <div><div class="score-label">النتيجة</div><div class="score-value" id="s1">0 / 0</div></div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="p1"></div></div></div>
+      <button class="reset-btn" onclick="resetModel(1)">↺ إعادة</button>
+    </div>
+    <div id="questions-1"></div>
+  </div>
+
+  <!-- ===================== MODEL 2 ===================== -->
+  <div class="model-panel" id="model-2">
+    <div class="model-header">
+      <div class="model-number">٢</div>
+      <div>
+        <div class="model-title">النموذج الثاني — التطبيق والفهم</div>
+        <div class="model-desc">١٠ أسئلة — اختر الإجابة الصحيحة</div>
+      </div>
+    </div>
+    <div class="score-bar">
+      <div><div class="score-label">النتيجة</div><div class="score-value" id="s2">0 / 0</div></div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="p2"></div></div></div>
+      <button class="reset-btn" onclick="resetModel(2)">↺ إعادة</button>
+    </div>
+    <div id="questions-2"></div>
+  </div>
+
+  <!-- ===================== MODEL 3 ===================== -->
+  <div class="model-panel" id="model-3">
+    <div class="model-header">
+      <div class="model-number">٣</div>
+      <div>
+        <div class="model-title">النموذج الثالث — التحليل والمقارنة</div>
+        <div class="model-desc">١٠ أسئلة — اختر الإجابة الصحيحة</div>
+      </div>
+    </div>
+    <div class="score-bar">
+      <div><div class="score-label">النتيجة</div><div class="score-value" id="s3">0 / 0</div></div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="p3"></div></div></div>
+      <button class="reset-btn" onclick="resetModel(3)">↺ إعادة</button>
+    </div>
+    <div id="questions-3"></div>
+  </div>
+
+</div>
+
+<script>
+const letters = ['أ','ب','ج','د'];
+
+const data = {
+  1: [
+    {
+      q: "ما هي وظيفة الـ RAM في الحاسوب؟",
+      opts: ["تخزين الملفات بشكل دائم","تحميل نظام التشغيل والبرامج لتشتغل مؤقتاً","حفظ إعدادات BIOS","قراءة البيانات فقط دون الكتابة"],
+      ans: 1,
+      fb: "الـ RAM ذاكرة مؤقتة تُحمَّل عليها البرامج ونظام التشغيل من القرص الصلب لتعمل بسرعة."
+    },
+    {
+      q: "أين يُخزَّن نظام التشغيل (مثل Windows) بشكل دائم؟",
+      opts: ["RAM","ROM","القرص الصلب (Hard Disk)","المعالج"],
+      ans: 2,
+      fb: "نظام التشغيل يُخزَّن على القرص الصلب، ومنه يُحمَّل على الـ RAM عند التشغيل."
+    },
+    {
+      q: "ما هو BIOS؟",
+      opts: ["نوع من أنواع القرص الصلب","برنامج مخزَّن في ROM يُعرِّف المعالج بمكونات الجهاز","ذاكرة مؤقتة سريعة","نظام تشغيل بديل"],
+      ans: 1,
+      fb: "BIOS برنامج أساسي مخزَّن في ROM يُشغَّل أولاً ويُعرِّف المعالج بالقرص الصلب ومكان نظام التشغيل."
+    },
+    {
+      q: "ماذا يحدث لمحتوى الـ RAM عند إيقاف تشغيل الحاسوب؟",
+      opts: ["يُحفظ على القرص الصلب","ينتقل إلى ROM","يُمسح تماماً","يبقى محفوظاً"],
+      ans: 2,
+      fb: "الـ RAM ذاكرة متطايرة (Volatile)، أي أن محتواها يُمسح بالكامل عند انقطاع التيار."
+    },
+    {
+      q: "ما نوع الذاكرة التي تُخزَّن فيها إعدادات BIOS؟",
+      opts: ["RAM","Hard Disk","ROM","SSD"],
+      ans: 2,
+      fb: "BIOS مخزَّن في شريحة ROM (أو Flash ROM حديثاً) على اللوحة الأم."
+    },
+    {
+      q: "ما المقصود بـ ROM؟",
+      opts: ["ذاكرة القراءة فقط","ذاكرة الوصول العشوائي","القرص الصلب","وحدة المعالجة المركزية"],
+      ans: 0,
+      fb: "ROM تعني Read-Only Memory أي ذاكرة القراءة فقط، لا يمكن الكتابة عليها بشكل اعتيادي."
+    },
+    {
+      q: "أيٌّ من الخيارات التالية يصف الـ Hard Disk بشكل صحيح؟",
+      opts: ["يفقد بياناته عند الإيقاف","تخزين دائم للملفات ونظام التشغيل","يُستخدم لتشغيل البرامج مباشرة","مخزَّن على اللوحة الأم"],
+      ans: 1,
+      fb: "القرص الصلب وسيلة تخزين دائمة لا تفقد بياناتها عند الإيقاف."
+    },
+    {
+      q: "ما أول شيء يعمل حين تضغط على زر تشغيل الحاسوب؟",
+      opts: ["نظام التشغيل","الـ RAM","BIOS","القرص الصلب"],
+      ans: 2,
+      fb: "عند الضغط على التشغيل، يعمل BIOS أولاً ويفحص المكونات ثم يُحدِّد مكان نظام التشغيل."
+    },
+    {
+      q: "لماذا لا يمكن تشغيل نظام التشغيل مباشرة من القرص الصلب؟",
+      opts: ["لأن القرص الصلب بطيء جداً ويحتاج إلى تحميله على RAM أولاً","لأن القرص الصلب لا يخزن نظام التشغيل","لأن المعالج لا يقرأ من القرص الصلب","لأن ROM تمنع ذلك"],
+      ans: 0,
+      fb: "القرص الصلب بطيء مقارنةً بالـ RAM، لذا يُحمَّل النظام على الـ RAM لضمان سرعة التشغيل."
+    },
+    {
+      q: "ما الفرق الرئيسي بين ROM وRAM؟",
+      opts: ["ROM أسرع من RAM","ROM دائمة لا تمحى بالإيقاف، RAM مؤقتة تمحى","RAM أكبر حجماً دائماً","لا يوجد فرق بينهما"],
+      ans: 1,
+      fb: "ROM تحتفظ بمحتواها دون تيار كهربائي، بينما RAM تفقد محتواها عند الإيقاف."
+    }
+  ],
+  2: [
+    {
+      q: "ماذا يفعل BIOS بعد أن يتحقق من سلامة المكونات؟",
+      opts: ["يُشغِّل برامج المستخدم مباشرة","يُخبر المعالج بمكان نظام التشغيل في القرص الصلب","يحذف ملفات RAM","يُوقف تشغيل القرص الصلب"],
+      ans: 1,
+      fb: "بعد فحص POST، يقوم BIOS بالبحث عن القطاع الأول من القرص الصلب لتحميل نظام التشغيل."
+    },
+    {
+      q: "إذا امتلأت الـ RAM بالكامل، ماذا سيحدث للحاسوب؟",
+      opts: ["سيُوقَف الحاسوب فوراً","سيصبح بطيئاً لأن النظام سيستخدم القرص الصلب كذاكرة مؤقتة","ستُمسح بيانات ROM","لن يتأثر أداء الحاسوب"],
+      ans: 1,
+      fb: "حين تمتلئ RAM يلجأ النظام إلى Virtual Memory على القرص الصلب مما يُبطئ الجهاز بشكل ملحوظ."
+    },
+    {
+      q: "أيٌّ من هذه المعلومات لا يُخزَّن في ROM؟",
+      opts: ["BIOS","إعدادات اللوحة الأم الأساسية","الملفات الشخصية للمستخدم","برامج التشغيل الأساسية للأجهزة"],
+      ans: 2,
+      fb: "الملفات الشخصية تُخزَّن على القرص الصلب، أما ROM فتحتوي البرامج الثابتة للجهاز فقط."
+    },
+    {
+      q: "لماذا تحتاج الحواسيب إلى RAM منفصلة عن القرص الصلب؟",
+      opts: ["لأن القرص الصلب لا يخزن بيانات","لأن RAM أسرع بكثير مما يجعل البرامج تعمل بكفاءة","لأن RAM أرخص ثمناً","لأن القرص الصلب لا يتصل بالمعالج"],
+      ans: 1,
+      fb: "سرعة وصول المعالج إلى RAM أعلى بكثير من القرص الصلب، مما يجعلها ضرورية لأداء سريع."
+    },
+    {
+      q: "ما الذي يُخزَّن في القرص الصلب؟",
+      opts: ["البرامج فقط","نظام التشغيل، البرامج، والملفات الشخصية","BIOS فقط","إعدادات الشاشة"],
+      ans: 1,
+      fb: "القرص الصلب يُخزِّن كل شيء: نظام التشغيل، التطبيقات، الصور، المستندات، وجميع ملفات المستخدم."
+    },
+    {
+      q: "عند تشغيل برنامج على حاسوبك، من أين يُحمَّل؟",
+      opts: ["من ROM مباشرة","من القرص الصلب إلى RAM ثم يُنفَّذ","من BIOS","من الشبكة دائماً"],
+      ans: 1,
+      fb: "كل برنامج مخزَّن على القرص الصلب يُنقَل إلى RAM أولاً، ثم يُنفِّذه المعالج من هناك."
+    },
+    {
+      q: "ما وظيفة عملية POST في BIOS؟",
+      opts: ["تخزين الملفات","فحص مكونات الحاسوب عند التشغيل للتأكد من سلامتها","تشغيل نظام التشغيل مباشرة","حذف ملفات قديمة"],
+      ans: 1,
+      fb: "POST (Power-On Self Test) هو الفحص الذاتي الذي يُجريه BIOS على المعالج والذاكرة والأجهزة عند كل تشغيل."
+    },
+    {
+      q: "أيٌّ من الأمثلة التالية يُعدّ مخزَّناً في ROM؟",
+      opts: ["ملف word فتحته الآن","نظام Windows المثبَّت","UEFI/BIOS للوحة الأم","صور على سطح المكتب"],
+      ans: 2,
+      fb: "UEFI/BIOS هو المثال الكلاسيكي للبرنامج المخزَّن في شريحة ROM على اللوحة الأم."
+    },
+    {
+      q: "إذا أُزيلت شريحة ROM من الحاسوب، ماذا سيحدث؟",
+      opts: ["سيعمل الحاسوب ببطء","لن يتمكن الحاسوب من الإقلاع نهائياً","ستُفقَد الملفات الشخصية","ستتوقف الشاشة فقط"],
+      ans: 1,
+      fb: "بدون ROM لن يوجد BIOS، وبالتالي لن يتمكن المعالج من معرفة كيفية بدء التشغيل."
+    },
+    {
+      q: "ما الاختلاف الرئيسي بين SSD والـ Hard Disk التقليدي؟",
+      opts: ["SSD يستخدم أقراص ممغنطة، HDD يستخدم فلاش","HDD يستخدم أقراصاً ممغنطة، SSD يستخدم ذاكرة فلاش وأسرع","SSD أقل سعةً دائماً","لا يوجد فرق بينهما"],
+      ans: 1,
+      fb: "HDD يعتمد على أقراص ممغنطة دوّارة، بينما SSD يستخدم خلايا فلاش مما يجعله أسرع وأقل استهلاكاً للطاقة."
+    }
+  ],
+  3: [
+    {
+      q: "قارن بين ROM والـ RAM: أيٌّ منهما تفقد بياناتها عند انقطاع التيار؟",
+      opts: ["ROM","RAM","كلاهما","لا شيء منهما"],
+      ans: 1,
+      fb: "RAM هي الذاكرة المتطايرة التي تفقد محتواها لحظة انقطاع التيار، عكس ROM التي تحتفظ ببياناتها."
+    },
+    {
+      q: "ما العلاقة بين BIOS والـ RAM في عملية الإقلاع؟",
+      opts: ["BIOS يُخزَّن في RAM","BIOS يُرشِد المعالج لتحميل نظام التشغيل من القرص الصلب إلى RAM","RAM تُشغِّل BIOS مباشرة","لا توجد علاقة بينهما"],
+      ans: 1,
+      fb: "BIOS يكتشف مكان نظام التشغيل على القرص الصلب ويبدأ عملية نقله إلى RAM ليعمل."
+    },
+    {
+      q: "لماذا لا يُستخدَم القرص الصلب بدلاً من RAM لتشغيل البرامج؟",
+      opts: ["لأن القرص الصلب لا يخزن برامج","لأن سرعة القرص الصلب أبطأ بكثير من RAM مما يُسبب بطئاً شديداً","لأن المعالج لا يقرأ من القرص الصلب","لأن ROM تمنع ذلك"],
+      ans: 1,
+      fb: "الفرق في السرعة هائل: RAM تعمل بنانوثانية بينما HDD بمللي ثانية، مما يجعل استخدامه بديلاً مستحيلاً عملياً."
+    },
+    {
+      q: "أيٌّ من السيناريوهات التالية يصف استخداماً صحيحاً لـ ROM؟",
+      opts: ["حفظ مستند Word عليها","تخزين BIOS الذي يعمل عند كل تشغيل","تحميل لعبة فيديو عليها","استخدامها كذاكرة مؤقتة للمعالج"],
+      ans: 1,
+      fb: "الاستخدام الكلاسيكي لـ ROM هو تخزين BIOS وبرامج الإقلاع الثابتة التي لا تتغير باستمرار."
+    },
+    {
+      q: "ما ترتيب الإقلاع الصحيح عند تشغيل الحاسوب؟",
+      opts: [
+        "RAM ← Hard Disk ← BIOS ← المعالج",
+        "BIOS ← يكتشف Hard Disk ← يُحمِّل النظام على RAM ← يبدأ التشغيل",
+        "Hard Disk ← RAM ← BIOS ← المعالج",
+        "ROM ← RAM ← Hard Disk ← BIOS"
+      ],
+      ans: 1,
+      fb: "الترتيب الصحيح: BIOS يعمل أولاً → يفحص المكونات → يجد القرص الصلب → يُحمِّل نظام التشغيل على RAM → يبدأ التشغيل."
+    },
+    {
+      q: "إذا أردت زيادة سرعة حاسوبك عند تعدد المهام، ما الذي يجب ترقيته؟",
+      opts: ["ROM","BIOS","RAM","بطاقة الصوت"],
+      ans: 2,
+      fb: "زيادة RAM تُتيح للحاسوب تشغيل برامج أكثر في نفس الوقت دون الاضطرار للجوء للقرص الصلب."
+    },
+    {
+      q: "ما أهمية وجود BIOS في الحاسوب؟",
+      opts: [
+        "لا أهمية له، يمكن الاستغناء عنه",
+        "يُعرِّف المعالج بالمكونات ويبدأ عملية الإقلاع بدونه لا يعمل الحاسوب",
+        "يُخزِّن الملفات الشخصية",
+        "يُشغِّل الشاشة فقط"
+      ],
+      ans: 1,
+      fb: "BIOS هو حلقة الوصل الأولى بين الهاردوير والسوفتوير، بدونه لا يعلم المعالج كيف يبدأ."
+    },
+    {
+      q: "لماذا يُعدّ Hard Disk أرخص تكلفةً للغيغابايت مقارنةً بـ RAM؟",
+      opts: [
+        "لأنه أسرع من RAM",
+        "لأن تقنيته أبسط وسرعته أقل فيُستخدَم للتخزين الدائم وليس للمعالجة",
+        "لأنه مصنوع من مواد أرخص",
+        "لأنه موصول بـ BIOS مباشرة"
+      ],
+      ans: 1,
+      fb: "RAM مصممة للسرعة الفائقة مما يرفع تكلفتها، بينما HDD مصمم للسعة والتخزين طويل الأمد."
+    },
+    {
+      q: "ما الذي يميز UEFI عن BIOS التقليدي؟",
+      opts: [
+        "UEFI يُخزَّن في RAM",
+        "UEFI واجهة حديثة تدعم أقراصاً أكبر وتوفر واجهة رسومية وأمان أكبر",
+        "UEFI يحل محل القرص الصلب",
+        "لا فرق بينهما"
+      ],
+      ans: 1,
+      fb: "UEFI هو الخلف الحديث لـ BIOS، يدعم أقراصاً بسعة تتجاوز 2TB، ويوفر واجهة رسومية وتمهيد أسرع وأمان Secure Boot."
+    },
+    {
+      q: "حاسوب لا يُصدر صوتاً ولا يُقلِع. ما أكثر سبب محتمل مرتبط بما درسناه؟",
+      opts: [
+        "القرص الصلب ممتلئ",
+        "RAM تالفة أو BIOS تالف مما يمنع الإقلاع",
+        "الملفات الشخصية محذوفة",
+        "ROM تحتوي بيانات خاطئة"
+      ],
+      ans: 1,
+      fb: "إذا كان BIOS تالفاً أو RAM لا تعمل، لن يتجاوز الحاسوب مرحلة POST وسيفشل الإقلاع تماماً."
+    }
+  ]
+};
+
+const scores = { 1: { correct: 0, answered: 0 }, 2: { correct: 0, answered: 0 }, 3: { correct: 0, answered: 0 } };
+
+function buildModel(modelNum) {
+  const container = document.getElementById('questions-' + modelNum);
+  container.innerHTML = '';
+  const questions = data[modelNum];
+  questions.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q${modelNum}-${idx}`;
+
+    const optsHtml = item.opts.map((opt, oi) => `
+      <button class="option" onclick="answer(${modelNum},${idx},${oi})">
+        <span class="opt-letter">${letters[oi]}</span>
+        <span>${opt}</span>
+      </button>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">${idx + 1}</div>
+        <div class="q-text">${item.q}</div>
+      </div>
+      <div class="options">${optsHtml}</div>
+      <div class="feedback" id="fb${modelNum}-${idx}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function answer(modelNum, qIdx, chosenIdx) {
+  const item = data[modelNum][qIdx];
+  const card = document.getElementById(`q${modelNum}-${qIdx}`);
+  const opts = card.querySelectorAll('.option');
+  const fb = document.getElementById(`fb${modelNum}-${qIdx}`);
+
+  // Disable all
+  opts.forEach(o => o.classList.add('disabled'));
+
+  const isCorrect = chosenIdx === item.ans;
+
+  // Mark chosen
+  opts[chosenIdx].classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // If wrong, reveal correct
+  if (!isCorrect) {
+    opts[item.ans].classList.add('reveal');
+  }
+
+  // Feedback
+  fb.textContent = (isCorrect ? '✓ صحيح! ' : '✗ خطأ. ') + item.fb;
+  fb.className = `feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+
+  // Score
+  scores[modelNum].answered++;
+  if (isCorrect) scores[modelNum].correct++;
+  updateScore(modelNum);
+}
+
+function updateScore(modelNum) {
+  const { correct, answered } = scores[modelNum];
+  document.getElementById('s' + modelNum).textContent = `${correct} / ${answered}`;
+  const pct = answered > 0 ? (correct / answered) * 100 : 0;
+  document.getElementById('p' + modelNum).style.width = pct + '%';
+}
+
+function resetModel(modelNum) {
+  scores[modelNum] = { correct: 0, answered: 0 };
+  updateScore(modelNum);
+  buildModel(modelNum);
+}
+
+function switchModel(num) {
+  document.querySelectorAll('.model-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('model-' + num).classList.add('active');
+  document.querySelectorAll('.tab-btn')[num - 1].classList.add('active');
+}
+
+// Init
+buildModel(1);
+buildModel(2);
+buildModel(3);
+</script>
+</body>
+</html>
