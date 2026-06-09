@@ -3,18 +3,22 @@
 
  ### Exceed_Your_Limits ✨
 
-<hr>
+
+---
+
 
 ## Computer_Skills:
-> A-نظري
+ A-نظري
+
 ###  [Learning_Lectures](/lectures_combined.html) 
 ###  [Quiz_For_All](/quiz-all-lectures.html)
-> B-عملي
+ B-عملي
+
 ### [Word](/word_lecture.html) 
 ### [Excel](/excel_study_guide.html) 
 ### [PowerPoint](/powerpoint_lecture.html) 
 
-<hr>
+---
 
 ## اقتصاد هندسي 
 ### [اقتصاد هندسي1](/i_h.html)
