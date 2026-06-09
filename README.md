@@ -1,5 +1,5 @@
 # 404_SleepNotFound
-### Exceed_Your_Limits
+### Exceed_Your_Limits ✨
 
 
 ## اقتصاد هندسي 
@@ -9,6 +9,7 @@
 
 
 ## Computer_Skills:
+### [Learning_Lectures](/lectures_combined.html)
 ### [Word](/word_lecture.html)
 ### [Excel](/excel_study_guide.html)
 ### [PowerPoint](/powerpoint_lecture.html)
