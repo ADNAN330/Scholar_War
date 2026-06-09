@@ -9,7 +9,7 @@
 
 
 ## Computer_Skills:
-### [Quiz_For_All](/quiz-all-lectures)
+### [Quiz_For_All](/quiz-all-lectures.html)
 ### [Learning_Lectures](/lectures_combined.html)
 ### [Word](/word_lecture.html)
 ### [Excel](/excel_study_guide.html)
