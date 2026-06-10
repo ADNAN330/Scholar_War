@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنك أسئلة – Microsoft Excel – ثلاثة نماذج</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg:      #EFF3F8;
+    --surface: #FFFFFF;
+    --sf2:     #F6F8FC;
+    --border:  #DCE3EE;
+    --text:    #1B2337;
+    --muted:   #68779A;
+    --m1:      #1A7FD4;   /* model 1 – blue */
+    --m2:      #0D9E6E;   /* model 2 – green */
+    --m3:      #C2410C;   /* model 3 – orange-red */
+    --ok:      #16A34A;
+    --no:      #DC2626;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Cairo',sans-serif; line-height:1.7; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg,#0E3A6E 0%,#1A7FD4 45%,#0D9E6E 100%);
+    padding: 50px 24px 42px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::after {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse 80% 60% at 50% 110%,rgba(255,255,255,.08),transparent);
+    pointer-events:none;
+  }
+  .hero-badge {
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:.14em;
+    color:rgba(255,255,255,.9); border:1px solid rgba(255,255,255,.3);
+    background:rgba(255,255,255,.12); padding:4px 16px; border-radius:20px;
+    margin-bottom:16px; text-transform:uppercase;
+  }
+  .hero h1 { font-size:clamp(22px,4vw,36px); font-weight:900; color:#fff; margin-bottom:6px; }
+  .hero h1 span { color:#BBF7D0; }
+  .hero p { color:rgba(255,255,255,.7); font-size:13px; }
+
+  .score-strip {
+    display:flex; justify-content:center; gap:28px; margin-top:26px; flex-wrap:wrap;
+  }
+  .score-item { text-align:center; }
+  .score-num  { font-family:'Fira Code',monospace; font-size:26px; font-weight:700; color:#fff; line-height:1; }
+  .score-label{ font-size:11px; color:rgba(255,255,255,.6); margin-top:2px; }
+
+  /* ── TABS ── */
+  .tabs-wrap {
+    background:#fff; border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  .tabs {
+    max-width:860px; margin:0 auto; display:flex; overflow-x:auto;
+    scrollbar-width:none; padding:0 16px;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab-btn {
+    flex-shrink:0; border:none; background:none; cursor:pointer;
+    font-family:'Cairo',sans-serif; font-size:14px; font-weight:700;
+    color:var(--muted); padding:16px 24px;
+    border-bottom:3px solid transparent;
+    transition:color .2s, border-color .2s; white-space:nowrap;
+  }
+  .tab-btn:hover { color:var(--text); }
+  .tab-btn[data-m="1"].active { border-bottom-color:var(--m1); color:var(--m1); }
+  .tab-btn[data-m="2"].active { border-bottom-color:var(--m2); color:var(--m2); }
+  .tab-btn[data-m="3"].active { border-bottom-color:var(--m3); color:var(--m3); }
+
+  /* ── CONTAINER ── */
+  .container { max-width:820px; margin:0 auto; padding:32px 20px 80px; }
+
+  .model-panel { display:none; }
+  .model-panel.active { display:block; }
+
+  /* header */
+  .mod-header {
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:24px; padding-bottom:16px;
+    border-bottom:2px solid var(--border);
+  }
+  .mod-dot   { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+  .mod-title { font-size:17px; font-weight:800; }
+  .mod-count {
+    margin-right:auto; font-size:12px; color:var(--muted);
+    background:var(--sf2); border:1px solid var(--border);
+    padding:2px 10px; border-radius:12px;
+  }
+
+  /* score bar */
+  .score-bar {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:14px 18px; margin-bottom:24px;
+    display:flex; align-items:center; gap:14px; font-size:13px;
+  }
+  .bar-track { flex:1; height:8px; border-radius:4px; background:var(--border); overflow:hidden; }
+  .bar-fill  { height:100%; border-radius:4px; background:var(--ok); transition:width .4s; }
+  .bar-label { font-weight:700; min-width:60px; text-align:left; }
+
+  /* difficulty badge */
+  .diff {
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:10px; font-weight:700; padding:2px 9px;
+    border-radius:5px; margin-bottom:10px;
+  }
+  .diff-med  { background:#FEF9C3; color:#854D0E; border:1px solid #FDE68A; }
+  .diff-hard { background:#FEE2E2; color:#991B1B; border:1px solid #FECACA; }
+
+  /* q-card */
+  .q-card {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:14px; padding:22px 24px; margin-bottom:16px;
+    transition:box-shadow .2s;
+  }
+  .q-card:hover { box-shadow:0 4px 16px rgba(26,127,212,.08); }
+
+  .q-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; }
+  .q-num  {
+    font-family:'Fira Code',monospace; font-size:13px; font-weight:700; color:#fff;
+    width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; margin-top:2px;
+  }
+  .q-text { font-size:14px; font-weight:600; line-height:1.65; }
+
+  /* code inline */
+  code {
+    font-family:'Fira Code',monospace; font-size:12px;
+    background:#EEF2FF; color:#3730A3; padding:1px 6px; border-radius:4px;
+  }
+
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt {
+    display:flex; align-items:flex-start; gap:10px;
+    background:var(--sf2); border:1.5px solid var(--border);
+    border-radius:9px; padding:11px 14px; cursor:pointer;
+    transition:background .15s, border-color .15s; font-size:13px;
+  }
+  .opt:hover { background:#EBF4FF; border-color:#93C5FD; }
+  .opt-letter {
+    font-family:'Fira Code',monospace; font-size:12px; font-weight:700;
+    width:22px; height:22px; border-radius:6px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    background:var(--border); color:var(--muted);
+    transition:background .15s,color .15s;
+  }
+
+  .opt.correct  { border-color:var(--ok)  !important; background:#ECFDF5 !important; }
+  .opt.correct .opt-letter { background:var(--ok) !important; color:#fff !important; }
+  .opt.correct .opt-text   { color:var(--ok); font-weight:700; }
+  .opt.wrong    { border-color:var(--no)  !important; background:#FEF2F2 !important; }
+  .opt.wrong .opt-letter   { background:var(--no) !important; color:#fff !important; }
+  .opt.wrong .opt-text     { color:var(--no); }
+  .opt.disabled { cursor:default; pointer-events:none; }
+  .opt.dimmed   { opacity:.4; }
+
+  .answer-badge {
+    margin-top:12px; display:none;
+    align-items:center; gap:8px; font-size:13px; font-weight:700;
+    padding:9px 14px; border-radius:8px;
+  }
+  .answer-badge.show { display:flex; }
+  .answer-badge.ok   { background:#ECFDF5; color:var(--ok); }
+  .answer-badge.no   { background:#FEF2F2; color:var(--no); }
+
+  /* tip shown after answering */
+  .tip {
+    margin-top:8px; display:none;
+    font-size:12px; color:var(--muted);
+    background:var(--sf2); border:1px solid var(--border);
+    border-radius:6px; padding:8px 12px; line-height:1.6;
+  }
+  .tip.show { display:block; }
+
+  .reset-btn {
+    border:1.5px solid var(--border); background:#fff;
+    font-family:'Cairo',sans-serif; font-size:12px; font-weight:700;
+    padding:5px 14px; border-radius:7px; cursor:pointer;
+    color:var(--muted); transition:border-color .2s,color .2s;
+  }
+  .reset-btn:hover { border-color:var(--no); color:var(--no); }
+
+  footer {
+    text-align:center; padding:20px; font-size:12px; color:var(--muted);
+    border-top:1px solid var(--border); background:#fff;
+  }
+
+  @media(max-width:560px) {
+    .q-card { padding:16px; }
+    .score-strip { gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">مهارات الحاسوب · جداول إكسل</div>
+  <h1>بنك أسئلة <span>Microsoft Excel</span></h1>
+  <p>ثلاثة نماذج · 15 سؤالاً لكل نموذج · أسئلة متوسطة وصعبة</p>
+  <div class="score-strip">
+    <div class="score-item"><div class="score-num" id="g-ans">0</div><div class="score-label">تمت الإجابة</div></div>
+    <div class="score-item"><div class="score-num" id="g-ok" style="color:#86EFAC">0</div><div class="score-label">صحيحة</div></div>
+    <div class="score-item"><div class="score-num" id="g-no" style="color:#FCA5A5">0</div><div class="score-label">خاطئة</div></div>
+    <div class="score-item"><div class="score-num" id="g-pct">—</div><div class="score-label">النسبة</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" data-m="1" onclick="showModel(1,this)">📗 النموذج الأول</button>
+    <button class="tab-btn"        data-m="2" onclick="showModel(2,this)">📘 النموذج الثاني</button>
+    <button class="tab-btn"        data-m="3" onclick="showModel(3,this)">📙 النموذج الثالث</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="model-panel active" id="model-1">
+    <div class="mod-header">
+      <div class="mod-dot" style="background:var(--m1)"></div>
+      <div class="mod-title">النموذج الأول – الأساسيات والواجهة</div>
+      <div class="mod-count">15 سؤالاً</div>
+      <button class="reset-btn" onclick="resetModel(1)">إعادة تعيين</button>
+    </div>
+    <div class="score-bar">
+      <span style="color:var(--muted)">التقدم:</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-1" style="width:0%"></div></div>
+      <span class="bar-label" id="bar-lbl-1" style="color:var(--m1)">0 / 15</span>
+    </div>
+    <div id="qs-1"></div>
+  </div>
+
+  <div class="model-panel" id="model-2">
+    <div class="mod-header">
+      <div class="mod-dot" style="background:var(--m2)"></div>
+      <div class="mod-title">النموذج الثاني – التنسيق والتنقل</div>
+      <div class="mod-count">15 سؤالاً</div>
+      <button class="reset-btn" onclick="resetModel(2)">إعادة تعيين</button>
+    </div>
+    <div class="score-bar">
+      <span style="color:var(--muted)">التقدم:</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-2" style="width:0%"></div></div>
+      <span class="bar-label" id="bar-lbl-2" style="color:var(--m2)">0 / 15</span>
+    </div>
+    <div id="qs-2"></div>
+  </div>
+
+  <div class="model-panel" id="model-3">
+    <div class="mod-header">
+      <div class="mod-dot" style="background:var(--m3)"></div>
+      <div class="mod-title">النموذج الثالث – إدارة الأوراق والطباعة</div>
+      <div class="mod-count">15 سؤالاً</div>
+      <button class="reset-btn" onclick="resetModel(3)">إعادة تعيين</button>
+    </div>
+    <div class="score-bar">
+      <span style="color:var(--muted)">التقدم:</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-3" style="width:0%"></div></div>
+      <span class="bar-label" id="bar-lbl-3" style="color:var(--m3)">0 / 15</span>
+    </div>
+    <div id="qs-3"></div>
+  </div>
+
+</div>
+
+<footer>جامعة قاسيون الخاصة · مهارات الحاسوب · Microsoft Excel</footer>
+
+<script>
+const L = ['أ','ب','ج','د'];
+
+// ══════════════════════════════════════════════════
+// DATA  –  3 models × 15 questions
+// diff: 'm' = medium, 'h' = hard
+// tip: short explanation shown after answering
+// ══════════════════════════════════════════════════
+const MODELS = {
+
+  // ───────────── MODEL 1 ─────────────
+  1: { color:'#1A7FD4', questions:[
+    {
+      diff:'m',
+      q:'أقصى عدد من الصفوف التي يمكن أن تحتويها ورقة عمل واحدة في Excel هو:',
+      opts:['65536 صفاً','1048576 صفاً','1000000 صف','524288 صفاً'],
+      ans:1,
+      tip:'الإصدارات الحديثة من Excel تدعم 1,048,576 صفاً و16,384 عموداً (A → XFD).'
+    },
+    {
+      diff:'m',
+      q:'ما هو الاسم الافتراضي الذي يُعطى لملف Excel عند إنشائه لأول مرة؟',
+      opts:['Sheet1','Workbook1','BOOK1','Document1'],
+      ans:2,
+      tip:'يُسمى الملف مصنفاً (Book) ويظهر في شريط العنوان باسم BOOK1 افتراضياً.'
+    },
+    {
+      diff:'m',
+      q:'عنوان الخلية الواقعة في العمود الثالث والصف الخامس هو:',
+      opts:['C5','5C','3-5','Row5Col3'],
+      ans:0,
+      tip:'العنوان = حرف العمود + رقم الصف، العمود الثالث هو C، الصف الخامس = 5 ← C5.'
+    },
+    {
+      diff:'h',
+      q:'أيّ من الأشرطة التالية يحتوي على جزأين: الأيسر لعرض عنوان الخلية النشطة، والأيمن لعرض محتواها أو صيغتها؟',
+      opts:['شريط الحالة (Status Bar)','شريط الأدوات (Ribbon)','شريط الصيغة (Formula Bar)','شريط العنوان (Title Bar)'],
+      ans:2,
+      tip:'شريط الصيغة (Formula Bar) فقط هو الذي يعرض عنوان الخلية النشطة على اليسار ومحتواها على اليمين.'
+    },
+    {
+      diff:'m',
+      q:'ما هو الامتداد الافتراضي لملفات Excel الحديثة؟',
+      opts:['.xls','.xlm','.xlsx','.xlsb'],
+      ans:2,
+      tip:'الامتداد الافتراضي منذ Office 2007 هو .xlsx، بينما .xls كان للإصدارات القديمة.'
+    },
+    {
+      diff:'h',
+      q:'أيّ شريط من الأشرطة الخمسة في Excel يحتوي على طرق عرض الورقة وأداة التحكم في نسبة التكبير (Zoom)؟',
+      opts:['شريط العنوان (Title Bar)','شريط القوائم (Menu Bar)','شريط الأدوات (Ribbon)','شريط الحالة (Status Bar)'],
+      ans:3,
+      tip:'شريط الحالة يقع أسفل النافذة وبه أزرار طرق العرض وشريط Zoom.'
+    },
+    {
+      diff:'h',
+      q:'عند كتابة نص طويل في خلية وكانت الخلية التي تليها مباشرة تحتوي على بيانات، ماذا يحدث للنص الزائد ظاهرياً؟',
+      opts:['يُحذف نهائياً من ذاكرة الخلية','يختفي عن الظهور ويُقتطع بصرياً فقط دون حذف فعلي','ينتقل تلقائياً للخلية التالية ويُعدل عنوانها','يظهر على سطرين داخل الخلية تلقائياً'],
+      ans:1,
+      tip:'النص يبقى محفوظاً بالكامل في الخلية لكن لا يُعرض بسبب الخلية المجاورة المشغولة.'
+    },
+    {
+      diff:'m',
+      q:'ما هو الاختصار الصحيح لإنشاء مصنف Excel جديد فارغ؟',
+      opts:['Ctrl + W','Ctrl + O','Ctrl + N','Ctrl + S'],
+      ans:2,
+      tip:'Ctrl+N = New (جديد)، Ctrl+O = Open (فتح)، Ctrl+S = Save (حفظ)، Ctrl+W = إغلاق.'
+    },
+    {
+      diff:'h',
+      q:'أيّ من الخيارات التالية يصف بدقة وظيفة أمر "Export" في قائمة File؟',
+      opts:['حفظ الملف بنفس الاسم في مكان مختلف','تحويل المصنف إلى صيغة PDF/XPS مع الحفاظ على التنسيق وصعوبة التعديل','مشاركة الملف مع مستخدمين آخرين عبر البريد الإلكتروني','إرسال نسخة احتياطية للسحابة (OneDrive) تلقائياً'],
+      ans:1,
+      tip:'Export يُحوّل الملف إلى PDF أو XPS. Save As يحفظه في مكان أو صيغة مختلفة.'
+    },
+    {
+      diff:'m',
+      q:'ما هي وظيفة زر "Quick Access Toolbar" الموجود في شريط العنوان؟',
+      opts:['عرض مختصرات لوحة المفاتيح الخاصة بإكسل','يتيح الوصول السريع لأوامر متكررة الاستخدام يختارها المستخدم بنفسه','تغيير شكل واجهة البرنامج بالكامل','إدارة الإضافات (Add-ins) في إكسل'],
+      ans:1,
+      tip:'Quick Access Toolbar قابل للتخصيص ويوفر وصولاً سريعاً لأوامر مختارة دون الحاجة لفتح التبويبات.'
+    },
+    {
+      diff:'h',
+      q:'إذا أردت إدخال نفس البيانات في ثلاث خلايا غير متجاورة (A1, C3, E5) في خطوة واحدة، فما هي الطريقة الصحيحة؟',
+      opts:['تحديد الخلايا بالضغط على Ctrl+A ثم الكتابة','تحديد الخلايا بالنقر عليها مع الضغط المستمر على Ctrl ثم الكتابة ثم Ctrl+Enter','تحديد النطاق A1:E5 ثم الكتابة','نسخ الخلية الأولى ولصقها في الباقيتين بـ Ctrl+V'],
+      ans:1,
+      tip:'تحديد متعدد غير متجاور يتم بالنقر مع Ctrl، ثم الكتابة، ثم Ctrl+Enter لملء الكل دفعة واحدة.'
+    },
+    {
+      diff:'h',
+      q:'ما هو الفرق بين "Save" و"Save As" في قائمة File؟',
+      opts:['لا يوجد فرق بينهما وكلاهما يحفظ الملف بنفس الطريقة','Save يحفظ التعديلات على الملف الحالي، أما Save As فيحفظ بنسخة جديدة باسم أو مكان مختلف','Save As يُصدّر إلى PDF فقط','Save يفتح نافذة لاختيار المكان دائماً بعكس Save As'],
+      ans:1,
+      tip:'Save = تحديث الملف المفتوح. Save As = نسخة جديدة تختار لها اسماً أو مكاناً أو صيغة.'
+    },
+    {
+      diff:'m',
+      q:'أي من التبويبات التالية يحتوي على أوامر تتعلق بعرض المعادلات والحسابات في Excel؟',
+      opts:['Home','Insert','Formulas','Data'],
+      ans:2,
+      tip:'تبويب Formulas مخصص للدوال والمعادلات وتتبعها وأدوات الحساب.'
+    },
+    {
+      diff:'h',
+      q:'الجزء الذي يُعرض على يسار شريط الصيغة (Formula Bar) هو:',
+      opts:['اسم ورقة العمل النشطة','محتوى الخلية النشطة (نص أو معادلة)','عنوان (مرجع) الخلية النشطة','اسم مصنف Excel'],
+      ans:2,
+      tip:'Name Box على يسار Formula Bar يعرض عنوان الخلية النشطة مثل A1 أو B5.'
+    },
+    {
+      diff:'h',
+      q:'عند الضغط على أيقونة "Ribbon Display Options" في شريط العنوان واختيار "Auto-hide Ribbon"، ماذا يحدث؟',
+      opts:['يُخفى شريط الحالة فقط ويبقى القائمة ظاهرة','تختفي التبويبات والأوامر كلها لزيادة مساحة العرض ويظهر الشريط عند النقر في الأعلى','يُعيد ضبط تنسيقات المصنف الافتراضية','تُخفى أوراق العمل من الأسفل'],
+      ans:1,
+      tip:'Auto-hide يُخفي الـ Ribbon بالكامل لمنح المستخدم مساحة عرض أكبر للبيانات.'
+    },
+  ]},
+
+  // ───────────── MODEL 2 ─────────────
+  2: { color:'#0D9E6E', questions:[
+    {
+      diff:'m',
+      q:'ما هو الاختصار الصحيح لتحديد ورقة العمل كاملة دفعة واحدة؟',
+      opts:['Ctrl + S','Ctrl + All','Ctrl + A','Shift + A'],
+      ans:2,
+      tip:'Ctrl+A يُحدد كل الخلايا في ورقة العمل دفعة واحدة.'
+    },
+    {
+      diff:'h',
+      q:'عند الضغط على مفتاح TAB في ورقة عمل ذات اتجاه من اليمين إلى اليسار (RTL)، إلى أي اتجاه تنتقل؟',
+      opts:['لأسفل','للخلية على اليمين','للخلية على اليسار','لأعلى'],
+      ans:2,
+      tip:'في ورقة RTL يتحرك TAB نحو اليسار، أما في LTR يتحرك نحو اليمين.'
+    },
+    {
+      diff:'m',
+      q:'ما هو الاختصار لجعل نص الخلية غامقاً (Bold)؟',
+      opts:['Ctrl + U','Ctrl + I','Ctrl + B','Ctrl + D'],
+      ans:2,
+      tip:'B = Bold (غامق)، I = Italic (مائل)، U = Underline (خط تحت).'
+    },
+    {
+      diff:'h',
+      q:'أيّ من تنسيقات الأرقام التالية يُضرّب القيمة المُدخلة في 100 ويضيف رمز ٪ تلقائياً؟',
+      opts:['Number','General','Currency','Percentage'],
+      ans:3,
+      tip:'Percentage يأخذ مثلاً القيمة 0.75 ويعرضها 75% بضربها في 100.'
+    },
+    {
+      diff:'h',
+      q:'ما الفرق بين تنسيق "Currency" وتنسيق "Accounting" في مجموعة Number؟',
+      opts:['لا فرق بينهما وكلاهما يضيف رمز العملة في نفس الموضع','Currency يضع رمز العملة ملاصقاً للرقم، بينما Accounting يُحاذي رمز العملة على يسار الخلية بعيداً عن الرقم','Accounting يستخدم للعملات الأجنبية فقط و Currency للمحلية','Currency يضيف منازل عشرية و Accounting لا يضيف'],
+      ans:1,
+      tip:'الفرق الأساسي في محاذاة رمز العملة: Currency ملاصق للرقم، Accounting على اليسار.'
+    },
+    {
+      diff:'m',
+      q:'أيّ الأوامر التالية يُستخدم لدمج عدة خلايا محددة في خلية واحدة مع توسيط محتواها؟',
+      opts:['Wrap Text','Merge & Center','Increase Indent','Orientation'],
+      ans:1,
+      tip:'Merge & Center تدمج الخلايا وتوسّط النص، وتوجد في مجموعة Alignment.'
+    },
+    {
+      diff:'h',
+      q:'ماذا يحدث عند استخدام تنسيق "General" في مجموعة Number لخلية تحتوي على رقم؟',
+      opts:['يُضاف رمز العملة المحلية تلقائياً للرقم','يُضرب الرقم في 100 ويضاف رمز %','لا يُطبق أي تنسيق خاص ويُعرض الرقم كما هو','تُضاف فاصلة الآلاف ومنزلتان عشريتان'],
+      ans:2,
+      tip:'General هو التنسيق الافتراضي ولا يُطبق أي تنسيق، الرقم يظهر كما هو.'
+    },
+    {
+      diff:'m',
+      q:'ما هو الاختصار الصحيح لقص محتويات خلية ما؟',
+      opts:['Ctrl + C','Ctrl + V','Ctrl + Z','Ctrl + X'],
+      ans:3,
+      tip:'X = القص (Cut)، C = النسخ (Copy)، V = اللصق (Paste)، Z = التراجع (Undo).'
+    },
+    {
+      diff:'h',
+      q:'أيّ أمر من أوامر محاذاة النص (Alignment) يُسمح له بأن ينتقل النص إلى سطر جديد داخل نفس الخلية تلقائياً حسب اتساع العمود؟',
+      opts:['Merge & Center','Decrease Indent','Orientation','Wrap Text'],
+      ans:3,
+      tip:'Wrap Text يلف النص داخل الخلية ويجعله يظهر على أسطر متعددة بدلاً من الاقتطاع.'
+    },
+    {
+      diff:'m',
+      q:'لنسخ تنسيق خلية وتطبيقه على خلية أخرى دون نسخ المحتوى، نستخدم الأمر:',
+      opts:['Paste Special','Format Painter','Copy + Paste','Conditional Formatting'],
+      ans:1,
+      tip:'Format Painter (فرشاة التنسيق) في مجموعة Clipboard تنسخ التنسيق فقط دون البيانات.'
+    },
+    {
+      diff:'h',
+      q:'ما هو الاختصار لإدخال سطر جديد داخل نفس الخلية (دون الانتقال لخلية أخرى)؟',
+      opts:['Ctrl + Enter','Shift + Enter','Alt + Enter','Tab + Enter'],
+      ans:2,
+      tip:'Alt+Enter ينقل المؤشر لسطر جديد داخل الخلية نفسها، بينما Ctrl+Enter يُعبّئ الخلايا المحددة.'
+    },
+    {
+      diff:'h',
+      q:'أيّ ميزة تُتيح تغيير لون خلفية خلية معينة تلقائياً إذا احتوت على قيمة أكبر من 100 مثلاً؟',
+      opts:['Cell Styles','Format as Table','Conditional Formatting','Number Formatting'],
+      ans:2,
+      tip:'Conditional Formatting تُطبق تنسيقاً بناءً على شرط منطقي (مثل > 100 أو "ناجح").'
+    },
+    {
+      diff:'m',
+      q:'ما هو تنسيق الرقم الذي يُظهر التاريخ بصيغة "26 November 2021" بدلاً من "26/10/2021"؟',
+      opts:['Short Date','Long Date','Number','General'],
+      ans:1,
+      tip:'Long Date يعرض اسم الشهر كاملاً، أما Short Date يعرضه بأرقام مائلة.'
+    },
+    {
+      diff:'h',
+      q:'ما هو الاختصار لتحديد الصف الحالي بالكامل في Excel؟',
+      opts:['Ctrl + Space (المسطرة)','Shift + Space (المسطرة)','Ctrl + Shift + Space','Alt + Space'],
+      ans:1,
+      tip:'Shift+Space يُحدد الصف كاملاً، بينما Ctrl+Space يُحدد العمود كاملاً.'
+    },
+    {
+      diff:'h',
+      q:'أيّ من الخيارات التالية يصف بدقة وظيفة "Increase Decimal" في مجموعة Number؟',
+      opts:['يُضاعف قيمة الرقم ويضيف له منزلة عشرية','يزيد عدد الأرقام الظاهرة بعد الفاصلة العشرية دون تغيير القيمة الفعلية','يُحوّل الرقم إلى نسبة مئوية تدريجياً','يُحوّل التنسيق من General إلى Number'],
+      ans:1,
+      tip:'Increase Decimal يُضيف منزلة عشرية ظاهرة فقط، القيمة المخزنة لا تتغير.'
+    },
+  ]},
+
+  // ───────────── MODEL 3 ─────────────
+  3: { color:'#C2410C', questions:[
+    {
+      diff:'m',
+      q:'ما هو الاختصار لإضافة ورقة عمل جديدة قبل الورقة الحالية مباشرة؟',
+      opts:['Ctrl + N','Alt + F11','Shift + F11','Ctrl + F11'],
+      ans:2,
+      tip:'Shift+F11 يُدرج ورقة عمل جديدة قبل الورقة النشطة الحالية.'
+    },
+    {
+      diff:'h',
+      q:'عند إدراج صف جديد عبر Home → Cells → Insert Sheet Rows، أين يظهر الصف الجديد بالنسبة للصف المحدد؟',
+      opts:['أسفل الصف المحدد مباشرة','أعلى الصف المحدد مباشرة','في نهاية الورقة','في بداية الورقة دائماً'],
+      ans:1,
+      tip:'دائماً يُدرج Excel الصف الجديد أعلى الصف المحدد حالياً.'
+    },
+    {
+      diff:'m',
+      q:'ما الذي يحدث عند اختيار "Protect Sheet" من قائمة إدارة ورقة العمل؟',
+      opts:['تُحذف ورقة العمل نهائياً بعد التأكيد','تُخفى ورقة العمل عن قائمة الأوراق','يتم وضع كلمة سر (Password) تمنع تعديل البيانات إلا من الأشخاص المخولين','تتحول الورقة إلى وضع القراءة فقط بشكل دائم لا يمكن التراجع عنه'],
+      ans:2,
+      tip:'Protect Sheet تضع حماية بكلمة مرور قابلة للرفع لاحقاً، وهي لا تحذف أو تخفي الورقة.'
+    },
+    {
+      diff:'h',
+      q:'ما هو الفرق بين خيار "Collated" وخيار "Uncollated" في إعدادات الطباعة؟',
+      opts:['Collated تطبع الصفحة الأولى بعدد النسخ كاملاً ثم الثانية وهكذا، بينما Uncollated تطبع مجموعة كاملة ثم مجموعة أخرى','Collated تطبع مجموعة كاملة (1,2,3) ثم تنتقل للمجموعة الثانية، بينما Uncollated تطبع كل صفحة بعدد النسخ قبل الانتقال للتالية','لا فرق بينهما في حالة طباعة صفحة واحدة فقط لكنهما متطابقان في جميع الحالات','Collated للطباعة الملونة و Uncollated للطباعة بالأسود والأبيض'],
+      ans:1,
+      tip:'Collated: 1-2-3 ثم 1-2-3. Uncollated: 1-1-1 ثم 2-2-2 ثم 3-3-3.'
+    },
+    {
+      diff:'m',
+      q:'ما الفرق بين خيار "Close" وخيار إغلاق نافذة البرنامج بالكامل (X) في File؟',
+      opts:['لا فرق بينهما وكلاهما يُغلق البرنامج والملف معاً','Close يُغلق المصنف الحالي فقط مع إبقاء برنامج Excel مفتوحاً، بينما X يُغلق البرنامج كاملاً','Close يحفظ الملف تلقائياً دون سؤال، بينما X يسأل عن الحفظ','Close يُغلق الورقة الحالية فقط دون المصنف'],
+      ans:1,
+      tip:'Close = إغلاق المصنف مع بقاء Excel. زر X = إغلاق Excel بالكامل.'
+    },
+    {
+      diff:'h',
+      q:'ما هي طريقة إعادة تسمية ورقة العمل بشكل مباشر دون النقر بالزر الأيمن؟',
+      opts:['الضغط على F2 مع تحديد الورقة','النقر المزدوج (Double Click) على اسم الورقة في الأسفل','الضغط على Ctrl+R فوق اسم الورقة','كتابة الاسم مباشرة في شريط الصيغة'],
+      ans:1,
+      tip:'النقر المزدوج على تبويب الورقة في الأسفل يُفعّل وضع التحرير لتغيير الاسم.'
+    },
+    {
+      diff:'h',
+      q:'عند اختيار طباعة "Print Selection" في إعدادات الطباعة، ماذا يعني ذلك بالضبط؟',
+      opts:['طباعة الورقة النشطة كاملة فقط','طباعة جميع أوراق المصنف معاً','طباعة النطاق أو الخلايا التي حددها المستخدم قبل فتح إعدادات الطباعة','طباعة الصفحة الأولى فقط من المصنف'],
+      ans:2,
+      tip:'Print Selection تطبع فقط ما قام المستخدم بتحديده (Select) قبل الذهاب لإعدادات الطباعة.'
+    },
+    {
+      diff:'m',
+      q:'أيّ من اختصارات التنقل التالية ينقلك للصفحة السابقة من الورقة (ليس الورقة السابقة)؟',
+      opts:['Ctrl + Page Up','Page Up','Ctrl + Page Down','Shift + Page Up'],
+      ans:1,
+      tip:'Page Up/Down = تنقل داخل الورقة. Ctrl+Page Up/Down = تنقل بين الأوراق (Sheets).'
+    },
+    {
+      diff:'h',
+      q:'ما الفرق بين "Ctrl + Page Up" و "Page Up" في التنقل داخل Excel؟',
+      opts:['Ctrl+Page Up ينقل لبداية الصفحة، وPage Up ينقل للأعلى داخل الورقة','Page Up ينقل للورقة السابقة وCtrl+Page Up ينقل لأول خلية A1','Ctrl+Page Up ينتقل للورقة السابقة في المصنف، بينما Page Up ينتقل للصفحة السابقة ضمن الورقة الحالية','لا فرق بينهما وكلاهما ينقل صفحة واحدة للأعلى'],
+      ans:2,
+      tip:'Ctrl+PageUp = ورقة سابقة (Sheet). PageUp = تمرير للأعلى في نفس الورقة.'
+    },
+    {
+      diff:'m',
+      q:'أيّ من الخيارات التالية يصف وظيفة "مقبض التعبئة التلقائية (Auto Fill)"؟',
+      opts:['يملأ الخلية بنفس لون الخلية المجاورة تلقائياً','يُستخدم لتوسيع سلاسل متسلسلة (أرقام، أيام، تواريخ) عن طريق السحب من زاوية الخلية','ينسخ تنسيق الجدول كاملاً إلى ورقة جديدة','يُطبق تنسيق الأرقام الشرطي تلقائياً'],
+      ans:1,
+      tip:'Auto Fill يسحب المقبض الصغير في الزاوية السفلى اليمنى للخلية لاستكمال التسلسل.'
+    },
+    {
+      diff:'h',
+      q:'إذا أردت إخفاء عمود B دون حذفه، ثم إعادة إظهاره لاحقاً، ما هو المسار الصحيح للإظهار؟',
+      opts:['تحديد العمود B مباشرة ثم الضغط على Unhide','تحديد العمودين A و C معاً ثم النقر بالزر الأيمن واختيار Unhide','الذهاب إلى Format → Columns → Unhide فقط','كتابة B في Name Box لإظهاره'],
+      ans:1,
+      tip:'لإظهار عمود مخفي يجب تحديد العمودين المجاورين له (قبله وبعده) ثم Unhide.'
+    },
+    {
+      diff:'h',
+      q:'ما هو خيار طباعة المصنف الذي يطبع جميع أوراق العمل المتواجدة في المصنف دفعة واحدة؟',
+      opts:['Print Active Sheet','Print Selection','Print Entire Workbook','Print Current Page'],
+      ans:2,
+      tip:'Print Entire Workbook تطبع كل الـ Sheets، أما Print Active Sheet فتطبع الورقة الحالية فقط.'
+    },
+    {
+      diff:'m',
+      q:'لتغيير اتجاه الطباعة إلى الوضع الأفقي (العرضي) في إعدادات الطباعة، نختار:',
+      opts:['Portrait','Landscape','Horizontal','Fit to Page'],
+      ans:1,
+      tip:'Landscape = أفقي (عرضي)، Portrait = عمودي (رأسي).'
+    },
+    {
+      diff:'h',
+      q:'ما هو المسار الصحيح في Excel لعرض معلومات المصنف مثل الحجم والاسم وتاريخ الإنشاء وعمل حماية للمصنف؟',
+      opts:['Home → Cells → Format','File → Info','View → Workbook Views','Page Layout → Sheet Options'],
+      ans:1,
+      tip:'File → Info يعرض خصائص المصنف الكاملة ويتيح حمايته بكلمة مرور.'
+    },
+    {
+      diff:'h',
+      q:'عند "نقل أو نسخ" ورقة عمل (Move or Copy)، ما الذي يميز عملية النسخ عن النقل في مربع الحوار؟',
+      opts:['يجب اختيار اسم مختلف للورقة المنسوخة فقط','تفعيل خيار "Create a copy" في مربع الحوار يجعلها نسخة، وإلا فستكون نقلاً فعلياً','النسخ يضع الورقة في مصنف جديد فقط','لا فرق بين النسخ والنقل في مربع الحوار نفسه'],
+      ans:1,
+      tip:'مربع حوار Move or Copy يحتوي على خيار "Create a copy" – تفعيله ينسخ، وتركه يُنقل.'
+    },
+  ]}
+};
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+const state = {};
+function initState(){
+  for(const m of [1,2,3])
+    state[m] = MODELS[m].questions.map(()=>({answered:false,correct:false}));
+}
+initState();
+
+// ══════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════
+function renderModel(m){
+  const {color,questions} = MODELS[m];
+  const container = document.getElementById(`qs-${m}`);
+  container.innerHTML = '';
+  questions.forEach((q,qi)=>{
+    const card = document.createElement('div');
+    card.className='q-card'; card.id=`qc-${m}-${qi}`;
+    const diffLabel = q.diff==='h'
+      ? '<span class="diff diff-hard">🔴 صعب</span>'
+      : '<span class="diff diff-med">🟡 متوسط</span>';
+    const optHtml = q.opts.map((o,oi)=>`
+      <div class="opt" id="opt-${m}-${qi}-${oi}" onclick="pick(${m},${qi},${oi})">
+        <span class="opt-letter">${L[oi]}</span>
+        <span class="opt-text">${o}</span>
+      </div>`).join('');
+    card.innerHTML=`
+      ${diffLabel}
+      <div class="q-head">
+        <div class="q-num" style="background:${color}">${qi+1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="options">${optHtml}</div>
+      <div class="answer-badge" id="badge-${m}-${qi}"></div>
+      <div class="tip" id="tip-${m}-${qi}">${q.tip}</div>`;
+    container.appendChild(card);
+  });
+}
+function renderAll(){ [1,2,3].forEach(m=>renderModel(m)); }
+
+// ══════════════════════════════════════════════════
+// INTERACTION
+// ══════════════════════════════════════════════════
+function pick(m,qi,chosen){
+  const s=state[m][qi]; if(s.answered)return;
+  s.answered=true;
+  const correct=MODELS[m].questions[qi].ans;
+  s.correct=(chosen===correct);
+  MODELS[m].questions[qi].opts.forEach((_,oi)=>{
+    const el=document.getElementById(`opt-${m}-${qi}-${oi}`);
+    el.classList.add('disabled');
+    if(oi===correct) el.classList.add('correct');
+    else if(oi===chosen&&!s.correct) el.classList.add('wrong');
+    else el.classList.add('dimmed');
+  });
+  const badge=document.getElementById(`badge-${m}-${qi}`);
+  badge.classList.add('show');
+  if(s.correct){ badge.classList.add('ok'); badge.innerHTML='✓ إجابة صحيحة!'; }
+  else{ badge.classList.add('no'); badge.innerHTML=`✗ خطأ — الإجابة الصحيحة: <strong>${L[correct]}</strong>`; }
+  document.getElementById(`tip-${m}-${qi}`).classList.add('show');
+  updateScores(m);
+}
+
+function updateScores(m){
+  const st=state[m];
+  const corr=st.filter(x=>x.correct).length;
+  const tot=MODELS[m].questions.length;
+  document.getElementById(`bar-${m}`).style.width=`${(corr/tot)*100}%`;
+  document.getElementById(`bar-lbl-${m}`).textContent=`${corr} / ${tot}`;
+  let ga=0,gc=0,gw=0;
+  for(const mm of [1,2,3]){
+    ga+=state[mm].filter(x=>x.answered).length;
+    gc+=state[mm].filter(x=>x.correct).length;
+    gw+=state[mm].filter(x=>x.answered&&!x.correct).length;
+  }
+  document.getElementById('g-ans').textContent=ga;
+  document.getElementById('g-ok').textContent=gc;
+  document.getElementById('g-no').textContent=gw;
+  const pct=ga>0?Math.round((gc/ga)*100):null;
+  document.getElementById('g-pct').textContent=pct!==null?`${pct}%`:'—';
+}
+
+function resetModel(m){
+  state[m]=MODELS[m].questions.map(()=>({answered:false,correct:false}));
+  renderModel(m); updateScores(m);
+}
+
+function showModel(m,btn){
+  document.querySelectorAll('.model-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`model-${m}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderAll();
+</script>
+</body>
+</html>
