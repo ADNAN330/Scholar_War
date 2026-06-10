@@ -20,7 +20,7 @@
 ### [Excel](/excel_study_guide.html) 
 ### [PowerPoint](/powerpoint_lecture.html)
 -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-### [Word_Quiz](/msword_quiz%20(1).html)
+### [Word_Quiz](/msword_quiz.html)
 ### [Excel_Quiz](/excel-quiz-3models.html)
 ### [PowerPoint_Quiz](/powerpoint-3models.html)
 
