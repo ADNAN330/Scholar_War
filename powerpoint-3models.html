@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نماذج اختبار PowerPoint – ثلاثة نماذج</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
+  :root {
+    --bg:#f1f5f9; --surface:#fff; --border:#e2e8f0; --border-d:#cbd5e1;
+    --blue:#2563eb; --blue-l:#eff6ff; --blue-b:#bfdbfe;
+    --green:#16a34a; --green-l:#f0fdf4; --green-b:#bbf7d0;
+    --red:#dc2626; --red-l:#fef2f2; --red-b:#fecaca;
+    --text:#0f172a; --muted:#64748b; --dim:#94a3b8;
+    --m1:#7c3aed; --m1-l:#f5f3ff; --m1-b:#ddd6fe;
+    --m2:#0891b2; --m2-l:#ecfeff; --m2-b:#a5f3fc;
+    --m3:#d97706; --m3-l:#fffbeb; --m3-b:#fde68a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;font-size:15px;line-height:1.7}
+
+  /* header */
+  header{background:var(--surface);border-bottom:2px solid var(--border);padding:1.8rem 1.5rem 1.4rem;text-align:center}
+  .eyebrow{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:.35rem}
+  header h1{font-size:clamp(1.3rem,4vw,1.8rem);font-weight:800;margin-bottom:.2rem}
+  header p{color:var(--muted);font-size:.83rem}
+
+  /* model tabs */
+  .tabs-wrap{background:var(--surface);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:20;overflow-x:auto}
+  .tabs{display:flex;min-width:100%}
+  .tab-btn{flex:1;padding:.8rem 1rem;background:none;border:none;border-bottom:3px solid transparent;
+    color:var(--muted);font-family:'Tajawal',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;
+    transition:all .2s;white-space:nowrap}
+  .tab-btn:hover{background:var(--bg)}
+  .tab-btn.m1.active{color:var(--m1);border-color:var(--m1);background:var(--m1-l)}
+  .tab-btn.m2.active{color:var(--m2);border-color:var(--m2);background:var(--m2-l)}
+  .tab-btn.m3.active{color:var(--m3);border-color:var(--m3);background:var(--m3-l)}
+
+  /* panels */
+  .panel{display:none}.panel.active{display:block}
+  .container{max-width:800px;margin:0 auto;padding:1.8rem 1.25rem 4rem}
+
+  /* toolbar */
+  .toolbar{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:.75rem 1.1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+  .score-pill{border-radius:99px;padding:.28rem .85rem;font-size:.78rem;font-weight:700;white-space:nowrap}
+  .s-m1{background:var(--m1-l);color:var(--m1);border:1px solid var(--m1-b)}
+  .s-m2{background:var(--m2-l);color:var(--m2);border:1px solid var(--m2-b)}
+  .s-m3{background:var(--m3-l);color:var(--m3);border:1px solid var(--m3-b)}
+  .prog-wrap{flex:1;min-width:80px;height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:99px;transition:width .4s}
+  .pf-m1{background:linear-gradient(90deg,var(--m1),#a78bfa)}
+  .pf-m2{background:linear-gradient(90deg,var(--m2),#06b6d4)}
+  .pf-m3{background:linear-gradient(90deg,var(--m3),#f59e0b)}
+  .ans-cnt{font-size:.76rem;color:var(--muted);white-space:nowrap}
+  .btn-reset{background:var(--surface);border:1.5px solid var(--border-d);border-radius:8px;
+    padding:.3rem .85rem;font-family:'Tajawal',sans-serif;font-size:.76rem;font-weight:600;
+    color:var(--muted);cursor:pointer;transition:all .15s}
+  .btn-reset:hover{border-color:var(--red);color:var(--red)}
+
+  /* model badge */
+  .model-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.3rem .9rem;border-radius:99px;
+    font-size:.75rem;font-weight:700;margin-bottom:1.3rem}
+  .mb-m1{background:var(--m1-l);color:var(--m1);border:1px solid var(--m1-b)}
+  .mb-m2{background:var(--m2-l);color:var(--m2);border:1px solid var(--m2-b)}
+  .mb-m3{background:var(--m3-l);color:var(--m3);border:1px solid var(--m3-b)}
+
+  /* result banner */
+  .result-banner{display:none;background:var(--surface);border:2px solid var(--border);
+    border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+  .result-banner.show{display:block}
+  .result-big{font-size:2.1rem;font-weight:800}
+  .result-sub{color:var(--muted);font-size:.85rem;margin-top:.25rem}
+  .result-grade{display:inline-block;margin-top:.7rem;padding:.3rem 1.1rem;border-radius:99px;font-size:.83rem;font-weight:700}
+
+  /* q-card */
+  .q-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;
+    padding:1.25rem 1.35rem 1.05rem;margin-bottom:.9rem;transition:border-color .2s,box-shadow .2s}
+  .q-card:hover:not(.done){box-shadow:0 2px 10px rgba(0,0,0,.06);border-color:var(--blue-b)}
+  .q-card.done{border-color:var(--border-d)}
+  .q-head{display:flex;align-items:flex-start;gap:.7rem;margin-bottom:.8rem}
+  .q-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--blue-l);color:var(--blue);
+    font-size:.76rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .q-num.ok{background:var(--green-l);color:var(--green)}
+  .q-num.err{background:var(--red-l);color:var(--red)}
+  .q-text{font-size:.92rem;font-weight:600;color:var(--text);line-height:1.6}
+
+  /* options */
+  .options{display:flex;flex-direction:column;gap:.4rem}
+  .opt{display:flex;align-items:flex-start;gap:.55rem;background:var(--bg);border:1.5px solid var(--border);
+    border-radius:10px;padding:.55rem .8rem;cursor:pointer;font-size:.85rem;color:var(--text);
+    transition:border-color .15s,background .15s;user-select:none}
+  .opt:hover:not(.locked){border-color:var(--blue);background:var(--blue-l)}
+  .opt.locked{cursor:default}
+  .opt.correct{border-color:var(--green)!important;background:var(--green-l)!important;color:var(--green);font-weight:600}
+  .opt.wrong{border-color:var(--red)!important;background:var(--red-l)!important;color:var(--red)}
+  .opt-ltr{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:var(--surface);
+    border:1.5px solid var(--border-d);font-size:.7rem;font-weight:700;color:var(--muted);
+    display:flex;align-items:center;justify-content:center}
+  .opt.correct .opt-ltr{background:var(--green);border-color:var(--green);color:#fff}
+  .opt.wrong   .opt-ltr{background:var(--red);border-color:var(--red);color:#fff}
+
+  /* feedback */
+  .feedback{display:none;margin-top:.65rem;padding:.5rem .8rem;border-radius:8px;
+    font-size:.81rem;font-weight:600;line-height:1.55}
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--green-l);color:var(--green);border:1px solid var(--green-b)}
+  .feedback.err{background:var(--red-l);color:var(--red);border:1px solid var(--red-b)}
+
+  /* diff badge */
+  .diff{display:inline-block;font-size:.62rem;font-weight:700;padding:.1rem .5rem;border-radius:99px;margin-bottom:.5rem}
+  .diff-med{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
+  .diff-hard{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+
+  footer{text-align:center;padding:1.1rem;font-size:.71rem;color:var(--dim);border-top:1px solid var(--border);background:var(--surface)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">مهارات الحاسوب · جامعة قاسيون · 2025/2026</div>
+  <h1>نماذج اختبار Microsoft PowerPoint</h1>
+  <p>ثلاثة نماذج مختلفة — كل نموذج 15 سؤال</p>
+</header>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn m1 active" onclick="switchTab('m1')">📝 النموذج الأول</button>
+    <button class="tab-btn m2"        onclick="switchTab('m2')">📋 النموذج الثاني</button>
+    <button class="tab-btn m3"        onclick="switchTab('m3')">📄 النموذج الثالث</button>
+  </div>
+</div>
+
+<!-- M1 -->
+<div id="m1" class="panel active">
+<div class="container">
+  <div class="model-badge mb-m1">📝 النموذج الأول</div>
+  <div class="toolbar">
+    <div class="score-pill s-m1" id="pill-m1">0 / 0</div>
+    <div class="prog-wrap"><div class="prog-fill pf-m1" id="prog-m1" style="width:0%"></div></div>
+    <div class="ans-cnt" id="cnt-m1">0 من 15</div>
+    <button class="btn-reset" onclick="reset('m1')">↺ إعادة</button>
+  </div>
+  <div class="result-banner" id="res-m1"><div class="result-big" id="rn-m1"></div><div class="result-sub">من أصل 15 سؤال</div><div class="result-grade" id="rg-m1"></div></div>
+  <div id="qs-m1"></div>
+</div>
+</div>
+
+<!-- M2 -->
+<div id="m2" class="panel">
+<div class="container">
+  <div class="model-badge mb-m2">📋 النموذج الثاني</div>
+  <div class="toolbar">
+    <div class="score-pill s-m2" id="pill-m2">0 / 0</div>
+    <div class="prog-wrap"><div class="prog-fill pf-m2" id="prog-m2" style="width:0%"></div></div>
+    <div class="ans-cnt" id="cnt-m2">0 من 15</div>
+    <button class="btn-reset" onclick="reset('m2')">↺ إعادة</button>
+  </div>
+  <div class="result-banner" id="res-m2"><div class="result-big" id="rn-m2"></div><div class="result-sub">من أصل 15 سؤال</div><div class="result-grade" id="rg-m2"></div></div>
+  <div id="qs-m2"></div>
+</div>
+</div>
+
+<!-- M3 -->
+<div id="m3" class="panel">
+<div class="container">
+  <div class="model-badge mb-m3">📄 النموذج الثالث</div>
+  <div class="toolbar">
+    <div class="score-pill s-m3" id="pill-m3">0 / 0</div>
+    <div class="prog-wrap"><div class="prog-fill pf-m3" id="prog-m3" style="width:0%"></div></div>
+    <div class="ans-cnt" id="cnt-m3">0 من 15</div>
+    <button class="btn-reset" onclick="reset('m3')">↺ إعادة</button>
+  </div>
+  <div class="result-banner" id="res-m3"><div class="result-big" id="rn-m3"></div><div class="result-sub">من أصل 15 سؤال</div><div class="result-grade" id="rg-m3"></div></div>
+  <div id="qs-m3"></div>
+</div>
+</div>
+
+<footer>مادة مهارات الحاسوب · جامعة قاسيون الخاصة للعلوم والتكنولوجيا · 2025/2026</footer>
+
+<script>
+const L = ['أ','ب','ج','د'];
+
+const MODELS = {
+  m1: [
+    {d:'med',q:'ما هي الوحدة الأساسية التي يتكون منها العرض التقديمي في PowerPoint؟',
+     opts:['الفقرات (Paragraphs)','الشرائح (Slides)','الجداول (Tables)','الأوراق (Sheets)'],ans:1,
+     exp:'العرض التقديمي يتكون من مجموعة شرائح (Slides) تحتوي على النصوص والصور والتأثيرات.'},
+    {d:'med',q:'أي تبويب يحتوي على أمر "شريحة جديدة" (New Slide) و"تخطيط" (Layout)؟',
+     opts:['Insert','Design','Home','Transitions'],ans:2,
+     exp:'تبويب Home يحتوي مجموعة Slides التي تضم New Slide و Layout و Reset.'},
+    {d:'med',q:'ماذا يعني تغيير "تخطيط الشريحة" (Layout) في تبويب Home؟',
+     opts:['تغيير حجم الشريحة كاملاً من 4:3 إلى 16:9','تغيير تنسيق الخط والألوان للنص المكتوب','تغيير طريقة توزيع نائبات النص والعناصر داخل الشريحة','تغيير الخلفية والنسق المرئي للعرض كله'],ans:2,
+     exp:'Layout يُغيّر هيكل الشريحة (مثل: عنوان فقط، عنوان ومحتوى، مقارنة، فارغة...) دون تغيير التصميم.'},
+    {d:'med',q:'لإضافة مقطع فيديو داخل شريحة، أي تبويب وأي مجموعة تستخدم؟',
+     opts:['Design ← Customize','Home ← Slides','Insert ← Media','View ← Presentation Views'],ans:2,
+     exp:'تبويب Insert ← مجموعة Media تُتيح إدراج Video وAudio مباشرة في الشريحة.'},
+    {d:'med',q:'ما الاختصار الذي يُنشئ عرضاً تقديمياً جديداً فارغاً بالكامل؟',
+     opts:['Ctrl + M','Ctrl + S','Ctrl + N','Ctrl + O'],ans:2,
+     exp:'Ctrl + N يفتح عرضاً تقديمياً جديداً فارغاً. أما Ctrl + M فيُدرج شريحة جديدة داخل العرض الحالي.'},
+    {d:'med',q:'ما الذي يفعله أمر "Reset" في مجموعة Slides بتبويب Home؟',
+     opts:['يحذف محتوى الشريحة ويتركها فارغة','يُعيد نائبات النص لحجمها وموقعها وتنسيقها الافتراضي','يُلغي آخر عملية تم تنفيذها','يعيد تثبيت البرنامج'],ans:1,
+     exp:'Reset يُعيد الـ Placeholders لإعداداتها الأصلية دون حذف النص المكتوب.'},
+    {d:'med',q:'أي من الخيارات التالية يُطبع الشريحة مع مساحة للملاحظات أسفلها؟',
+     opts:['Full Page Slides','Handouts','Notes Pages','Outline'],ans:2,
+     exp:'Notes Pages تطبع الشريحة في الأعلى والملاحظات التي كتبها المحاضر أسفلها في نفس الصفحة.'},
+    {d:'hard',q:'المحاضر يريد أن تنتقل الشرائح تلقائياً كل 10 ثوانٍ دون أي نقر. ماذا يضبط في تبويب Transitions؟',
+     opts:['يُفعّل "On Mouse Click" فقط ويضع 10 ثوانٍ','يُلغي "On Mouse Click" ويُفعّل "After" ويضبطه على 00:10','يُفعّل كلا الخيارين معاً','يذهب لتبويب Animations ويضبط التوقيت هناك'],ans:1,
+     exp:'"After" بـ 00:10 يجعل الانتقال تلقائياً بعد 10 ثوانٍ. إلغاء "On Mouse Click" يمنع التدخل اليدوي.'},
+    {d:'hard',q:'ما الفرق الدقيق بين اختصار F5 واختصار Shift + F5؟',
+     opts:['F5 يفتح نافذة Find & Replace، وShift+F5 يبدأ العرض','F5 يبدأ العرض من الشريحة الأولى دائماً، وShift+F5 يبدأ من الشريحة الحالية المحددة','F5 يبدأ العرض من الشريحة الحالية، وShift+F5 يبدأ من الأولى','كلاهما يبدأ العرض من الشريحة الأولى لكن بسرعات مختلفة'],ans:1,
+     exp:'F5 = من الشريحة الأولى دائماً. Shift+F5 = من الشريحة المحددة حالياً. فرق مهم جداً في الامتحان.'},
+    {d:'hard',q:'في عرض "فارز الشرائح" (Slide Sorter)، أي من الإجراءات التالية غير ممكن تنفيذه؟',
+     opts:['حذف شريحة','إعادة ترتيب الشرائح بالسحب والإفلات','تعديل النص داخل الشريحة مباشرة','تحديد أكثر من شريحة دفعة واحدة'],ans:2,
+     exp:'Slide Sorter لا يسمح بتحرير محتوى الشرائح داخلياً؛ هو فقط للترتيب والحذف والنظرة الشاملة.'},
+    {d:'hard',q:'ما الفرق الجوهري بين خيار طباعة "Handouts بـ 3 شرائح" وخيار "Outline"؟',
+     opts:['Handouts تطبع النصوص فقط، وOutline تطبع الشرائح كاملة مع الصور','Handouts تطبع شرائح مصغرة مع مساحة للتدوين، وOutline تطبع النصوص فقط بلا صور','كلاهما يطبع نصوصاً فقط لكن بتنسيق مختلف','لا فرق بينهما في المحتوى المطبوع'],ans:1,
+     exp:'Handouts = شرائح مصغرة (مرئية). Outline = نص فقط بلا أي عناصر بصرية. هدفان مختلفان تماماً.'},
+    {d:'hard',q:'أنواع تأثيرات الحركة (Animations) الثلاثة الرئيسية مرتبةً هي:',
+     opts:['ظهور، اختفاء، تحرك','دخول (Entrance)، توكيد (Emphasis)، خروج (Exit)','بداية، منتصف، نهاية','تكبير، تصغير، دوران'],ans:1,
+     exp:'Entrance = كيف يدخل العنصر. Emphasis = تأثير وهو ظاهر. Exit = كيف يغادر. هذا التصنيف الرسمي في PowerPoint.'},
+    {d:'hard',q:'طالب فعّل تأثير Entrance على صورة داخل شريحة. أي تبويب استخدم؟',
+     opts:['Transitions','Design','Animations','Insert'],ans:2,
+     exp:'تبويب Animations خاص بتحريك العناصر داخل الشريحة. Transitions خاص بالانتقال بين الشرائح.'},
+    {d:'hard',q:'ما وظيفة "صفحة الملاحظات" (Notes Page) في PowerPoint؟',
+     opts:['تعرض الشريحة بملء الشاشة لمشاهدة التأثيرات','تعرض جميع الشرائح مصغرة لإعادة ترتيبها','تتيح للمحاضر كتابة ملاحظات تُخفى عن الجمهور وتُطبع للمحاضر','تعرض الشريحة بحجم النافذة مع بقاء شريط الحالة ظاهراً'],ans:2,
+     exp:'Notes Page = شريحة في الأعلى + مساحة ملاحظات في الأسفل. الملاحظات مخفية عن الجمهور ومخصصة للمحاضر.'},
+    {d:'hard',q:'أي من العبارات التالية تصف بدقة وظيفة "نسق" (Theme) في تبويب Design؟',
+     opts:['يُغيّر خلفية الشريحة الحالية فقط دون التأثير على بقية الشرائح','يُطبّق تصميماً متكاملاً (خطوط + ألوان + خلفيات) على جميع شرائح العرض دفعة واحدة','يُغيّر حجم الشريحة من قياسي إلى عريض','يُضيف انتقالات تلقائية بين الشرائح'],ans:1,
+     exp:'Theme = حزمة تصميم شاملة تشمل الخطوط والألوان والخلفيات وتُطبق على كل الشرائح بنقرة واحدة.'},
+  ],
+
+  m2: [
+    {d:'med',q:'برنامج PowerPoint ينتمي إلى:',
+     opts:['حزمة Adobe Creative Suite','حزمة Microsoft Office','حزمة Google Workspace','نظام التشغيل Windows مباشرة'],ans:1,
+     exp:'PowerPoint جزء من حزمة Microsoft Office إلى جانب Word وExcel وAccess.'},
+    {d:'med',q:'أي من الوسائل التالية يمكن استخدامها لعرض شرائح PowerPoint على جمهور كبير في قاعة؟',
+     opts:['الطابعة الليزرية (Laser Jet)','جهاز الإسقاط الضوئي (Data Show)','الماسح الضوئي (Scanner)','كاميرا الويب (Webcam)'],ans:1,
+     exp:'Data Show (Projector) يُعرض الشرائح على شاشة كبيرة. يمكن أيضاً العرض على شاشة الحاسوب أو كصفحة ويب.'},
+    {d:'med',q:'لإدراج رسوم بيانية (Bar Chart, Pie Chart) داخل شريحة، أي أمر تستخدم؟',
+     opts:['SmartArt','Chart','Shapes','Pictures'],ans:1,
+     exp:'Chart في تبويب Insert يُدرج الرسوم البيانية الإحصائية. SmartArt للمخططات الهيكلية والتنظيمية.'},
+    {d:'med',q:'ما وظيفة "WordArt" في تبويب Insert؟',
+     opts:['إدراج مستند Word داخل الشريحة','إنشاء نصوص مزخرفة بتأثيرات بصرية جذابة','تحويل النص العادي إلى جدول','إدراج ملف صوتي بتنسيق نصي'],ans:1,
+     exp:'WordArt ينشئ نصوصاً مزخرفة بتأثيرات بصرية كالتدرج والظل والانعكاس.'},
+    {d:'med',q:'ما الاختصار المستخدم لإنهاء عرض الشرائح بملء الشاشة والعودة لواجهة التصميم؟',
+     opts:['Alt + F4','Ctrl + W','Esc','Ctrl + Z'],ans:2,
+     exp:'Esc ينهي وضع Slide Show ويعود لواجهة Normal التصميمية فوراً.'},
+    {d:'med',q:'في تبويب Transitions، ماذا يعني تفعيل خيار "On Mouse Click"؟',
+     opts:['تنتقل الشريحة تلقائياً بعد ثانية واحدة','لا تنتقل الشريحة إلا بعد نقر المستخدم على الماوس أو لوحة المفاتيح','تُنفَّذ الحركات داخل الشريحة عند النقر','يُفتح مربع حوار لاختيار الشريحة التالية'],ans:1,
+     exp:'"On Mouse Click" يجعل التحكم يدوياً — الشريحة تنتظر نقرة المستخدم للانتقال.'},
+    {d:'med',q:'أي طريقة عرض تُستخدم لتصميم وتحرير محتوى الشريحة بشكل رئيسي؟',
+     opts:['Slide Sorter','Reading View','Normal','Slide Show'],ans:2,
+     exp:'Normal (عادي) هي طريقة العرض الافتراضية وهي المكان الرئيسي لتصميم وتحرير الشرائح.'},
+    {d:'hard',q:'في تبويب Design، ما الفرق بين "حجم الشريحة" (Slide Size) و"تنسيق الخلفية" (Format Background)؟',
+     opts:['لا فرق بينهما؛ كلاهما يُغيّر مظهر الشريحة','Slide Size يُغيّر أبعاد الشريحة (4:3 أو 16:9)، وFormat Background يُغيّر لون أو صورة الخلفية','Slide Size يُغيّر لون الخلفية، وFormat Background يُغيّر الأبعاد','كلاهما ينتميان لتبويب View وليس Design'],ans:1,
+     exp:'Slide Size = الأبعاد الهندسية للشريحة. Format Background = تخصيص مظهر الخلفية (لون، تدرج، صورة).'},
+    {d:'hard',q:'عرض "القراءة" (Reading View) يختلف عن "عرض الشرائح" (Slide Show) في أن:',
+     opts:['Reading View لا يعرض التأثيرات والحركات بينما Slide Show يعرضها','Reading View يملأ النافذة ويُبقي شريط المهام وعناصر Windows ظاهرة، بينما Slide Show يملأ الشاشة كاملاً','Reading View للمحاضر فقط وتظهر فيه الملاحظات','لا فرق عملي بينهما'],ans:1,
+     exp:'الفرق الدقيق: Slide Show = شاشة فارغة كاملة. Reading View = يملأ النافذة لكن شريط Windows يبقى مرئياً.'},
+    {d:'hard',q:'أراد طالب طباعة شرائح العرض بحيث يظهر النص فقط بدون أي صور أو خلفيات. أي خيار يختار؟',
+     opts:['Full Page Slides','Notes Pages','Outline','Handouts – 6 Slides'],ans:2,
+     exp:'Outline عند الطباعة يُخرج النصوص النصية فقط (العناوين والمحتوى) دون أي عناصر بصرية.'},
+    {d:'hard',q:'مدرّس يريد توزيع ورقة على الطلاب فيها 6 شرائح مصغرة في صفحة واحدة. أي خيار طباعة يختار؟',
+     opts:['Full Page Slides','Notes Pages – 6','Handouts – 6 Slides per page','Outline'],ans:2,
+     exp:'Handouts مع اختيار عدد الشرائح يطبع شرائح مصغرة متعددة في الصفحة — مثالي لأوراق التوزيع.'},
+    {d:'hard',q:'ما الذي يحدث عند إدراج SmartArt ثم اختيار نوع "هيكل تنظيمي" (Hierarchy)?',
+     opts:['يُدرج جدول بيانات رقمي','يُدرج رسم بياني دائري','يُدرج مخطط يعرض علاقات التسلسل الهرمي والرؤساء والمرؤوسين','يُدرج صورة من مكتبة صور Office'],ans:2,
+     exp:'SmartArt نوع Hierarchy يُنشئ مخططاً هيكلياً يوضح التسلسل الوظيفي أو التنظيمي.'},
+    {d:'hard',q:'ما الفرق الجوهري بين "الانتقالات" (Transitions) و"الحركات" (Animations)؟',
+     opts:['الانتقالات تُحرّك عناصر الشريحة، والحركات تُغيّر شكل الانتقال بين الشرائح','الانتقالات تأثيرات بصرية عند التنقل بين الشرائح، والحركات تأثيرات على عناصر داخل الشريحة الواحدة','كلاهما شيء واحد بأسماء مختلفة','الانتقالات للنصوص فقط والحركات للصور فقط'],ans:1,
+     exp:'Transitions = بين الشرائح. Animations = داخل الشريحة. أكثر سؤال يأتي في الامتحانات.'},
+    {d:'hard',q:'ما الاختصار الصحيح لبدء العرض التقديمي من الشريحة الأولى دائماً؟',
+     opts:['Shift + F5','F5','Ctrl + F5','Alt + F5'],ans:1,
+     exp:'F5 يبدأ العرض من الشريحة الأولى دائماً بصرف النظر عن الشريحة المحددة حالياً.'},
+    {d:'hard',q:'أي من العبارات التالية صحيحة عن "Header & Footer" في تبويب Insert؟',
+     opts:['يُضيف رأساً وتذييلاً للصفحة يظهران في جميع الشرائح','يُنشئ نصاً مزخرفاً في أعلى وأسفل الشريحة','يُحدد حجم الشريحة وهوامشها عند الطباعة','يُضيف شريط تنقل تفاعلي بين الشرائح'],ans:0,
+     exp:'Header & Footer في Insert يُضيف معلومات ثابتة (تاريخ، رقم شريحة، نص) تظهر في جميع الشرائح.'},
+  ],
+
+  m3: [
+    {d:'med',q:'أي مما يلي لا يمكن إضافته داخل شريحة PowerPoint؟',
+     opts:['جدول (Table)','رسم بياني (Chart)','قاعدة بيانات SQL مباشرة','ملف صوتي (Audio)'],ans:2,
+     exp:'يمكن إدراج جداول وصور وأشكال وأصوات وفيديو وSmartArt وCharts، لكن لا يمكن إدراج قاعدة بيانات SQL مباشرة.'},
+    {d:'med',q:'أي تبويب يختص بالمظهر المرئي العام للعرض من حيث الألوان والخطوط والخلفيات؟',
+     opts:['Home','Insert','Design','Animations'],ans:2,
+     exp:'تبويب Design يحتوي على Themes وCustomize (حجم الشريحة وتنسيق الخلفية).'},
+    {d:'med',q:'ما وظيفة "مربع نص" (Text Box) في تبويب Insert؟',
+     opts:['إدراج نص من ملف خارجي تلقائياً','الكتابة الحرّة في أي مكان داخل الشريحة خارج نائبات النص الافتراضية','تحويل الصورة إلى نص','تنسيق النص الموجود في الشريحة'],ans:1,
+     exp:'Text Box يُتيح الكتابة في أي موقع حر داخل الشريحة، بعيداً عن الـ Placeholders المحددة مسبقاً.'},
+    {d:'med',q:'كم عدد طرق العرض الرئيسية الموجودة في تبويب View ضمن مجموعة Presentation Views؟',
+     opts:['ثلاث طرق','أربع طرق','خمس طرق','ست طرق'],ans:2,
+     exp:'الخمس طرق: Normal, Slide Sorter, Notes Page, Reading View, Slide Show.'},
+    {d:'med',q:'ما الاختصار المستخدم لإدراج شريحة جديدة في العرض الحالي؟',
+     opts:['Ctrl + N','Ctrl + M','Ctrl + Enter','Ctrl + Shift + N'],ans:1,
+     exp:'Ctrl + M = شريحة جديدة داخل العرض الحالي. Ctrl + N = عرض تقديمي جديد كامل.'},
+    {d:'med',q:'في تبويب Design، ما وظيفة "Widescreen (16:9)"؟',
+     opts:['يجعل الخط أعرض وأكبر في جميع الشرائح','يُغيّر أبعاد الشريحة لتناسب الشاشات الحديثة العريضة','يُطبّق نسقاً أزرق على جميع الشرائح','يُضيف حدوداً حول كل شريحة'],ans:1,
+     exp:'Widescreen 16:9 هو حجم الشريحة المناسب للشاشات الحديثة وأجهزة العرض الحديثة.'},
+    {d:'med',q:'ملاحظات صفحة النوتس (Notes Page) تكون:',
+     opts:['مرئية للجمهور أثناء عرض الشرائح على الشاشة الكبيرة','مخفية عن الجمهور ومخصصة للمحاضر ويمكن طباعتها','مرئية فقط في طريقة عرض Normal','محفوظة في ملف منفصل عن العرض التقديمي'],ans:1,
+     exp:'ملاحظات Notes Page خاصة بالمحاضر، مخفية عن الجمهور أثناء العرض، ولكن يمكن طباعتها.'},
+    {d:'hard',q:'مدرّس يريد تغيير ترتيب 10 شرائح بسرعة دون تعديل محتواها. ما أنسب طريقة عرض يستخدمها؟',
+     opts:['Normal','Notes Page','Slide Sorter','Reading View'],ans:2,
+     exp:'Slide Sorter يعرض كل الشرائح كأيقونات مصغرة ويُتيح إعادة ترتيبها بالسحب والإفلات بكفاءة عالية.'},
+    {d:'hard',q:'ما الفرق بين تطبيق Theme على شريحة واحدة مقارنةً بالضغط على "Apply To All" في Transitions؟',
+     opts:['كلاهما يؤثر على جميع الشرائح دائماً','Theme بنقرة عادية يؤثر على جميع الشرائح، بينما Apply To All في Transitions يُطبّق نفس الانتقال على كل الشرائح','Theme يؤثر على شريحة واحدة فقط، وApply To All يؤثر على الشرائح الفردية فقط','لا علاقة بين الأمرين'],ans:1,
+     exp:'Theme يُطبَّق على الكل تلقائياً بنقرة. Apply To All في Transitions يُوحّد تأثير الانتقال على جميع الشرائح.'},
+    {d:'hard',q:'أي من العبارات التالية خاطئة فيما يخص تبويب Animations؟',
+     opts:['يحتوي على تأثيرات Entrance وEmphasis وExit','التأثيرات تؤثر على عناصر داخل الشريحة الواحدة','يمكن تطبيق أكثر من تأثير على نفس العنصر','تأثيرات Animations هي نفسها تأثيرات Transitions'],ans:3,
+     exp:'Animations وTransitions مختلفان تماماً — الأول لعناصر داخل الشريحة، والثاني للانتقال بين الشرائح.'},
+    {d:'hard',q:'طالب يريد مراجعة العرض بشكل مريح دون ملء الشاشة الكاملة. أي طريقة عرض الأنسب؟',
+     opts:['Slide Show','Slide Sorter','Reading View','Notes Page'],ans:2,
+     exp:'Reading View تملأ نافذة البرنامج وتعرض التأثيرات، لكنها تُبقي شريط Windows مرئياً — مثالية للمراجعة.'},
+    {d:'hard',q:'ما الصحيح فيما يخص طباعة "Full Page Slides"؟',
+     opts:['تطبع عدة شرائح في صفحة واحدة لتوفير الورق','تطبع كل شريحة في صفحة مستقلة بحجمها الكامل مع تصميمها','تطبع النصوص فقط بدون الصور','تطبع الشريحة مع الملاحظات أسفلها'],ans:1,
+     exp:'Full Page Slides = شريحة واحدة كاملة بصفحة واحدة مع كل ألوانها وصورها وتصميمها.'},
+    {d:'hard',q:'عند اختيار "Shapes" من تبويب Insert، ما الذي يمكن إدراجه؟',
+     opts:['صور فوتوغرافية من الإنترنت','أشكال هندسية وأسهم توضيحية وفقاعات نصية','مخططات هيكلية تنظيمية جاهزة','جداول ذات صفوف وأعمدة'],ans:1,
+     exp:'Shapes تُدرج أشكالاً هندسية (مستطيلات، دوائر، مثلثات) وأسهماً وفقاعات وخطوطاً توضيحية.'},
+    {d:'hard',q:'ما الاختصار الصحيح لبدء العرض بملء الشاشة انطلاقاً من الشريحة الحالية وليس الأولى؟',
+     opts:['F5','Ctrl + F5','Shift + F5','Alt + F5'],ans:2,
+     exp:'Shift + F5 يبدأ من الشريحة المحددة حالياً. F5 يبدأ دائماً من الشريحة الأولى.'},
+    {d:'hard',q:'أي من العبارات التالية تصف بدقة وظيفة "Apply To All" في تبويب Transitions؟',
+     opts:['يُغيّر Theme وألوان العرض بالكامل','يُطبّق نفس تأثير الانتقال والتوقيت الزمني على جميع شرائح العرض','يُطبّق نفس الحركة (Animation) على كل عناصر الشريحة','يحفظ الملف ويُرسله لجميع المستخدمين'],ans:1,
+     exp:'"Apply To All" في Transitions يُوحّد تأثير وتوقيت الانتقال لكل شرائح العرض دفعة واحدة.'},
+  ]
+};
+
+// state
+const state = {
+  m1: new Array(15).fill(null),
+  m2: new Array(15).fill(null),
+  m3: new Array(15).fill(null),
+};
+
+function render(m) {
+  const qs = MODELS[m];
+  document.getElementById('qs-'+m).innerHTML = qs.map((q,qi) => {
+    const a = state[m][qi];
+    const done = a !== null;
+    const nc = done ? (a===q.ans?'ok':'err') : '';
+    return `<div class="q-card${done?' done':''}" id="qc-${m}-${qi}">
+      <div class="diff diff-${q.d}">${q.d==='med'?'⚡ متوسطة':'🔥 صعبة'}</div>
+      <div class="q-head">
+        <div class="q-num ${nc}">${qi+1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="options">
+        ${q.opts.map((o,oi)=>{
+          let c='opt';
+          if(done){c+=' locked'; if(oi===q.ans)c+=' correct'; else if(oi===a)c+=' wrong';}
+          return `<div class="${c}" onclick="pick('${m}',${qi},${oi})">
+            <span class="opt-ltr">${L[oi]}</span><span>${o}</span></div>`;
+        }).join('')}
+      </div>
+      ${done?`<div class="feedback show ${a===q.ans?'ok':'err'}">
+        ${a===q.ans?`✅ إجابة صحيحة! ${q.exp}`:`❌ خاطئة — الصحيحة: ${L[q.ans]}) ${q.opts[q.ans]}. ${q.exp}`}
+      </div>`:''}
+    </div>`;
+  }).join('');
+  updateUI(m);
+}
+
+function pick(m,qi,oi){
+  if(state[m][qi]!==null)return;
+  state[m][qi]=oi;
+  render(m);
+  const next=state[m].findIndex((v,i)=>i>qi&&v===null);
+  if(next!==-1) setTimeout(()=>document.getElementById(`qc-${m}-${next}`)?.scrollIntoView({behavior:'smooth',block:'center'}),250);
+}
+
+function updateUI(m){
+  const a=state[m], total=a.filter(v=>v!==null).length, correct=a.filter((v,i)=>v===MODELS[m][i].ans).length;
+  const pct=total?Math.round(correct/total*100):0;
+  document.getElementById('pill-'+m).textContent=`${correct} / ${total}`;
+  document.getElementById('prog-'+m).style.width=(total/15*100)+'%';
+  document.getElementById('cnt-'+m).textContent=`${total} من 15`;
+  const ban=document.getElementById('res-'+m);
+  if(total===15){
+    ban.classList.add('show');
+    document.getElementById('rn-'+m).textContent=`${correct} / 15`;
+    let g,c,b;
+    if(pct>=90){g='ممتاز 🎉';c='#166534';b='#dcfce7';}
+    else if(pct>=75){g='جيد جداً ✅';c='#1e40af';b='#dbeafe';}
+    else if(pct>=60){g='جيد 👍';c='#92400e';b='#fef3c7';}
+    else{g='بحاجة للمراجعة 📖';c='#991b1b';b='#fee2e2';}
+    const el=document.getElementById('rg-'+m);
+    el.textContent=g;el.style.background=b;el.style.color=c;el.style.border=`1px solid ${c}33`;
+    ban.scrollIntoView({behavior:'smooth',block:'start'});
+  } else { ban.classList.remove('show'); }
+}
+
+function reset(m){
+  state[m]=new Array(15).fill(null);
+  window.scrollTo({top:0,behavior:'smooth'});
+  render(m);
+}
+
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.getAttribute('onclick')===`switchTab('${id}')`) b.classList.add('active');
+  });
+}
+
+['m1','m2','m3'].forEach(render);
+</script>
+</body>
+</html>
