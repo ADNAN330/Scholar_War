@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل القوانين والمعادلات الرياضية والحسابية</title>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --card-bg: #ffffff;
+    --primary: #2c5d8f;
+    --primary-light: #e8f1fb;
+    --accent: #1f8a70;
+    --text: #2b2b2b;
+    --muted: #6b7280;
+    --border: #e2e6ec;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.8;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--primary), #3f7cb0);
+    color: #ffffff;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  header p {
+    margin: 8px 0 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  .container {
+    max-width: 950px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+  }
+
+  .section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .section h2 {
+    color: var(--primary);
+    margin-top: 0;
+    font-size: 1.25rem;
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lecture-tag {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .formula-block {
+    background: var(--primary-light);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    overflow-x: auto;
+  }
+
+  .formula-title {
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-size: 0.98rem;
+  }
+
+  /* إصلاح اتجاه المعادلات الرياضية لتظهر بشكل صحيح داخل صفحة عربية (RTL) */
+  mjx-container {
+    direction: ltr !important;
+    unicode-bidi: isolate;
+  }
+
+  mjx-container[display="true"] {
+    margin: 8px auto !important;
+    text-align: center !important;
+  }
+
+  .formula-block {
+    text-align: center;
+  }
+
+  .definitions {
+    background: #fbfbfd;
+    border-right: 4px solid var(--accent);
+    padding: 10px 16px;
+    margin-top: 8px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .definitions strong {
+    color: var(--text);
+  }
+
+  ul {
+    margin: 6px 0;
+    padding-inline-start: 20px;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .section {
+      padding: 16px;
+    }
+    header h1 {
+      font-size: 1.4rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📘 دليل القوانين والمعادلات الرياضية والحسابية</h1>
+  <p>ملخص شامل للقوانين المذكورة في المحاضرات من الأولى إلى السابعة</p>
+</header>
+
+<div class="container">
+
+  <!-- 1 -->
+  <div class="section">
+    <h2>1️⃣ قانون صافي القيمة الحالية بالتكلفة (NPV) <span class="lecture-tag">المحاضرة 2</span></h2>
+    <p>يُستخدم لحساب مجموع التكاليف الحالية لمشروع ممتد لعدة سنوات عند معدل خصم ($i$):</p>
+    <div class="formula-block">
+      $$NPV = CF_0 + \frac{CF_1}{(1+i)^1} + \frac{CF_2}{(1+i)^2} + \frac{CF_3}{(1+i)^3} + \dots + \frac{CF_n}{(1+i)^n}$$
+    </div>
+    <div class="definitions">
+      <strong>حيث:</strong>
+      <ul>
+        <li>$CF_0$ = التكلفة الابتدائية (في السنة صفر)</li>
+        <li>$CF_1, CF_2, \dots$ = تكاليف السنوات اللاحقة</li>
+        <li>$i$ = معدل الخصم</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <h2>2️⃣ قوانين حساب الكلفة الإجمالية والتبويب <span class="lecture-tag">المحاضرة 3</span></h2>
+
+    <div class="formula-block">
+      <div class="formula-title">الكلفة الإجمالية (Total Cost)</div>
+      $$\text{الكلفة الإجمالية} = \text{التكاليف الثابتة} + \text{التكاليف المتغيرة}$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">الكلفة المتغيرة الإجمالية</div>
+      $$\text{الكلفة المتغيرة الإجمالية} = \text{كلفة إنتاج الوحدة الواحدة} \times \text{حجم الإنتاج (عدد الوحدات)}$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">الكلفة المباشرة الإجمالية</div>
+      $$\text{الكلفة المباشرة} = \text{كلفة المواد المباشرة} + \text{كلفة العمالة المباشرة}$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">كلفة الفرصة البديلة (Opportunity Cost)</div>
+      $$\text{كلفة الفرصة البديلة} = \text{عائد الخيار الأفضل الضائع} - \text{عائد الخيار الذي تم اختياره}$$
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <h2>3️⃣ قوانين الفائدة البسيطة (Simple Interest) <span class="lecture-tag">المحاضرة 5</span></h2>
+
+    <div class="formula-block">
+      <div class="formula-title">قيمة الفائدة كمبلغ مالي ($I$)</div>
+      $$I = P \times i \times n$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">القيمة المستقبلية بالفائدة البسيطة ($FV$ أو $F$)</div>
+      $$FV = P + I = P \times (1 + i \times n)$$
+    </div>
+
+    <div class="definitions">
+      <strong>حيث:</strong>
+      <ul>
+        <li>$P$ = المبلغ الأصلي (الحالي)</li>
+        <li>$i$ = معدل الفائدة السنوي</li>
+        <li>$n$ = عدد السنوات</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <h2>4️⃣ قوانين الفائدة المركبة الأساسية (Compound Interest) <span class="lecture-tag">المحاضرة 4 و 5</span></h2>
+
+    <div class="formula-block">
+      <div class="formula-title">القيمة المستقبلية (Future Value - FV)</div>
+      $$FV = PV \times (1 + i)^n$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">القيمة الحالية (Present Value - PV)</div>
+      $$PV = \frac{FV}{(1 + i)^n}$$
+    </div>
+
+    <div class="definitions">
+      <strong>حيث:</strong>
+      <ul>
+        <li>$PV$ أو $P$ = القيمة الحالية</li>
+        <li>$FV$ أو $F$ = القيمة المستقبلية</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <h2>5️⃣ قوانين التدفقات والمنتظمات السنوية (Annual Worth) <span class="lecture-tag">المحاضرة 6</span></h2>
+
+    <div class="formula-block">
+      <div class="formula-title">إيجاد القيمة الحالية بمعلومية الدفعات السنوية – معامل (P/A)</div>
+      $$P = A \times \left[ \frac{(1+i)^n - 1}{i(1+i)^n} \right]$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">إيجاد الدفعات السنوية بمعلومية القيمة الحالية – معامل (A/P)</div>
+      $$A = P \times \left[ \frac{i(1+i)^n}{(1+i)^n - 1} \right]$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">إيجاد القيمة المستقبلية بمعلومية الدفعات السنوية – معامل (F/A)</div>
+      $$F = A \times \left[ \frac{(1+i)^n - 1}{i} \right]$$
+    </div>
+
+    <div class="formula-block">
+      <div class="formula-title">إيجاد الدفعات السنوية بمعلومية القيمة المستقبلية – معامل (A/F)</div>
+      $$A = F \times \left[ \frac{i}{(1+i)^n - 1} \right]$$
+    </div>
+
+    <div class="definitions">
+      <strong>حيث:</strong>
+      <ul>
+        <li>$A$ = القيمة السنوية المنتظمة المتساوية (Annual Worth)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  تم إعداد هذا الملف كمرجع سريع للقوانين الواردة في المحاضرات 1–7
+</footer>
+
+</body>
+</html>
