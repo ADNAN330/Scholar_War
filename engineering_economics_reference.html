@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرجع الاقتصاد الهندسي — المحاضرات 2–7</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+
+:root {
+  --bg: #f5f7ff;
+  --white: #ffffff;
+  --border: #e2e8f7;
+  --text: #1a1f3c;
+  --muted: #64708d;
+  --shadow: 0 2px 16px rgba(30,50,120,.07);
+
+  /* lecture accent colors */
+  --l2: #2563eb; --l2-bg: #eff4ff; --l2-border: #bfdbfe;
+  --l3: #7c3aed; --l3-bg: #f5f3ff; --l3-border: #ddd6fe;
+  --l4: #0891b2; --l4-bg: #ecfeff; --l4-border: #a5f3fc;
+  --l5: #d97706; --l5-bg: #fffbeb; --l5-border: #fde68a;
+  --l6: #16a34a; --l6-bg: #f0fdf4; --l6-border: #bbf7d0;
+  --l7: #dc2626; --l7-bg: #fef2f2; --l7-border: #fecaca;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(140deg, #1e3a8a 0%, #4f46e5 50%, #7c3aed 100%);
+  padding: 52px 24px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 36px; background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hero-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,.65);
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: clamp(24px, 5vw, 42px); font-weight: 900;
+  color: #fff; line-height: 1.15;
+}
+.hero p { color: rgba(255,255,255,.7); font-size: 15px; margin-top: 10px; }
+.hero-pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin-top: 20px;
+}
+.hero-pill {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-size: 12px; font-weight: 700;
+  padding: 5px 14px; border-radius: 99px; cursor: pointer;
+  transition: background .2s;
+}
+.hero-pill:hover { background: rgba(255,255,255,.28); }
+
+/* ── NAV TABS ── */
+#tab-nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  overflow-x: auto; white-space: nowrap;
+  scrollbar-width: none;
+}
+#tab-nav::-webkit-scrollbar { display: none; }
+.tab-list {
+  display: inline-flex; padding: 0 16px;
+  min-width: 100%;
+}
+.tab-btn {
+  padding: 14px 18px; font-size: 13px; font-weight: 700;
+  font-family: 'Cairo', sans-serif; color: var(--muted);
+  background: none; border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; transition: color .2s, border-color .2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--text); }
+.tab-btn[data-lec="2"].active { color: var(--l2); border-bottom-color: var(--l2); }
+.tab-btn[data-lec="3"].active { color: var(--l3); border-bottom-color: var(--l3); }
+.tab-btn[data-lec="4"].active { color: var(--l4); border-bottom-color: var(--l4); }
+.tab-btn[data-lec="5"].active { color: var(--l5); border-bottom-color: var(--l5); }
+.tab-btn[data-lec="6"].active { color: var(--l6); border-bottom-color: var(--l6); }
+.tab-btn[data-lec="7"].active { color: var(--l7); border-bottom-color: var(--l7); }
+
+/* ── CONTENT ── */
+.lec-page { display: none; max-width: 860px; margin: 0 auto; padding: 36px 20px; }
+.lec-page.active { display: block; }
+
+/* lecture header band */
+.lec-header {
+  border-radius: 18px; padding: 28px 28px 24px;
+  margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.lec-header::before {
+  content: attr(data-num);
+  position: absolute; left: -10px; top: -10px;
+  font-size: 120px; font-weight: 900; line-height: 1;
+  opacity: .06; color: currentColor;
+}
+.lec-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 8px; opacity: .75;
+}
+.lec-header h2 { font-size: clamp(18px, 3vw, 26px); font-weight: 900; }
+.lec-header p { font-size: 14px; margin-top: 6px; opacity: .75; }
+
+/* ── SECTION BLOCK ── */
+.section-block {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.section-title {
+  padding: 16px 22px;
+  font-size: 15px; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1.5px solid var(--border);
+}
+.section-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center; font-size: 15px;
+  flex-shrink: 0;
+}
+.section-body { padding: 18px 22px; }
+
+/* ── ORDERED LIST ── */
+.steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.steps-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 14px; line-height: 1.6;
+}
+.step-num {
+  min-width: 28px; height: 28px; border-radius: 7px;
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+
+/* ── BULLET LIST ── */
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.bullet-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; line-height: 1.6; padding: 10px 14px;
+  border-radius: 10px; background: var(--bg); border: 1px solid var(--border);
+}
+.bullet-dot {
+  min-width: 8px; height: 8px; border-radius: 50%;
+  margin-top: 7px; flex-shrink: 0;
+}
+
+/* ── CARD GRID ── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.info-card {
+  border-radius: 12px; padding: 16px;
+  border: 1.5px solid; display: flex; flex-direction: column; gap: 6px;
+}
+.info-card .card-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; opacity: .7; }
+.info-card .card-title { font-size: 15px; font-weight: 800; }
+.info-card .card-body { font-size: 13px; line-height: 1.55; opacity: .8; }
+
+/* ── CATEGORY BLOCK ── */
+.cat-block { margin-bottom: 18px; }
+.cat-block:last-child { margin-bottom: 0; }
+.cat-label {
+  font-size: 12px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; padding: 5px 12px;
+  border-radius: 6px; display: inline-block; margin-bottom: 10px;
+}
+
+/* ── TABLE ── */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ref-table th {
+  text-align: right; padding: 10px 14px; font-size: 12px;
+  font-weight: 800; letter-spacing: .5px; text-transform: uppercase;
+  background: var(--bg); color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+.ref-table td {
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  vertical-align: top; line-height: 1.55;
+}
+.ref-table tr:last-child td { border-bottom: none; }
+.ref-table tr:hover td { background: var(--bg); }
+.tag-pill {
+  display: inline-block; font-size: 11px; font-weight: 800;
+  padding: 3px 10px; border-radius: 99px; color: #fff;
+}
+
+/* symbols row */
+.sym-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.sym-card {
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px; text-align: center;
+}
+.sym-card .sym { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+.sym-card .sym-name { font-size: 12px; font-weight: 700; }
+.sym-card .sym-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* note box */
+.note-box {
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 13px; line-height: 1.6;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-top: 14px;
+}
+.note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* divider */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+@media(max-width:520px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .sym-grid { grid-template-columns: repeat(3,1fr); }
+  .section-body { padding: 14px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">مرجع شامل</div>
+  <h1>الاقتصاد الهندسي</h1>
+  <p>المحاضرات من الثانية إلى السابعة — جميع التعدادات والتصنيفات والخطوات</p>
+  <div class="hero-pills">
+    <span class="hero-pill" onclick="switchTab(2)">📘 م٢ المبادئ</span>
+    <span class="hero-pill" onclick="switchTab(3)">📗 م٣ الكلفة</span>
+    <span class="hero-pill" onclick="switchTab(4)">📙 م٤ القيمة الزمنية</span>
+    <span class="hero-pill" onclick="switchTab(5)">📒 م٥ الفائدة</span>
+    <span class="hero-pill" onclick="switchTab(6)">📕 م٦ القيم</span>
+    <span class="hero-pill" onclick="switchTab(7)">📓 م٧ المقارنة</span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div id="tab-nav">
+  <div class="tab-list">
+    <button class="tab-btn active" data-lec="2" onclick="switchTab(2)">📘 المحاضرة الثانية</button>
+    <button class="tab-btn" data-lec="3" onclick="switchTab(3)">📗 المحاضرة الثالثة</button>
+    <button class="tab-btn" data-lec="4" onclick="switchTab(4)">📙 المحاضرة الرابعة</button>
+    <button class="tab-btn" data-lec="5" onclick="switchTab(5)">📒 المحاضرة الخامسة</button>
+    <button class="tab-btn" data-lec="6" onclick="switchTab(6)">📕 المحاضرة السادسة</button>
+    <button class="tab-btn" data-lec="7" onclick="switchTab(7)">📓 المحاضرة السابعة</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 2
+═══════════════════════════════════════════ -->
+<div class="lec-page active" id="lec-2">
+  <div class="lec-header" data-num="٢" style="background:var(--l2-bg);color:var(--l2);border:1.5px solid var(--l2-border)">
+    <div class="lec-tag">المحاضرة الثانية</div>
+    <h2>مبادئ الاقتصاد الهندسي وصنع القرار</h2>
+    <p>خطوات اتخاذ القرار + المبادئ السبعة الأساسية</p>
+  </div>
+
+  <!-- خطوات القرار -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l2-bg);color:var(--l2)">🔢</div>
+      خطوات اتخاذ القرار الهندسي الاقتصادي <span style="color:var(--muted);font-size:12px;margin-right:6px">(٧ خطوات مرتبة)</span>
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l2)">١</span><div><strong>تحديد المشكلة أو الهدف</strong> — نقطة الانطلاق الأساسية لكل عملية قرار.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٢</span><div><strong>جمع البيانات والمعلومات ذات الصلة</strong> — توفير المعطيات اللازمة لتحليل المشكلة.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٣</span><div><strong>تطوير البدائل الممكنة والجدية</strong> — صياغة الحلول المحتملة التي تحقق الهدف.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٤</span><div><strong>اختيار معيار المقارنة</strong> — مثل صافي القيمة الحالية NPV أو العائد.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٥</span><div><strong>تحليل البدائل وتوقع نتائجها</strong> — تقدير ما يترتب على كل بديل من تكاليف وعوائد.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٦</span><div><strong>اختيار البديل الأفضل</strong> — بناءً على نتائج التحليل والمعيار المختار.</div></li>
+        <li><span class="step-num" style="background:var(--l2)">٧</span><div><strong>تنفيذ البديل ومراقبة النتائج</strong> — التطبيق الفعلي مع متابعة الأداء.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- المبادئ السبعة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l2-bg);color:var(--l2)">💡</div>
+      المبادئ السبعة الأساسية لعلم الاقتصاد الهندسي
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ الأول</div>
+          <div class="card-title" style="color:var(--l2)">مبدأ البدائل</div>
+          <div class="card-body">الاختيار دائماً بين بديلين أو أكثر؛ تطوير البدائل وتعريفها أمر جوهري.</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ الثاني</div>
+          <div class="card-title" style="color:var(--l2)">التركيز على الاختلافات</div>
+          <div class="card-body">الاختلافات في النتائج المستقبلية بين البدائل هي المهمة في المقارنة.</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ الثالث</div>
+          <div class="card-title" style="color:var(--l2)">وجهة نظر ثابتة</div>
+          <div class="card-body">تطوير النتائج باتساق انطلاقاً من منظور محدد (متخذ القرار أو الشركة).</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ الرابع</div>
+          <div class="card-title" style="color:var(--l2)">وحدة قياس مشتركة</div>
+          <div class="card-body">تحويل النتائج إلى قيمة مالية لجعل البدائل قابلة للمقارنة الكمية.</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ الخامس</div>
+          <div class="card-title" style="color:var(--l2)">العوامل غير الاقتصادية</div>
+          <div class="card-body">مراعاة الجوانب غير القابلة للقياس المالي: رضا العملاء، الأمان، السمعة.</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ السادس</div>
+          <div class="card-title" style="color:var(--l2)">جعل عدم اليقين صريحاً</div>
+          <div class="card-body">تحليل المخاطر وتوقع عدم دقة البيانات لأنها مبنية على التنبؤ.</div>
+        </div>
+        <div class="info-card" style="background:var(--l2-bg);border-color:var(--l2-border)">
+          <div class="card-label" style="color:var(--l2)">المبدأ السابع</div>
+          <div class="card-title" style="color:var(--l2)">مراجعة القرارات اللاحقة</div>
+          <div class="card-body">مقارنة النتائج الفعلية بالتوقعات للتعلم من التجربة وتحسين المستقبل.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 3
+═══════════════════════════════════════════ -->
+<div class="lec-page" id="lec-3">
+  <div class="lec-header" data-num="٣" style="background:var(--l3-bg);color:var(--l3);border:1.5px solid var(--l3-border)">
+    <div class="lec-tag">المحاضرة الثالثة</div>
+    <h2>مفاهيم الكلفة وتصنيفاتها</h2>
+    <p>أشكال الكلفة · فوائد فهمها · تصنيفاتها الأربعة</p>
+  </div>
+
+  <!-- أشكال الكلفة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l3-bg);color:var(--l3)">💰</div>
+      عناصر وأشكال الكلفة <span style="color:var(--muted);font-size:12px;margin-right:6px">(لا تقتصر على المال)</span>
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l3-bg);border-color:var(--l3-border)"><div class="card-title" style="color:var(--l3)">⏰ الوقت</div></div>
+        <div class="info-card" style="background:var(--l3-bg);border-color:var(--l3-border)"><div class="card-title" style="color:var(--l3)">💪 الجهد</div></div>
+        <div class="info-card" style="background:var(--l3-bg);border-color:var(--l3-border)"><div class="card-title" style="color:var(--l3)">⚡ الطاقة</div></div>
+        <div class="info-card" style="background:var(--l3-bg);border-color:var(--l3-border)"><div class="card-title" style="color:var(--l3)">👥 الموارد البشرية</div></div>
+        <div class="info-card" style="background:var(--l3-bg);border-color:var(--l3-border)"><div class="card-title" style="color:var(--l3)">🚪 الفرص الضائعة</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- فوائد فهم الكلفة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l3-bg);color:var(--l3)">✅</div>
+      فوائد فهم الكلفة للمهندس
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l3)"></span>تقدير ميزانيات المشاريع بدقة.</li>
+        <li><span class="bullet-dot" style="background:var(--l3)"></span>مقارنة البدائل الهندسية المختلفة.</li>
+        <li><span class="bullet-dot" style="background:var(--l3)"></span>تبرير القرارات أمام الإدارة بالأرقام.</li>
+        <li><span class="bullet-dot" style="background:var(--l3)"></span>تجنب الهدر المالي في المشاريع.</li>
+        <li><span class="bullet-dot" style="background:var(--l3)"></span>تحسين كفاءة استخدام الموارد المتاحة.</li>
+      </ul>
+      <div class="note-box" style="background:#fff7ed;border:1px solid #fed7aa">
+        <div class="note-icon">⚠️</div>
+        <div style="font-size:13px"><strong>عواقب عدم الفهم:</strong> اختيار حل ممتاز تقنياً لكنه خاسر اقتصادياً، أو التسبب في تجاوز الميزانية المسموحة للمشروع.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- تصنيفات الكلفة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l3-bg);color:var(--l3)">🗂️</div>
+      تصنيفات الكلفة الأربعة
+    </div>
+    <div class="section-body">
+
+      <div class="cat-block">
+        <div class="cat-label" style="background:var(--l3-bg);color:var(--l3)">أولاً — من حيث حجم الإنتاج</div>
+        <ol class="steps-list">
+          <li><span class="step-num" style="background:var(--l3)">١</span>
+            <div><strong>تكاليف ثابتة (Fixed Costs)</strong> — لا تتغير بتغير حجم الإنتاج.<br><span style="color:var(--muted);font-size:13px">مثال: إيجار المصنع، الرواتب الأساسية.</span></div>
+          </li>
+          <li><span class="step-num" style="background:var(--l3)">٢</span>
+            <div><strong>تكاليف متغيرة (Variable Costs)</strong> — تتغير طردياً مع حجم الإنتاج.<br><span style="color:var(--muted);font-size:13px">مثال: المواد الخام، كلفة الطاقة للتشغيل.</span></div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="cat-block">
+        <div class="cat-label" style="background:var(--l3-bg);color:var(--l3)">ثانياً — من حيث إمكانية التتبع والتخصيص</div>
+        <ol class="steps-list">
+          <li><span class="step-num" style="background:var(--l3)">١</span>
+            <div><strong>تكاليف مباشرة (Direct Costs)</strong> — يمكن ربطها وتتبعها لمنتج أو خدمة محددة.<br><span style="color:var(--muted);font-size:13px">مثال: كلفة المعدات والكابلات في مشروع شبكة.</span></div>
+          </li>
+          <li><span class="step-num" style="background:var(--l3)">٢</span>
+            <div><strong>تكاليف غير مباشرة (Indirect Costs)</strong> — كلف عامة يصعب تخصيصها لمنتج واحد.<br><span style="color:var(--muted);font-size:13px">مثال: كهرباء المكتب الإداري، رواتب إدارة المشروع.</span></div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="cat-block">
+        <div class="cat-label" style="background:var(--l3-bg);color:var(--l3)">ثالثاً — تبويبات خاصة باتخاذ القرارات</div>
+        <ol class="steps-list">
+          <li><span class="step-num" style="background:var(--l3)">١</span>
+            <div><strong>كلفة غارقة (Sunk Cost)</strong> — مال صُرف في الماضي ولا يمكن استرداده.<br><span style="color:var(--muted);font-size:13px">⚠️ لا يجوز أن تؤثر في القرار الحالي.</span></div>
+          </li>
+          <li><span class="step-num" style="background:var(--l3)">٢</span>
+            <div><strong>كلفة متزايدة (Incremental Cost)</strong> — الفارق المالي في الكلفة بين بديلين مطروحين.</div>
+          </li>
+          <li><span class="step-num" style="background:var(--l3)">٣</span>
+            <div><strong>كلفة الفرصة البديلة (Opportunity Cost)</strong> — العائد الضائع نتيجة اختيار بديل وترك آخر أفضل.</div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="cat-block">
+        <div class="cat-label" style="background:var(--l3-bg);color:var(--l3)">رابعاً — من حيث القوائم المالية والميزانيات</div>
+        <ol class="steps-list">
+          <li><span class="step-num" style="background:var(--l3)">١</span>
+            <div><strong>كلفة رأسمالية (CapEx)</strong> — كلف التأسيس وشراء الأصول، تُدفع مرة واحدة في بداية المشروع.</div>
+          </li>
+          <li><span class="step-num" style="background:var(--l3)">٢</span>
+            <div><strong>كلفة تشغيلية (OpEx)</strong> — الكلف الدورية المستمرة.<br><span style="color:var(--muted);font-size:13px">مثال: الصيانة السنوية، فواتير الطاقة.</span></div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 4
+═══════════════════════════════════════════ -->
+<div class="lec-page" id="lec-4">
+  <div class="lec-header" data-num="٤" style="background:var(--l4-bg);color:var(--l4);border:1.5px solid var(--l4-border)">
+    <div class="lec-tag">المحاضرة الرابعة</div>
+    <h2>القيمة الزمنية للنقود</h2>
+    <p>لماذا المال اليوم يختلف عن المال غداً؟</p>
+  </div>
+
+  <!-- مجالات الاستخدام -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l4-bg);color:var(--l4)">🎯</div>
+      مجالات استخدام مفهوم القيمة الزمنية للنقود
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l4)"></span>مقارنة المشاريع الهندسية المختلفة.</li>
+        <li><span class="bullet-dot" style="background:var(--l4)"></span>تقييم الاستثمارات وقياس مردودها.</li>
+        <li><span class="bullet-dot" style="background:var(--l4)"></span>حساب الجدوى الاقتصادية للمشاريع.</li>
+        <li><span class="bullet-dot" style="background:var(--l4)"></span>تحليل البدائل الهندسية على المدى الزمني.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- الأسباب الثلاثة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l4-bg);color:var(--l4)">🔍</div>
+      الأسباب الثلاثة لامتلاك المال قيمة زمنية
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l4)">أ</span>
+          <div><strong>القدرة على الاستثمار</strong><br>المال اليوم يمكن استثماره لتحقيق عائد. المال المستقبلي لا يحقق فائدة حالية ويحمل مخاطرة.</div>
+        </li>
+        <li><span class="step-num" style="background:var(--l4)">ب</span>
+          <div><strong>التضخم</strong><br>يؤدي إلى انخفاض القوة الشرائية للنقود؛ نفس المبلغ يشتري أقل في المستقبل.</div>
+        </li>
+        <li><span class="step-num" style="background:var(--l4)">ج</span>
+          <div><strong>المخاطر وعدم اليقين</strong><br>المستقبل يحمل احتمالات تقلبات السوق، عدم السداد، أو تغير الظروف.</div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 5
+═══════════════════════════════════════════ -->
+<div class="lec-page" id="lec-5">
+  <div class="lec-header" data-num="٥" style="background:var(--l5-bg);color:var(--l5);border:1.5px solid var(--l5-border)">
+    <div class="lec-tag">المحاضرة الخامسة</div>
+    <h2>الفائدة البسيطة والفائدة المركبة</h2>
+    <p>وظائف الفائدة · أنواعها · محددات التحليل</p>
+  </div>
+
+  <!-- وظائف الفائدة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l5-bg);color:var(--l5)">⚙️</div>
+      وظائف الفائدة في الاقتصاد الهندسي
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>تربط الحاضر بالمستقبل (الأداة الرئيسية للربط الزمني).</li>
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>تسمح بحساب القيمة المستقبلية للمبالغ الحالية.</li>
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>تمكن من مقارنة البدائل الاقتصادية على أسس زمنية موحدة.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ما تعوض عنه الفائدة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l5-bg);color:var(--l5)">💹</div>
+      عناصر التعويض في الفائدة <span style="color:var(--muted);font-size:12px;margin-right:6px">(ثمن الزمن — تُعوض عن)</span>
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l5-bg);border-color:var(--l5-border)">
+          <div class="card-title" style="color:var(--l5)">📈 التضخم</div>
+          <div class="card-body">انخفاض القوة الشرائية للنقود مع الزمن.</div>
+        </div>
+        <div class="info-card" style="background:var(--l5-bg);border-color:var(--l5-border)">
+          <div class="card-title" style="color:var(--l5)">⚡ المخاطر</div>
+          <div class="card-body">احتمال الخسارة أو تغير الظروف المستقبلية.</div>
+        </div>
+        <div class="info-card" style="background:var(--l5-bg);border-color:var(--l5-border)">
+          <div class="card-title" style="color:var(--l5)">🚪 كلفة الفرصة البديلة</div>
+          <div class="card-body">العائد الذي كان يمكن تحقيقه لو استُخدم المال في بديل آخر.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- مجالات الاستخدام -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l5-bg);color:var(--l5)">🎯</div>
+      مجالات استخدام الفائدة في الاقتصاد الهندسي
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>تقييم المشاريع الهندسية.</li>
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>مقارنة البدائل الهندسية.</li>
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>حساب القيم المستقبلية والحالية.</li>
+        <li><span class="bullet-dot" style="background:var(--l5)"></span>تحليل الجدوى الاقتصادية.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- محددات التحليل -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l5-bg);color:var(--l5)">🔑</div>
+      محددات تحليل أي قرار هندسي عبر الزمن <span style="color:var(--muted);font-size:12px;margin-right:6px">(لا يمكن التحليل دون تحديدها)</span>
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l5)">١</span><div><strong>نوع الفائدة</strong> — بسيطة أم مركبة.</div></li>
+        <li><span class="step-num" style="background:var(--l5)">٢</span><div><strong>معدل الفائدة (i)</strong> — النسبة المئوية لكل فترة زمنية.</div></li>
+        <li><span class="step-num" style="background:var(--l5)">٣</span><div><strong>عدد الفترات الزمنية (n)</strong> — المدة الزمنية التي يمتد عليها القرار.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- نوعا الفائدة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l5-bg);color:var(--l5)">⚖️</div>
+      أنواع الفائدة الرئيسية
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l5-bg);border-color:var(--l5-border)">
+          <div class="card-label" style="color:var(--l5)">النوع الأول</div>
+          <div class="card-title" style="color:var(--l5)">الفائدة البسيطة<br><span style="font-size:12px;opacity:.7">Simple Interest</span></div>
+          <div class="card-body">تُحسب فقط على المبلغ الأصلي المستثمر طوال كامل المدة.</div>
+        </div>
+        <div class="info-card" style="background:var(--l5-bg);border-color:var(--l5-border)">
+          <div class="card-label" style="color:var(--l5)">النوع الثاني</div>
+          <div class="card-title" style="color:var(--l5)">الفائدة المركبة<br><span style="font-size:12px;opacity:.7">Compound Interest</span></div>
+          <div class="card-body">تُحسب على المبلغ الأصلي + الفوائد المتراكمة من الفترات السابقة (فائدة على الفائدة).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 6
+═══════════════════════════════════════════ -->
+<div class="lec-page" id="lec-6">
+  <div class="lec-header" data-num="٦" style="background:var(--l6-bg);color:var(--l6);border:1.5px solid var(--l6-border)">
+    <div class="lec-tag">المحاضرة السادسة</div>
+    <h2>القيم الحالية والمستقبلية والسنوية</h2>
+    <p>الرموز الخمسة · طرق توحيد الزمن · خطوات المقارنة</p>
+  </div>
+
+  <!-- الرموز الخمسة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l6-bg);color:var(--l6)">🔡</div>
+      الرموز والمفاهيم الخمسة الأساسية في حسابات الفائدة
+    </div>
+    <div class="section-body">
+      <div class="sym-grid">
+        <div class="sym-card" style="border-color:var(--l6-border)">
+          <div class="sym" style="color:var(--l6)">P</div>
+          <div class="sym-name">القيمة الحالية</div>
+          <div class="sym-sub">Present Worth / Value</div>
+        </div>
+        <div class="sym-card" style="border-color:var(--l6-border)">
+          <div class="sym" style="color:var(--l6)">F</div>
+          <div class="sym-name">القيمة المستقبلية</div>
+          <div class="sym-sub">Future Worth / Value</div>
+        </div>
+        <div class="sym-card" style="border-color:var(--l6-border)">
+          <div class="sym" style="color:var(--l6)">A</div>
+          <div class="sym-name">القيمة السنوية</div>
+          <div class="sym-sub">Annual Worth</div>
+        </div>
+        <div class="sym-card" style="border-color:var(--l6-border)">
+          <div class="sym" style="color:var(--l6)">i</div>
+          <div class="sym-name">معدل الفائدة</div>
+          <div class="sym-sub">لكل فترة زمنية</div>
+        </div>
+        <div class="sym-card" style="border-color:var(--l6-border)">
+          <div class="sym" style="color:var(--l6)">n</div>
+          <div class="sym-name">عدد الفترات</div>
+          <div class="sym-sub">الزمنية / السنوات</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- طرق توحيد الزمن -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l6-bg);color:var(--l6)">⏱️</div>
+      طرق توحيد الزمن (Time Equivalence) لمقارنة المبالغ
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l6)">١</span><div><strong>تحويل القيم إلى الزمن الحاضر</strong> — حساب القيمة الحالية <strong>(P)</strong>.</div></li>
+        <li><span class="step-num" style="background:var(--l6)">٢</span><div><strong>تحويلها إلى زمن مستقبلي</strong> — حساب القيمة المستقبلية <strong>(F)</strong>.</div></li>
+        <li><span class="step-num" style="background:var(--l6)">٣</span><div><strong>تحويلها إلى دفعات سنوية منتظمة متساوية</strong> — حساب القيمة السنوية <strong>(A)</strong>.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- لماذا الزمن إلزامي -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l6-bg);color:var(--l6)">🏗️</div>
+      سمات الواقع الهندسي التي تجعل حسابات الزمن إلزامية
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>التكاليف لا تُدفع في وقت واحد.</li>
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>الإيرادات لا تأتي في زمن واحد.</li>
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>المشاريع تمتد لسنوات طويلة.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- خطوات المقارنة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l6-bg);color:var(--l6)">📊</div>
+      خطوات المقارنة الحسابية بين بديلين بأعمار مختلفة
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l6)">١</span><div><strong>حساب القيمة السنوية (AW)</strong> لكل بديل على حدة لتوزيع تكاليفه على عمره الافتراضي.</div></li>
+        <li><span class="step-num" style="background:var(--l6)">٢</span><div><strong>المقارنة بين القيم السنوية</strong> واختيار البديل الأقل كلفة سنوية.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- المهارات التطبيقية -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l6-bg);color:var(--l6)">🎓</div>
+      المهارات التطبيقية للمحاضرة السادسة
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>تحويل القيم المالية بين الأزمنة المختلفة.</li>
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>توحيد الزمن بين بدائل مختلفة.</li>
+        <li><span class="bullet-dot" style="background:var(--l6)"></span>استخدام القيم المالية لاتخاذ قرار هندسي سليم.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LECTURE 7
+═══════════════════════════════════════════ -->
+<div class="lec-page" id="lec-7">
+  <div class="lec-header" data-num="٧" style="background:var(--l7-bg);color:var(--l7);border:1.5px solid var(--l7-border)">
+    <div class="lec-tag">المحاضرة السابعة</div>
+    <h2>مقارنة البدائل واتخاذ القرار الهندسي</h2>
+    <p>المعايير الثلاثة · ٧ خطوات الحل · العوامل غير الاقتصادية · الأخطاء الشائعة</p>
+  </div>
+
+  <!-- أوجه الاختلاف -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l7-bg);color:var(--l7)">⚖️</div>
+      أوجه الاختلاف بين البدائل الهندسية
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)"><div class="card-title" style="color:var(--l7)">💰 الكلفة</div></div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)"><div class="card-title" style="color:var(--l7)">📅 العمر</div></div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)"><div class="card-title" style="color:var(--l7)">📈 الأداء</div></div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)"><div class="card-title" style="color:var(--l7)">💡 التقنية</div></div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)"><div class="card-title" style="color:var(--l7)">⚡ المخاطر</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- معايير المقارنة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l7-bg);color:var(--l7)">📐</div>
+      طرق ومعايير مقارنة البدائل
+    </div>
+    <div class="section-body">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>المعيار</th>
+            <th>الرمز</th>
+            <th>متى يُستخدم؟</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>القيمة الحالية</strong> — Present Worth</td>
+            <td><span class="tag-pill" style="background:var(--l7)">PW</span></td>
+            <td>المشاريع ذات <strong>الأعمار المتساوية</strong> · التحليل المالي الدقيق</td>
+          </tr>
+          <tr>
+            <td><strong>القيمة السنوية</strong> — Annual Worth</td>
+            <td><span class="tag-pill" style="background:var(--l7)">AW</span></td>
+            <td>المشاريع ذات <strong>الأعمار المختلفة</strong> · القرار الإداري (الأفضل عملياً)</td>
+          </tr>
+          <tr>
+            <td><strong>القيمة المستقبلية</strong> — Future Worth</td>
+            <td><span class="tag-pill" style="background:var(--l7)">FW</span></td>
+            <td><strong>التخطيط المستقبلي</strong> طويل الأجل</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- خطوات الحل السبع -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l7-bg);color:var(--l7)">🔢</div>
+      خطوات حل أي مسألة مقارنة <span style="color:var(--muted);font-size:12px;margin-right:6px">(٧ خطوات مرتبة)</span>
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:var(--l7)">١</span><div><strong>تحديد البدائل المتاحة</strong> — حصر كل الحلول الممكنة.</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٢</span><div><strong>تحديد العمر الاقتصادي لكل بديل</strong> — المدة الزمنية التي يعمل فيها كل حل.</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٣</span><div><strong>تحديد معدل الفائدة (i)</strong> — المعدل المستخدم في التحليل.</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٤</span><div><strong>توحيد الزمن</strong> باستخدام المعيار المناسب (PW أو AW أو FW).</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٥</span><div><strong>إجراء الحسابات الرياضية</strong> — تطبيق المعادلات والجداول.</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٦</span><div><strong>اتخاذ القرار الاقتصادي</strong> بناءً على معيار القرار المختار.</div></li>
+        <li><span class="step-num" style="background:var(--l7)">٧</span><div><strong>تفسير القرار هندسياً وفنياً</strong> — ربط الرقم بالواقع التقني.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- العوامل غير الاقتصادية -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l7-bg);color:var(--l7)">🌐</div>
+      العوامل غير الاقتصادية المؤثرة في القرار الهندسي
+    </div>
+    <div class="section-body">
+      <div class="card-grid">
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">١</div>
+          <div class="card-title" style="color:var(--l7)">الاعتمادية</div>
+          <div class="card-body">Reliability — مدى موثوقية النظام في العمل المستمر.</div>
+        </div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">٢</div>
+          <div class="card-title" style="color:var(--l7)">الجودة</div>
+          <div class="card-body">Quality — مستوى الأداء والمواصفات التقنية.</div>
+        </div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">٣</div>
+          <div class="card-title" style="color:var(--l7)">المرونة</div>
+          <div class="card-body">Flexibility — القدرة على التكيف مع التغييرات المستقبلية.</div>
+        </div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">٤</div>
+          <div class="card-title" style="color:var(--l7)">الأمان</div>
+          <div class="card-body">Security — حماية النظام من المخاطر والتهديدات.</div>
+        </div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">٥</div>
+          <div class="card-title" style="color:var(--l7)">التوافق التقني</div>
+          <div class="card-body">Technical Compatibility — انسجام الحل مع البنية التحتية الموجودة.</div>
+        </div>
+        <div class="info-card" style="background:var(--l7-bg);border-color:var(--l7-border)">
+          <div class="card-label" style="color:var(--l7)">٦</div>
+          <div class="card-title" style="color:var(--l7)">سهولة الصيانة</div>
+          <div class="card-body">Maintainability — سهولة الإصلاح والصيانة الدورية.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- الأخطاء الشائعة -->
+  <div class="section-block">
+    <div class="section-title">
+      <div class="section-icon" style="background:var(--l7-bg);color:var(--l7)">🚫</div>
+      الأخطاء الشائعة في مقارنة البدائل
+    </div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><span class="step-num" style="background:#dc2626">١</span><div>مقارنة بدائل <strong>دون توحيد الزمن</strong>.</div></li>
+        <li><span class="step-num" style="background:#dc2626">٢</span><div><strong>تجاهل العمر الاقتصادي</strong> للمشاريع عند المقارنة.</div></li>
+        <li><span class="step-num" style="background:#dc2626">٣</span><div>استخدام <strong>المتوسط الحسابي العادي</strong> بدلاً من قانون AW عند اختلاف الأعمار.</div></li>
+        <li><span class="step-num" style="background:#dc2626">٤</span><div><strong>الخلط بين الكلفة الغارقة</strong> والقرار الحالي (السماح للماضي بالتأثير على القرار).</div></li>
+        <li><span class="step-num" style="background:#dc2626">٥</span><div>اختيار الحل <strong>الأرخص اسمياً في البداية</strong> بدلاً من الأفضل اقتصادياً على المدى الطويل.</div></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(n) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lec-page').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-lec="${n}"]`).classList.add('active');
+  document.getElementById(`lec-${n}`).classList.add('active');
+  window.scrollTo({top: document.getElementById('tab-nav').offsetTop - 10, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
