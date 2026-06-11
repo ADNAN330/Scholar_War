@@ -30,6 +30,8 @@
 ### [اقتصاد هندسي1](/i_h.html)
 ### [اقتصاد هندسي4_5](/i_h_4_5.html) 
 ### [اقتصاد هندسي6_7](/i_h_6_7.html)
+### [اقتصاد_quiz](/engineering_economics_3models.html)
+
 
 
 <hr>
