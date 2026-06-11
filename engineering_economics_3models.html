@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الاقتصاد الهندسي — 3 نماذج</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+  :root {
+    --bg:#f0f4fb;--surface:#fff;--card:#fff;--border:#dde3f0;
+    --accent:#2563eb;--accent2:#7c3aed;--accent-light:#eff4ff;
+    --correct:#16a34a;--correct-bg:#f0fdf4;
+    --wrong:#dc2626;--wrong-bg:#fef2f2;
+    --text:#1e2545;--muted:#6b7494;
+    --shadow:0 2px 12px rgba(37,99,235,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:64px}
+
+  /* HEADER */
+  header{background:linear-gradient(135deg,#2563eb 0%,#7c3aed 100%);padding:36px 24px 42px;text-align:center;position:relative;overflow:hidden}
+  header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:28px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%)}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:10px}
+  header h1{font-size:clamp(20px,5vw,34px);font-weight:900;color:#fff;line-height:1.2}
+  header p{color:rgba(255,255,255,.75);font-size:14px;margin-top:8px}
+
+  /* MODEL SELECTOR */
+  #model-selector{max-width:700px;margin:32px auto 0;padding:0 20px}
+  #model-selector h2{font-size:18px;font-weight:800;margin-bottom:18px;text-align:center;color:var(--text)}
+  .model-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .model-card{
+    background:var(--card);border:2px solid var(--border);border-radius:18px;
+    padding:28px 16px;text-align:center;cursor:pointer;
+    transition:border-color .2s,transform .15s,box-shadow .2s;
+    box-shadow:var(--shadow);
+  }
+  .model-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(37,99,235,.15)}
+  .model-card .icon{font-size:36px;margin-bottom:12px}
+  .model-card .model-title{font-size:16px;font-weight:900;color:var(--text)}
+  .model-card .model-sub{font-size:12px;color:var(--muted);margin-top:5px}
+  .model-card.m1{--mc:#2563eb} .model-card.m2{--mc:#7c3aed} .model-card.m3{--mc:#0891b2}
+  .model-card:hover .model-title{color:var(--mc)}
+  @media(max-width:480px){.model-cards{grid-template-columns:1fr}}
+
+  /* PROGRESS */
+  #progress-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.06);display:none}
+  #progress-bar-bg{flex:1;height:7px;background:var(--border);border-radius:99px;overflow:hidden}
+  #progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .4s;width:0%}
+  #progress-text{font-size:13px;color:var(--muted);white-space:nowrap;font-weight:600}
+
+  /* BACK BTN */
+  #back-btn{display:none;max-width:780px;margin:20px auto 0;padding:0 20px}
+  #back-btn button{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;color:var(--muted);cursor:pointer;transition:border-color .2s}
+  #back-btn button:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* MODEL LABEL */
+  #model-label{display:none;max-width:780px;margin:18px auto 0;padding:0 20px}
+  .active-model-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:99px;font-size:13px;font-weight:800;color:#fff}
+  .badge-m1{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+  .badge-m2{background:linear-gradient(135deg,#7c3aed,#6d28d9)}
+  .badge-m3{background:linear-gradient(135deg,#0891b2,#0e7490)}
+
+  /* LEC BADGE */
+  .lec-section{max-width:780px;margin:24px auto 0;padding:0 20px}
+  .lec-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;font-size:13px;font-weight:700;padding:6px 16px;border-radius:99px;margin-bottom:14px}
+
+  /* QUIZ */
+  #quiz{max-width:780px;margin:0 auto;padding:16px 20px;display:flex;flex-direction:column;gap:18px;display:none}
+
+  /* CARD */
+  .q-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:22px 20px 18px;box-shadow:var(--shadow)}
+  .q-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+  .q-num{min-width:36px;height:36px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+  .q-text{font-size:clamp(14px,2.5vw,16px);font-weight:700;line-height:1.65;padding-top:6px}
+  .options{display:flex;flex-direction:column;gap:9px}
+  .option{display:flex;align-items:center;gap:12px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:background .18s,border-color .18s,transform .1s;font-size:14px;font-family:'Cairo',sans-serif;color:var(--text);text-align:right;width:100%}
+  .option:hover:not(:disabled){background:var(--accent-light);border-color:var(--accent);transform:translateX(-2px)}
+  .opt-label{min-width:26px;height:26px;border-radius:7px;background:var(--border);display:grid;place-items:center;font-size:12px;font-weight:800;flex-shrink:0;transition:background .2s,color .2s}
+  .option.correct{background:var(--correct-bg);border-color:var(--correct)}
+  .option.correct .opt-label{background:var(--correct);color:#fff}
+  .option.wrong{background:var(--wrong-bg);border-color:var(--wrong)}
+  .option.wrong .opt-label{background:var(--wrong);color:#fff}
+  .option:disabled{cursor:default}
+  .feedback{display:none;margin-top:12px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;align-items:center;gap:8px}
+  .feedback.show{display:flex}
+  .feedback.ok{background:var(--correct-bg);color:var(--correct);border:1px solid #bbf7d0}
+  .feedback.no{background:var(--wrong-bg);color:var(--wrong);border:1px solid #fecaca}
+
+  /* SUBMIT */
+  #submit-btn{display:none;max-width:780px;margin:8px auto 0;padding:0 20px}
+  #submit-btn button{width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:14px;padding:16px;font-size:17px;font-weight:700;font-family:'Cairo',sans-serif;color:#fff;cursor:pointer;transition:opacity .2s;box-shadow:0 4px 18px rgba(37,99,235,.3)}
+  #submit-btn button:disabled{opacity:.38;cursor:not-allowed;box-shadow:none}
+  #submit-btn button:not(:disabled):hover{opacity:.9}
+
+  /* RESULTS */
+  #results{display:none;max-width:780px;margin:32px auto;padding:0 20px}
+  #results.show{display:block}
+  .results-card{background:var(--card);border:1.5px solid var(--border);border-radius:22px;padding:44px 28px;text-align:center;box-shadow:var(--shadow)}
+  .score-ring{width:128px;height:128px;border-radius:50%;background:conic-gradient(var(--accent) var(--pct,0deg),var(--border) 0);display:grid;place-items:center;margin:0 auto 22px;position:relative}
+  .score-ring::after{content:'';position:absolute;inset:13px;background:var(--card);border-radius:50%}
+  .score-ring span{position:relative;z-index:1;font-size:26px;font-weight:900;color:var(--accent)}
+  .results-card h2{font-size:24px;font-weight:900;margin-bottom:6px}
+  .results-card>p{color:var(--muted);font-size:14px;margin-bottom:28px}
+  .stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+  .stat{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:16px 22px;min-width:100px}
+  .stat .val{font-size:30px;font-weight:900}
+  .stat .lbl{font-size:12px;color:var(--muted);margin-top:2px}
+  .stat.ok .val{color:var(--correct)} .stat.no .val{color:var(--wrong)} .stat.tot .val{color:var(--accent)}
+  .result-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .result-btns button{background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:12px;padding:13px 28px;font-size:15px;font-weight:700;font-family:'Cairo',sans-serif;color:#fff;cursor:pointer;transition:opacity .2s;box-shadow:0 4px 16px rgba(37,99,235,.22)}
+  .result-btns button:hover{opacity:.88}
+  .result-btns .btn-outline{background:var(--surface);border:2px solid var(--border);color:var(--text);box-shadow:none}
+  .result-btns .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">بنك الأسئلة</div>
+  <h1>الاقتصاد الهندسي</h1>
+  <p>المحاضرات 2–7 — اختر النموذج وابدأ</p>
+</header>
+
+<!-- MODEL SELECTOR -->
+<div id="model-selector">
+  <h2>🗂️ اختر النموذج</h2>
+  <div class="model-cards">
+    <div class="model-card m1" onclick="startModel(0)">
+      <div class="icon">📘</div>
+      <div class="model-title">النموذج الأول</div>
+      <div class="model-sub">المحاضرات 2 و 3<br>مبادئ القرار والكلفة</div>
+    </div>
+    <div class="model-card m2" onclick="startModel(1)">
+      <div class="icon">📗</div>
+      <div class="model-title">النموذج الثاني</div>
+      <div class="model-sub">المحاضرات 4 و 5<br>القيمة الزمنية والفائدة</div>
+    </div>
+    <div class="model-card m3" onclick="startModel(2)">
+      <div class="icon">📙</div>
+      <div class="model-title">النموذج الثالث</div>
+      <div class="model-sub">المحاضرات 6 و 7<br>القيم الزمنية والمقارنة</div>
+    </div>
+  </div>
+</div>
+
+<div id="back-btn"><button onclick="goHome()">→ العودة إلى اختيار النموذج</button></div>
+<div id="model-label"></div>
+<div id="progress-wrap"><div id="progress-bar-bg"><div id="progress-bar-fill"></div></div><span id="progress-text">0 / 0</span></div>
+<div id="quiz"></div>
+<div id="submit-btn"><button id="submitBtn" disabled onclick="showResults()">عرض النتيجة النهائية</button></div>
+<div id="results">
+  <div class="results-card">
+    <div class="score-ring" id="scoreRing"><span id="scorePercent">0%</span></div>
+    <h2 id="resultsTitle"></h2>
+    <p id="resultsSub"></p>
+    <div class="stats">
+      <div class="stat ok"><div class="val" id="correctCount">0</div><div class="lbl">صحيحة</div></div>
+      <div class="stat no"><div class="val" id="wrongCount">0</div><div class="lbl">خاطئة</div></div>
+      <div class="stat tot"><div class="val" id="totalCount">0</div><div class="lbl">المجموع</div></div>
+    </div>
+    <div class="result-btns">
+      <button onclick="retryModel()">🔁 إعادة هذا النموذج</button>
+      <button class="btn-outline" onclick="goHome()">🗂️ اختيار نموذج آخر</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ['أ','ب','ج','د'];
+
+const models = [
+  {
+    name:"النموذج الأول",
+    badgeClass:"badge-m1",
+    icon:"📘",
+    sections:[
+      {
+        title:"المحاضرة الثانية: مبادئ الاقتصاد الهندسي وصنع القرار",
+        questions:[
+          {q:"ما هي الخطوة الأولى في عملية اتخاذ القرار الهندسي الاقتصادي؟",opts:["جمع البيانات والمعلومات","اختيار معيار المقارنة","تحديد المشكلة أو الهدف","تطوير البدائل الممكنة"],ans:2},
+          {q:"ما الخطوة التي تلي تحليل البدائل وتوقع نتائجها؟",opts:["تحديد المشكلة","جمع البيانات","تنفيذ البديل ومراقبة النتائج","اختيار البديل الأفضل"],ans:3},
+          {q:"مبدأ 'الاختيار بين بديلين أو أكثر' هو:",opts:["مبدأ توحيد الزمن","مبدأ البدائل","مبدأ الاختلافات","مبدأ وجهة النظر الثابتة"],ans:1},
+          {q:"لجعل البدائل قابلة للمقارنة يجب:",opts:["تجاهل العوامل النوعية","استخدام وحدة قياس مشتركة","مقارنة التقنية فقط","تجاهل العائد"],ans:1},
+          {q:"مبدأ 'جعل عدم اليقين صريحًا' يعني:",opts:["تجاهل المخاطر","افتراض دقة البيانات دائمًا","تحليل المخاطر لأن البيانات المستقبلية مبنية على التنبؤ","الاعتماد على الحدس"],ans:2},
+          {q:"مراجعة القرارات اللاحقة تهدف إلى:",opts:["تعقيد العملية","التعلم من التجربة وتحسين القرارات المستقبلية","تجاهل الأخطاء السابقة","تسريع القرار فقط"],ans:1},
+          {q:"'الاختلافات في النتائج المستقبلية بين البدائل هي المهمة' ينتمي إلى مبدأ:",opts:["مبدأ البدائل","مبدأ وجهة النظر الثابتة","مبدأ التركيز على الاختلافات","مبدأ وحدة القياس"],ans:2},
+          {q:"كم عدد المبادئ الأساسية لعلم الاقتصاد الهندسي؟",opts:["خمسة","ستة","سبعة","ثمانية"],ans:2},
+          {q:"عدد خطوات اتخاذ القرار الهندسي الاقتصادي هو:",opts:["خمس خطوات","ست خطوات","سبع خطوات","أربع خطوات"],ans:2},
+          {q:"'وجهة نظر ثابتة' في مبادئ الاقتصاد الهندسي تعني:",opts:["تغيير وجهة النظر مع كل بديل","تطوير النتائج بشكل متسق انطلاقاً من منظور محدد","إهمال متخذ القرار","التركيز على الزمن فقط"],ans:1},
+        ]
+      },
+      {
+        title:"المحاضرة الثالثة: مفاهيم الكلفة وتصنيفاتها",
+        questions:[
+          {q:"أي مما يلي يعد شكلاً من أشكال الكلفة؟",opts:["الربح","الوقت والجهد والطاقة","العائد السنوي","معدل الفائدة"],ans:1},
+          {q:"التكاليف الثابتة تتميز بأنها:",opts:["تتغير مع حجم الإنتاج","تُخصص لمنتج واحد مباشرة","لا تتغير بتغير حجم الإنتاج","تُدفع مرة واحدة فقط"],ans:2},
+          {q:"مثال على التكاليف المتغيرة:",opts:["الإيجار السنوي للمصنع","الرواتب الأساسية الثابتة","المواد الخام وكلفة الطاقة للتشغيل","رسوم الترخيص الثابتة"],ans:2},
+          {q:"التكاليف المباشرة هي:",opts:["كلف عامة يصعب تخصيصها","تكاليف لا يمكن استردادها","يمكن ربطها وتتبعها مباشرة لمنتج أو خدمة","كلف التأسيس وشراء الأصول"],ans:2},
+          {q:"الكلفة الغارقة (Sunk Cost):",opts:["الفارق بين بديلين","مال صُرف في الماضي ولا يمكن استرداده","كلفة تشغيل سنوية","الفرصة الضائعة"],ans:1},
+          {q:"كلفة الفرصة البديلة تعني:",opts:["كلفة شراء الأصول","العائد الضائع نتيجة اختيار بديل وترك آخر أفضل","الكلفة المتغيرة للإنتاج","مال صُرف ولا يمكن استرداده"],ans:1},
+          {q:"الكلفة الرأسمالية (CapEx):",opts:["الصيانة السنوية والطاقة","كلف التأسيس وشراء الأصول تُدفع مرة واحدة","الرواتب الشهرية للعمال","فواتير الكهرباء الدورية"],ans:1},
+          {q:"الكلفة المتزايدة (Incremental Cost):",opts:["كلفة غير قابلة للاسترداد","كلفة التأسيس","الفارق المالي في الكلفة بين بديلين","كلفة الفرصة الضائعة"],ans:2},
+          {q:"عدم فهم المهندس للكلفة قد يؤدي إلى:",opts:["تحسين الكفاءة","اختيار حل ممتاز تقنياً لكنه خاسر اقتصادياً","تجنب الهدر المالي","تبرير القرارات بدقة"],ans:1},
+          {q:"الكلفة التشغيلية (OpEx) تشمل:",opts:["شراء الأصول الثابتة","كلفة التأسيس","الصيانة السنوية وفواتير الطاقة الدورية","رأس المال الأولي"],ans:2},
+        ]
+      }
+    ]
+  },
+  {
+    name:"النموذج الثاني",
+    badgeClass:"badge-m2",
+    icon:"📗",
+    sections:[
+      {
+        title:"المحاضرة الرابعة: القيمة الزمنية للنقود",
+        questions:[
+          {q:"أي مما يلي ليس سببًا لامتلاك المال قيمة زمنية؟",opts:["القدرة على الاستثمار","التضخم","المخاطر وعدم اليقين","اسم صاحب المال"],ans:3},
+          {q:"التضخم يؤثر على القيمة الزمنية لأنه:",opts:["يثبت الأسعار","يرفع القوة الشرائية","يخفض القوة الشرائية للنقود","يزيد من قيمة الاستثمار فورًا"],ans:2},
+          {q:"مفهوم القيمة الزمنية للنقود يشكل الأساس لـ:",opts:["إدارة الموارد البشرية فقط","مقارنة المشاريع وتقييم الاستثمارات وحساب الجدوى","دراسة التضخم العام","تحديد أسعار المنتجات"],ans:1},
+          {q:"المال اليوم يفضل على المال المستقبلي لأنه:",opts:["أجمل مظهراً","يمكن استثماره لتحقيق عائد","أكثر أماناً دائماً","لا يتأثر بالتضخم"],ans:1},
+          {q:"كم عدد الأسباب الرئيسية لامتلاك المال قيمة زمنية؟",opts:["سببان","ثلاثة أسباب","أربعة أسباب","خمسة أسباب"],ans:1},
+          {q:"'المال المستقبلي لا يحقق فائدة حالية ويحمل مخاطرة' يرتبط بـ:",opts:["مبدأ التضخم","القدرة على الاستثمار","مبدأ المخاطر","مبدأ الندرة"],ans:1},
+          {q:"نفس المبلغ يشتري أقل في المستقبل بسبب:",opts:["ارتفاع الفائدة","انخفاض القوة الشرائية بسبب التضخم","زيادة الادخار","انخفاض الطلب"],ans:1},
+          {q:"المستقبل دائماً يحمل احتمالات تقلبات السوق وهذا يمثل:",opts:["التضخم","القدرة على الاستثمار","المخاطر وعدم اليقين","كلفة الفرصة"],ans:2},
+        ]
+      },
+      {
+        title:"المحاضرة الخامسة: الفائدة البسيطة والمركبة",
+        questions:[
+          {q:"الفائدة البسيطة تُحسب على:",opts:["المبلغ الأصلي + الفوائد المتراكمة","المبلغ الأصلي فقط طوال المدة","القيمة المستقبلية فقط","الفوائد المتراكمة فقط"],ans:1},
+          {q:"الفائدة المركبة تُحسب على:",opts:["المبلغ الأصلي فقط","القيمة الاسمية","المبلغ الأصلي + الفوائد المتراكمة","الأرباح فقط"],ans:2},
+          {q:"لا يمكن تحليل قرار هندسي يمتد عبر الزمن دون تحديد:",opts:["اسم المشروع وموقعه","نوع الفائدة ومعدلها وعدد الفترات","هوية المستثمر","عدد الموظفين"],ans:1},
+          {q:"الفائدة في الاقتصاد الهندسي تُعوض عن:",opts:["رضا العملاء","التضخم والمخاطر وكلفة الفرصة البديلة","التكاليف الإدارية فقط","الرواتب الثابتة"],ans:1},
+          {q:"الفائدة تربط الحاضر بالمستقبل وتسمح بـ:",opts:["تجاهل الزمن في التحليل","حساب القيمة المستقبلية ومقارنة البدائل","تجنب المعادلات الرياضية","إلغاء التضخم"],ans:1},
+          {q:"كم عدد محددات تحليل القرار الهندسي عبر الزمن؟",opts:["محددان","ثلاثة محددات","أربعة محددات","خمسة محددات"],ans:1},
+          {q:"أي نوع من الفائدة يُنتج قيمة مستقبلية أعلى على المدى الطويل؟",opts:["الفائدة البسيطة","الفائدة المركبة دائماً","يعتمد على المبلغ فقط","كلاهما متساويان"],ans:1},
+          {q:"'فائدة على الفائدة' يصف نوع:",opts:["الفائدة البسيطة","الفائدة الثابتة","الفائدة المركبة","الفائدة السنوية"],ans:2},
+        ]
+      }
+    ]
+  },
+  {
+    name:"النموذج الثالث",
+    badgeClass:"badge-m3",
+    icon:"📙",
+    sections:[
+      {
+        title:"المحاضرة السادسة: القيم الحالية والمستقبلية والسنوية",
+        questions:[
+          {q:"الرمز P في معادلات الفائدة يعني:",opts:["الفترات الزمنية","معدل الفائدة","القيمة الحالية (Present Worth)","القيمة السنوية المنتظمة"],ans:2},
+          {q:"الرمز A يمثل:",opts:["معدل الفائدة","عدد الفترات الزمنية","القيمة المستقبلية","القيمة السنوية المنتظمة المتساوية"],ans:3},
+          {q:"الرمز i يمثل:",opts:["القيمة الحالية","عدد الفترات الزمنية","معدل الفائدة لكل فترة","القيمة المستقبلية"],ans:2},
+          {q:"لتوحيد الزمن بين بدائل مختلفة يمكن:",opts:["تجاهل الزمن","تحويل القيم إلى الزمن الحاضر أو المستقبلي أو دفعات سنوية","استخدام المتوسط الحسابي العادي","جمع الأرقام كما هي"],ans:1},
+          {q:"الخطوة الثانية في المقارنة بين بديلين بأعمار مختلفة:",opts:["حساب القيمة الحالية P","حساب معدل الفائدة","المقارنة بين القيم السنوية واختيار الأقل كلفة","تحديد عدد الموظفين"],ans:2},
+          {q:"من أسباب إلزامية حسابات الزمن في الواقع الهندسي:",opts:["المشاريع تنتهي في يوم واحد","التكاليف والإيرادات لا تأتي في وقت واحد","جميع المشاريع لها نفس العمر","التكاليف ثابتة دائماً"],ans:1},
+          {q:"كم عدد الرموز الأساسية في حسابات الفائدة وجداولها؟",opts:["ثلاثة رموز","أربعة رموز","خمسة رموز","ستة رموز"],ans:2},
+          {q:"الرمز n يمثل:",opts:["القيمة الحالية","معدل الفائدة","القيمة السنوية","عدد الفترات الزمنية أو السنوات"],ans:3},
+        ]
+      },
+      {
+        title:"المحاضرة السابعة: مقارنة البدائل واتخاذ القرار الهندسي",
+        questions:[
+          {q:"معيار AW (القيمة السنوية) هو الأفضل عند:",opts:["مقارنة مشاريع بأعمار متساوية","التخطيط المستقبلي طويل الأجل","مقارنة مشاريع بأعمار مختلفة","التحليل المالي الدقيق فقط"],ans:2},
+          {q:"معيار PW (القيمة الحالية) يُستخدم عند:",opts:["الأعمار المختلفة للمشاريع","القرار الإداري فقط","المشاريع ذات الأعمار المتساوية","التخطيط المستقبلي"],ans:2},
+          {q:"أي مما يلي يُعد خطأً شائعًا عند مقارنة البدائل؟",opts:["استخدام AW للأعمار المختلفة","توحيد الزمن قبل المقارنة","مقارنة بدائل دون توحيد الزمن","حساب القيمة السنوية بدقة"],ans:2},
+          {q:"من العوامل غير الاقتصادية في القرار الهندسي:",opts:["معدل الفائدة","الكلفة الرأسمالية","الاعتمادية والجودة والمرونة","عدد الفترات الزمنية"],ans:2},
+          {q:"إذا كان هناك حل واحد فقط فهذا يعني:",opts:["وجود اقتصاد هندسي كامل","لا يوجد اقتصاد هندسي بل تنفيذ فقط","يجب تطبيق معيار PW","يجب تطبيق معيار AW"],ans:1},
+          {q:"الخطوة الأولى في حل أي مسألة مقارنة هي:",opts:["تحديد معدل الفائدة","توحيد الزمن","تحديد البدائل المتاحة","إجراء الحسابات الرياضية"],ans:2},
+          {q:"خطأ استخدام المتوسط الحسابي بدلاً من AW يحدث عند:",opts:["مقارنة مشاريع بأعمار متساوية","التخطيط المستقبلي","اختلاف أعمار المشاريع","حساب القيمة الحالية"],ans:2},
+          {q:"معيار FW (القيمة المستقبلية) يُستخدم في:",opts:["مقارنة الأعمار المختلفة","القرار الإداري اليومي","التخطيط المستقبلي طويل الأجل","المشاريع ذات الأعمار المتساوية"],ans:2},
+          {q:"كم عدد خطوات حل مسألة المقارنة الهندسية؟",opts:["أربع خطوات","خمس خطوات","ست خطوات","سبع خطوات"],ans:3},
+          {q:"التوافق التقني (Technical Compatibility) هو عامل:",opts:["اقتصادي مالي","غير اقتصادي يؤثر في القرار الهندسي","مرتبط بمعدل الفائدة","يتعلق بالتكاليف الثابتة"],ans:1},
+        ]
+      }
+    ]
+  }
+];
+
+let currentModel = null;
+let flatQuestions = [];
+let answered = [];
+
+function startModel(mi){
+  currentModel = mi;
+  const m = models[mi];
+
+  // flatten questions
+  flatQuestions = [];
+  m.sections.forEach(sec => sec.questions.forEach(q => flatQuestions.push({...q})));
+  answered = new Array(flatQuestions.length).fill(null);
+
+  // hide selector
+  document.getElementById('model-selector').style.display = 'none';
+
+  // show label
+  const lbl = document.getElementById('model-label');
+  lbl.style.display = 'block';
+  lbl.innerHTML = `<span class="active-model-badge ${m.badgeClass}">${m.icon} ${m.name}</span>`;
+
+  // show back
+  document.getElementById('back-btn').style.display = 'block';
+
+  // show progress
+  const pw = document.getElementById('progress-wrap');
+  pw.style.display = 'flex';
+
+  // reset progress
+  document.getElementById('progress-bar-fill').style.width = '0%';
+  document.getElementById('progress-text').textContent = `0 / ${flatQuestions.length}`;
+
+  // build quiz
+  buildQuiz(m);
+
+  // show quiz + submit
+  document.getElementById('quiz').style.display = 'flex';
+  document.getElementById('submit-btn').style.display = 'block';
+  document.getElementById('submitBtn').disabled = true;
+
+  // hide results
+  document.getElementById('results').classList.remove('show');
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildQuiz(m){
+  const container = document.getElementById('quiz');
+  container.innerHTML = '';
+  let qi = 0;
+  m.sections.forEach(sec => {
+    const wrap = document.createElement('div');
+    wrap.className = 'lec-section';
+    wrap.innerHTML = `<div class="lec-badge">📘 ${sec.title}</div>`;
+    container.appendChild(wrap);
+
+    sec.questions.forEach(q => {
+      const gi = qi;
+      const card = document.createElement('div');
+      card.className = 'q-card'; card.id = `card-${gi}`;
+      card.innerHTML = `
+        <div class="q-header">
+          <div class="q-num">${gi+1}</div>
+          <div class="q-text">${q.q}</div>
+        </div>
+        <div class="options">
+          ${q.opts.map((o,oi)=>`
+            <button class="option" onclick="pick(${gi},${oi})" id="opt-${gi}-${oi}">
+              <span class="opt-label">${labels[oi]}</span>${o}
+            </button>`).join('')}
+        </div>
+        <div class="feedback" id="fb-${gi}"></div>`;
+      container.appendChild(card);
+      qi++;
+    });
+  });
+}
+
+function pick(qi,oi){
+  if(answered[qi]!==null) return;
+  answered[qi]=oi;
+  const q=flatQuestions[qi];
+  const ok=oi===q.ans;
+  q.opts.forEach((_,i)=>{
+    const btn=document.getElementById(`opt-${qi}-${i}`);
+    btn.disabled=true;
+    if(i===q.ans) btn.classList.add('correct');
+    else if(i===oi) btn.classList.add('wrong');
+  });
+  const fb=document.getElementById(`fb-${qi}`);
+  fb.classList.add('show');
+  if(ok){ fb.classList.add('ok'); fb.innerHTML='✅ إجابة صحيحة!'; }
+  else { fb.classList.add('no'); fb.innerHTML=`❌ إجابة خاطئة — الصحيحة: <strong>${labels[q.ans]}) ${q.opts[q.ans]}</strong>`; }
+  updateProgress();
+  if(answered.every(a=>a!==null)) document.getElementById('submitBtn').disabled=false;
+}
+
+function updateProgress(){
+  const done=answered.filter(a=>a!==null).length;
+  const total=flatQuestions.length;
+  document.getElementById('progress-bar-fill').style.width=(done/total*100)+'%';
+  document.getElementById('progress-text').textContent=`${done} / ${total}`;
+}
+
+function showResults(){
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('progress-wrap').style.display='none';
+  document.getElementById('back-btn').style.display='none';
+  document.getElementById('model-label').style.display='none';
+
+  const correct=answered.filter((a,i)=>a===flatQuestions[i].ans).length;
+  const total=flatQuestions.length;
+  const wrong=total-correct;
+  const pct=Math.round(correct/total*100);
+
+  document.getElementById('correctCount').textContent=correct;
+  document.getElementById('wrongCount').textContent=wrong;
+  document.getElementById('totalCount').textContent=total;
+  document.getElementById('scorePercent').textContent=pct+'%';
+  document.getElementById('scoreRing').style.setProperty('--pct',pct*3.6+'deg');
+
+  let title,sub;
+  if(pct>=90){title='🏆 ممتاز!';sub='أداء رائع، أتقنت المادة بشكل كبير.';}
+  else if(pct>=70){title='👍 جيد جدًا!';sub='نتيجة جيدة، مع مراجعة بسيطة ستكون ممتازًا.';}
+  else if(pct>=50){title='📚 مقبول';sub='تحتاج إلى مراجعة بعض المفاهيم الأساسية.';}
+  else{title='💡 يحتاج مراجعة';sub='راجع المحاضرات مجدداً وحاول من جديد.';}
+
+  document.getElementById('resultsTitle').textContent=title;
+  document.getElementById('resultsSub').textContent=`${sub} (${correct} من ${total})`;
+
+  const r=document.getElementById('results');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth'});
+}
+
+function retryModel(){ startModel(currentModel); }
+
+function goHome(){
+  document.getElementById('model-selector').style.display='block';
+  document.getElementById('back-btn').style.display='none';
+  document.getElementById('model-label').style.display='none';
+  document.getElementById('progress-wrap').style.display='none';
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('quiz').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
