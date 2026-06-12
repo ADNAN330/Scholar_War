@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 09 — Stuff! | Final Exam (+ Unit 08 Review)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--card:#161616;--border:#2a2a2a;--accent:#e85d3a;--accent2:#f0a500;--text:#e8e2d9;--muted:#888;--correct:#2ecc71;--wrong:#e74c3c;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-weight:300;min-height:100vh;padding-bottom:80px;}
+header{background:linear-gradient(135deg,#0a0510 0%,#0d0d0d 60%);border-bottom:2px solid var(--accent);padding:44px 24px 32px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'09';position:absolute;font-family:'Playfair Display',serif;font-size:220px;font-weight:900;color:rgba(232,93,58,0.05);top:-50px;left:50%;transform:translateX(-50%);pointer-events:none;}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,52px);font-weight:900;letter-spacing:3px;color:#fff;position:relative;}
+header h1 span{color:var(--accent);}
+header p{margin-top:8px;color:var(--muted);font-size:13px;letter-spacing:4px;text-transform:uppercase;position:relative;}
+#scorebar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px 8px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-size:12px;letter-spacing:2px;text-transform:uppercase;position:sticky;top:0;z-index:100;}
+#scorebar span{color:var(--muted);}
+#scorebar strong{font-size:18px;}
+#progress-bar{width:100%;height:3px;background:var(--border);margin-top:8px;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease;width:0%;}
+.section{max-width:860px;margin:40px auto 0;padding:0 20px;}
+.section-title{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:12px;margin-bottom:22px;font-weight:600;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:16px;transition:border-color .3s;}
+.q-card.answered-correct{border-color:var(--correct);}
+.q-card.answered-wrong{border-color:var(--wrong);}
+.q-meta{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:15px;line-height:1.65;margin-bottom:16px;}
+.q-text em{font-style:italic;color:var(--accent2);}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt-btn{background:transparent;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:13px;text-align:left;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:11px;}
+.opt-btn:hover:not(:disabled){background:rgba(232,93,58,0.08);border-color:var(--accent);}
+.opt-letter{width:24px;height:24px;border-radius:50%;border:1px solid var(--muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;transition:all .2s;}
+.opt-btn.correct{background:rgba(46,204,113,0.12);border-color:var(--correct);color:var(--correct);}
+.opt-btn.correct .opt-letter{background:var(--correct);border-color:var(--correct);color:#000;}
+.opt-btn.wrong{background:rgba(231,76,60,0.12);border-color:var(--wrong);color:var(--wrong);}
+.opt-btn.wrong .opt-letter{background:var(--wrong);border-color:var(--wrong);color:#fff;}
+.opt-btn:disabled{cursor:default;}
+.feedback{display:none;margin-top:12px;padding:11px 14px;border-radius:4px;font-size:13px;line-height:1.6;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:rgba(46,204,113,0.1);border-left:3px solid var(--correct);color:#a8e6c3;}
+.feedback.wrong-fb{background:rgba(231,76,60,0.1);border-left:3px solid var(--wrong);color:#f0b0a8;}
+#submit-btn{display:block;margin:50px auto 20px;background:var(--accent);color:#fff;border:none;padding:15px 56px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;transition:all .2s;}
+#submit-btn:hover{background:#c9441f;transform:translateY(-2px);}
+#result-panel{display:none;max-width:560px;margin:40px auto;padding:0 20px;text-align:center;}
+#result-panel.show{display:block;}
+.result-box{background:var(--card);border:2px solid var(--accent);border-radius:8px;padding:40px;}
+.result-grade{font-family:'Playfair Display',serif;font-size:80px;font-weight:900;line-height:1;}
+.result-label{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+.result-detail{margin-top:22px;font-size:15px;color:var(--muted);line-height:2;}
+#restart-btn{margin-top:26px;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:11px 36px;font-family:'Source Sans 3',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;}
+#restart-btn:hover{background:var(--accent);color:#fff;}
+#tab-bar{max-width:860px;margin:30px auto 0;padding:0 20px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.passage-box{background:#111;border:1px solid #2a2a2a;border-left:3px solid var(--accent2);border-radius:6px;padding:24px 26px;margin-bottom:28px;font-size:14px;line-height:1.85;color:#c8c2b8;}
+.passage-box h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--accent2);margin-bottom:14px;letter-spacing:1px;}
+.passage-box h4{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin:18px 0 8px;font-weight:600;}
+.passage-box p{margin-bottom:10px;}
+.passage-box p:last-child{margin-bottom:0;}
+.passage-toggle{background:transparent;border:1px solid var(--accent2);color:var(--accent2);font-family:'Source Sans 3',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:7px 18px;border-radius:3px;cursor:pointer;margin-bottom:18px;transition:all .2s;}
+.passage-toggle:hover{background:var(--accent2);color:#000;}
+.passage-content{display:none;}
+.passage-content.open{display:block;}
+.tab-btn{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 18px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:4px;transition:all .2s;}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent2);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+</style>
+</head>
+<body>
+<header>
+  <h1>STUFF! <span>& REVIEW</span></h1>
+  <p>Units 08-09 &nbsp;·&nbsp; Final Exam &nbsp;·&nbsp; English</p>
+</header>
+<div id="scorebar">
+  <div><span>Questions: </span><strong id="total-q">0</strong></div>
+  <div><span>Answered: </span><strong id="answered-q">0</strong></div>
+  <div><span>Correct: </span><strong id="correct-q" style="color:var(--correct)">0</strong></div>
+  <div><span>Wrong: </span><strong id="wrong-q" style="color:var(--wrong)">0</strong></div>
+  <div style="width:100%"><div id="progress-bar"><div id="progress-fill"></div></div></div>
+</div>
+<div id="tab-bar"></div>
+<div id="quiz-container"></div>
+<button id="submit-btn" onclick="showFinalResult()">Show Final Result</button>
+<div id="result-panel">
+  <div class="result-box">
+    <div class="result-grade" id="result-percent"></div>
+    <div class="result-label">Final Score</div>
+    <div class="result-detail" id="result-detail"></div>
+    <button id="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+</div>
+<script>
+const Q=[
+
+  // ─── READING — Pages 86-87 — Consumer Crazy ───
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"Where was Louise's first stop last Saturday morning?",o:["A department store on New Bond Street","The shoe department in Selfridges, on Oxford Street","A boutique in Manhattan","A local supermarket"],a:1,passage:`<h3>Consumer Crazy — Pages 86–87</h3><h4>1 · The Extreme Shopper</h4><p>Last Saturday morning Louise Anderson was up early, ready to begin her usual weekend routine. First stop was the shoe department in Selfridges, in London's Oxford Street, then she moved on to other department stores and finally to the designer boutiques along New Bond Street.</p><p>When she arrived back in her flat she had three pairs of designer shoes and a matching handbag. She had also picked up two cashmere sweaters, a £200 pot of face cream and another £200 worth of make-up. 'Shopping is my reward to myself for working hard all week,' says 31-year-old Louise, who is single and childless. 'And buying shoes gives me such a high.'</p><p>In the last month, Louise has also bought eight designer bikinis and a set of black Gucci luggage. Louise admits that she doesn't even wear all her purchases. 'There is an entire wall of my bedroom which is covered in boxes of shoes, all carefully labelled,' she says. 'Sometimes I don't actually wear them to go out. I just put them on in my bedroom and admire them.'</p><p>Consumer psychologist Dr Paul Marsden encounters more and more women like Louise, who are 'addicted to shopping'. He believes that the lifestyle of modern women is to blame. 'Women today are time-poor. If they have busy careers, other parts of their lives are often not very satisfactory, but they want to feel good about themselves. Shopping is a quick-fix solution. It's a way of telling themselves that they matter and are important.'</p><h4>2 · The Extreme Minimalist</h4><p>Andrew Hyde is a technology mogul and successful entrepreneur who travels between New York City and Silicon Valley. Instead of a Manhattan apartment, he has chosen to be homeless — and has reduced his possessions to just 15 things.</p><p>So what made him sell everything? For Andrew it is all about freedom from the responsibility of possessions. Or as he puts it on his blog, 'Lack of choice helps, not hurts.'</p><p>Chris Yurista, a DJ and travel agent from Washington, DC, has also given up his apartment and reduced his possessions to a backpack full of designer clothes, a laptop and a bicycle. All his bills and letters arrive electronically and his record collection of 2,000 albums has been relocated onto an external hard drive. His only worry is that a hard drive crash or a problem with a server will cause him to lose all his digital possessions.</p>`},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"How old is Louise, and what is her relationship status?",o:["21 years old and married","25 years old and divorced","31 years old, single and childless","40 years old with two children"],a:2},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"According to Louise, what does shopping represent for her?",o:["A way to save money for the future","Her reward to herself for working hard all week","A way to make new friends","Part of her job"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"What does Louise sometimes do with shoes she buys but doesn't wear outside?",o:["She sells them online","She gives them away to charity","She puts them on at home and admires them","She returns them to the shop"],a:2},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"According to consumer psychologist Dr Paul Marsden, why are many modern women 'addicted to shopping'?",o:["Because clothes have become much cheaper","Because they are time-poor and shopping is a quick-fix way to feel important","Because their friends pressure them into it","Because they have too much free time"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"What is Andrew Hyde's profession?",o:["A novelist","A technology mogul and entrepreneur","A restaurateur","A broadcaster"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"How many possessions has Andrew Hyde reduced his life to?",o:["10","15","20","25"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"According to Andrew's blog, what 'helps, not hurts'?",o:["Having more money","Lack of choice","Living in Manhattan","Owning a laptop"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"What is Chris Yurista's job?",o:["A novelist and teacher","A DJ and travel agent","A technology mogul","A consumer psychologist"],a:1},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"How has Chris Yurista dealt with his collection of 2,000 albums?",o:["He sold them all at a market","He gave them to friends","He relocated them onto an external hard drive","He donated them to a library"],a:2},
+  {s:"READING — Pages 86-87 — Consumer Crazy (Reading Comprehension)",t:"What is Chris Yurista's main worry about his lifestyle?",o:["That he will run out of money","That a hard drive crash or server problem could make him lose his digital possessions","That his friends will get tired of him","That he will lose his job as a DJ"],a:1},
+
+  // ─── VOCABULARY — Page 88 — Modern Vocabulary (Definitions) ───
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a virtual shop which sells applications for phones, etc.' — What is this?",o:["a podcast","an app store","a tattoo","a YouTube clip"],a:1},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a machine that gives you directions when you are driving.' — What is this?",o:["sat-nav","a home recycling bin","guyliner","a podcast"],a:0},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a secret word which you use to access computers, bank accounts, etc.' — What is this?",o:["a tattoo","an energy drink","a password","a blogger"],a:2},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's make-up men put on their eyes.' — What is this?",o:["guyliner","a tattoo","a podcast","sat-nav"],a:0},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a person who writes a kind of online diary for others to read.' — What is this?",o:["an internet addict","a personal trainer","a blogger","a home recycling bin"],a:2},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a public area where people can connect their phones and computers to the internet.' — What is this?",o:["a Facebook wall","a wi-fi hotspot","an app store","a YouTube clip"],a:1},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a professional you hire to help you improve your fitness.' — What is this?",o:["a personal trainer","an internet addict","a blogger","guyliner"],a:0},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a person whose life is dominated by the internet.' — What is this?",o:["a podcast","a blogger","an internet addict","a tattoo"],a:2},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a section of your social networking profile where people can leave messages for you.' — What is this?",o:["a Facebook wall","a home recycling bin","an app store","a wi-fi hotspot"],a:0},
+  {s:"VOCABULARY — Page 88 — Modern Vocabulary (Definitions)",t:"'It's a drink which is designed to give you more energy.' — What is this?",o:["a podcast","an energy drink","guyliner","a tattoo"],a:1},
+
+  // ─── GRAMMAR — Page 88 — Relative Clauses ───
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Which relative pronoun is used to refer to PEOPLE?",o:["which","where","who","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Which relative pronoun is used to refer to THINGS?",o:["who","which","where","whose"],a:1},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Which relative pronoun is used to refer to LOCATIONS and PLACES?",o:["who","which","where","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Which relative pronoun is used to replace POSSESSIVES?",o:["who","which","where","whose"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"In definitions like 'It's make-up men put on their eyes' (guyliner) and 'It's a professional you hire to help you improve your fitness' (personal trainer), the relative pronoun can be left out because it is the ______ of the relative clause.",o:["subject","object","possessive","verb"],a:1},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"In 'It's a drink which is designed to give you more energy', the relative pronoun and the verb 'be' can be left out because the sentence is ______.",o:["active","passive","negative","a question"],a:1},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A photocopier is a machine ______ makes copies of documents.'",o:["who","where","that/which","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A bodyguard is a person ______ protects important people from being attacked.'",o:["that/who","which","where","whose"],a:0},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A launderette is a place with washing machines ______ you can wash your clothes.'",o:["who","which","where","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A plumber is a person ______ job is to mend central heating, taps, etc.'",o:["who","which","where","whose"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A vacuum cleaner is a machine ______ you use to clean floors and carpets.'",o:["who","that/which","where","whose"],a:1},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A cooker is a machine ______ cooks food.'",o:["who","that/which","where","whose"],a:1},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A cleaner is a person ______ you pay to clean your house or office.'",o:["that/who","which","where","whose"],a:0},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A dry cleaner's is a shop ______ they clean your clothes for you.'",o:["who","which","where","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A decorator is a person ______ job is to paint houses.'",o:["who","which","where","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A stationer's is a shop ______ you buy office supplies.'",o:["who","which","where","whose"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses",t:"Complete: 'A boiler is a machine ______ heats water for baths, etc.'",o:["who","where","that/which","whose"],a:2},
+
+  // ─── GRAMMAR — Page 90 — Quantifiers (Additional Practice) ───
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: 'It's good to bring ______ plastic bags.'",o:["a bit of","too much","several","much"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: '______ people forget that the desert is freezing cold at night, so you need to bring ______ warm clothes.'",o:["A lot of / some","A few / too much","Several / a bit of","Too much / plenty"],a:0},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: 'They haven't packed ______ warm clothes to deal with a change in the weather.'",o:["too much","enough","a bit of","several"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: '______ people these days rely on a handheld GPS navigator... but they can break.'",o:["A few","Several","Too many","A bit of"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: 'Often people bring ______ food with them and they always regret it, because they spend ______ time carrying it around, and there are ______ places to buy food.'",o:["too much / a lot of / plenty of","a few / several / a bit of","enough / too many / a couple of","plenty of / a bit of / too much"],a:0},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Additional Practice)",t:"Complete: 'So really... all you need is ______ money!'",o:["plenty of","too much","enough","a few"],a:2},
+
+  // ─── GRAMMAR — Page 90 — Countable & Uncountable Nouns ───
+  {s:"GRAMMAR — Page 90 — Countable & Uncountable Nouns",t:"Which of these nouns is UNCOUNTABLE?",o:["bag","battery","water","people"],a:2},
+  {s:"GRAMMAR — Page 90 — Countable & Uncountable Nouns",t:"Which of these nouns is COUNTABLE?",o:["money","food","battery","water"],a:2},
+
+  // ─── VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1) ───
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On camping trips: 'There ______ insects.'",o:["is a bit of","are a lot of","is too much","are enough"],a:1},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On camping trips: 'There isn't ______ space in your tent.'",o:["a lot of","many","several","a few"],a:0},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On camping trips: 'You need ______ equipment.'",o:["a few","some","too many","several"],a:1},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On trips to big cities: 'You can find ______ cheap places to eat.'",o:["too much","a bit of","a few","plenty"],a:2},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On trips to big cities: 'There are ______ people.'",o:["too many","a bit of","a few","much"],a:0},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On trips to big cities: 'There are usually ______ interesting places to visit.'",o:["a few","plenty of","too much","a bit of"],a:1},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"On trips to big cities: 'There are usually ______ museums and art galleries.'",o:["a couple of","much","a bit of","too much"],a:0},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"At the beach: 'There is ______ sand.'",o:["a few","several","plenty of","too many"],a:2},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"At the beach: 'It's better if there is ______ sun.'",o:["a bit of","a few","several","too many"],a:0},
+  {s:"VOCABULARY — Page 91 — Quantifiers in Context (Ex. 1)",t:"At the beach: 'There are usually ______ things to do.'",o:["a bit of","a lot of","too much","several"],a:1},
+
+  // ─── VOCABULARY — Page 91 — Describing Objects (Ex. 2a) ───
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'It's round and it's used for finding your way.' What is it?",o:["a torch","a compass","sunscreen","wet wipes"],a:1},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'It's rectangular and it's made of fabric.' What is it?",o:["a sleeping bag","a compass","a torch","insect repellent"],a:0},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'They're used for cleaning.' What are they?",o:["wet wipes","a sleeping bag","a compass","sunscreen"],a:0},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'It's got batteries inside and it's made of metal.' What is it?",o:["sunscreen","a sleeping bag","a torch","wet wipes"],a:2},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'It's used for protecting your skin.' What is it?",o:["insect repellent","sunscreen","a compass","a torch"],a:1},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'It's used for keeping insects away.' What is it?",o:["insect repellent","sunscreen","wet wipes","a torch"],a:0},
+  {s:"VOCABULARY — Page 91 — Describing Objects (Ex. 2a)",t:"'They're made of rubber and they're used for keeping your feet dry.' What are they?",o:["wellies","a sleeping bag","wet wipes","a compass"],a:0},
+
+  // ─── READING — Pages 92-93 — I Couldn't Live Without ───
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What does novelist Rachel Billington say she can't do without?",o:["Her bicycle","Her jewellery","Horror films","Her cats"],a:1,passage:`<h3>I Couldn't Live Without — Pages 92–93</h3><h4>Jewellery — Rachel Billington (Novelist)</h4><p>"I just couldn't do without my jewellery. The first thing I do when I wake up is put on a necklace. It makes me feel good on a grey morning. I just can't understand why some women save their jewellery for going out."</p><h4>Lemsip — Shyama Perera (Broadcaster and novelist)</h4><p>"They say it can help with colds and flu, but I think it can help with all sorts of problems. I use it for dealing with everything from insomnia to writer's block. The poet Andrew Motion drinks it too – so I'm in good company."</p><h4>Horror films — Alex Zane (TV presenter and DJ)</h4><p>"I love movies. When I was ten years old, while everyone else was out playing football, I was indoors watching films. These days, if I want to feel scared, I turn off all the lights and watch The Ring."</p><h4>Bicycle — Oliver Peyton (Restaurateur)</h4><p>"It's the fastest way around London – I completely rely on it. I don't have a lock so I never leave it anywhere it can be stolen. London is much more interesting when you see it as a cyclist."</p><h4>Spikes — Darren Campbell (100m Olympic gold medallist)</h4><p>"I can't do without my Reebok spikes. I've got big size 12 feet and these spikes are incredibly comfortable. I started wearing them last year and then became Olympic champion."</p><h4>Pavoni coffee machine — Justin Cartwright (Novelist)</h4><p>"I am addicted to coffee. My machine is eight years old. It's not an easy machine to use, but it still makes great coffee. I can't do without it. I even take it on holiday."</p><h4>My cats — Patrick Moore (Astronomer)</h4><p>"There are two things that I couldn't bear to live without: one is black and white and the other is dark brown and they both say 'meow'. I love all animals but I've always been a cat person and I've had these two for a long time. They're really special to me."</p>`},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What is the first thing Rachel Billington does when she wakes up?",o:["She drinks coffee","She puts on a necklace","She goes for a run","She checks her phone"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"According to Shyama Perera, what can Lemsip help with?",o:["Only colds and flu","Everything from insomnia to writer's block","Headaches only","Nothing in particular"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"According to Shyama Perera, which other person also drinks Lemsip?",o:["Alex Zane","Oliver Peyton","The poet Andrew Motion","Darren Campbell"],a:2},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What does TV presenter Alex Zane like to do when he wants to feel scared?",o:["Go to the cinema with friends","Turn off all the lights and watch The Ring","Read horror novels in bed","Play scary video games"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"As a child, what was Alex Zane doing while other children played football?",o:["Playing football too","Watching films indoors","Sleeping","Doing homework"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"Why doesn't Oliver Peyton use a lock for his bicycle?",o:["He thinks locks are too expensive","He never leaves it anywhere it can be stolen","He doesn't ride it often","Bicycles can't be stolen in London"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What is Darren Campbell's profession?",o:["A novelist","A restaurateur","An Olympic gold medallist (100m)","A broadcaster"],a:2},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What shoe size are Darren Campbell's feet?",o:["Size 9","Size 10","Size 11","Size 12"],a:3},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"How old is Justin Cartwright's coffee machine?",o:["Five years old","Eight years old","Ten years old","Two years old"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What does Justin Cartwright do with his coffee machine even on holiday?",o:["He leaves it at home","He sells it","He takes it with him","He gives it to a friend"],a:2},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What colours are Patrick Moore's two cats?",o:["Both black","Black and white, and dark brown","Both white","Grey and orange"],a:1},
+  {s:"READING — Pages 92-93 — I Couldn't Live Without",t:"What is Patrick Moore's profession?",o:["A novelist","A DJ","An astronomer","A broadcaster"],a:2},
+
+  // ─── VOCABULARY — Page 94 — Buying Things (Ex. 3a) ───
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Can I help at all?'",o:["I'll have a look for you.","No, I'm just looking, thanks.","Yes, it's 'L five nine three nine'.","By debit card, please."],a:1},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Do you have these in a size 10?'",o:["I'll have a look for you.","Yes, that's fine. Just keep your receipt.","No, I'm just looking, thanks.","Yes. It's 76b Alton Road."],a:0},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'How did you get on with those? Did they fit?'",o:["By debit card, please.","Yes, they were OK.","I'll have a look for you.","No, you don't."],a:1},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Can I bring them back if they aren't right?'",o:["Yes, it's 'L five nine three nine'.","Yes, that's fine. Just keep your receipt.","I'll have a look for you.","That's fine. I can take your order over the phone."],a:1},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'How would you like to pay?'",o:["By debit card, please.","No, you don't.","Yes, they were OK.","I'll have a look for you."],a:0},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'I'm trying to place an order on your website, but I'm having some problems.'",o:["Yes, it's 76b Alton Road.","That's fine. I can take your order over the phone.","By debit card, please.","Yes, that's fine. Just keep your receipt."],a:1},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Have you got a product code?'",o:["Yes, it's 'L five nine three nine'.","No, you don't.","Yes, they were OK.","By debit card, please."],a:0},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Do I have to pay for delivery?'",o:["Yes, that's fine. Just keep your receipt.","No, you don't. Orders over £25 are delivered free.","I'll have a look for you.","Yes, it's 76b Alton Road."],a:1},
+  {s:"VOCABULARY — Page 94 — Buying Things (Ex. 3a)",t:"Match the question with the best response: 'Could you confirm the first line of your address?'",o:["Yes. It's 76b Alton Road.","By debit card, please.","Yes, they were OK.","No, I'm just looking, thanks."],a:0},
+
+  // ─── VOCABULARY — Unit 8 Review — Manners & Customs ───
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"Complete the collocation: 'to kiss someone ______'",o:["on both cheeks","to pay","the host","on the whole"],a:0},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"Complete the collocation: 'to ______ the bill' (when everyone pays an equal part)",o:["share","borrow","vibrate","refuse"],a:0},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"Complete: 'to ______ an invitation' (to say no to it)",o:["accept","refuse","insist","vibrate"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"Complete: 'to stay ______ late' (to not come home early in the evening)",o:["out","in","up","on"],a:0},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"What do we call the person who organises a party and welcomes the guests?",o:["The guest","The host","The stranger","The neighbour"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"Complete: 'He ______ on paying for everyone's dinner.' (he refused to let anyone else pay)",o:["insisted","borrowed","vibrated","shared"],a:0},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"If something is described as '______', it means it is old-fashioned or embarrassing for young people.",o:["cool","rude","uncool","polite"],a:2},
+  {s:"VOCABULARY — Unit 8 Review — Manners & Customs",t:"When a phone '______s', it shakes silently to alert you instead of ringing.",o:["vibrates","borrows","insists","shares"],a:0},
+
+  // ─── VOCABULARY — Unit 8 Review — Devices & Appliances ───
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"What is 'a freezer' used for?",o:["Heating water","Keeping food very cold","Cleaning floors","Giving directions"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"What does it mean to 'switch on' a machine?",o:["To turn it off","To turn it on","To repair it","To unplug it"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"A 'dishwasher' is a machine used for...",o:["Washing clothes","Washing dishes","Cleaning floors","Cooking food"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"A 'battery' provides a device with...",o:["Water","Power/energy","An internet connection","Light only"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"'Fabric' refers to...",o:["A type of metal","A type of cloth or material","A type of food","A type of drink"],a:1},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"A 'digital camera' is mainly used for...",o:["Taking photos and videos electronically","Making phone calls","Cleaning surfaces","Cooking food"],a:0},
+  {s:"VOCABULARY — Unit 8 Review — Devices & Appliances",t:"A 'torch' (British English) is the same as which word in American English?",o:["A flashlight","A candle","A lamp shade","A lighter"],a:0},
+
+  // ─── GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150) ───
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: '______ you possibly take me into town?'",o:["Would","Could","Shall","Do"],a:1},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: 'Is it alright ______ I use your phone?'",o:["that","for","if","to"],a:2},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: '______ I have a window seat?'",o:["Would","Shall","Could","Will"],a:2},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: '______ you turn the light off?' (asking someone else to do something)",o:["Will","Shall","Am","Do"],a:0},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: 'Do you mind ______ I take the car tonight?'",o:["that","if","to","for"],a:1},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: '______ you tell Jenny about the party?'",o:["Would","Shall","Am","Do"],a:0},
+  {s:"GRAMMAR — Unit 8 Review — Polite Requests (Practice, p.150)",t:"Complete: 'Could I ______ leave early on Friday?'",o:["possible","possibly","possibility","possibly to"],a:1},
+
+  // ─── GRAMMAR — Unit 8 Review — Future Forms (Additional Practice) ───
+  {s:"GRAMMAR — Unit 8 Review — Future Forms (Additional Practice)",t:"'I'll help you with that bag.' — This is an example of ______.",o:["a pre-planned decision","an offer made on the spot","a prediction based on evidence","a request"],a:1},
+  {s:"GRAMMAR — Unit 8 Review — Future Forms (Additional Practice)",t:"'I'm going to have a party next weekend — I've already invited everyone.' — This is an example of ______.",o:["an offer","a spontaneous decision","a pre-planned intention","a suggestion"],a:2}
+
+];
+
+let answered=0,correct=0,wrong=0;
+const userAnswers={};
+
+const CATS=[...new Set(Q.map(q=>q.s.split(' — ')[0]))];
+let activeCat=CATS[0];
+
+function buildTabs(){
+  const tb=document.getElementById('tab-bar');
+  tb.innerHTML=CATS.map(c=>`<button class="tab-btn${c===activeCat?' active':''}" onclick="switchTab('${c}')">${c}</button>`).join('');
+}
+
+function switchTab(cat){
+  activeCat=cat;
+  buildTabs();
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  let sec='';
+  Q.forEach((q,i)=>{
+    const thisCat=q.s.split(' — ')[0];
+    if(thisCat!==activeCat)return;
+    if(q.s!==sec){
+      sec=q.s;
+      const sd=document.createElement('div');
+      sd.className='section';
+      sd.innerHTML=`<div class="section-title">${sec}</div>`;
+      c.appendChild(sd);
+    }
+    const lastSec=c.lastElementChild;
+    if(q.passage && !lastSec.querySelector('.passage-box')){
+      const pb=document.createElement('div');
+      pb.className='passage-box';
+      pb.innerHTML=`<button class="passage-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▲ Hide Reading Text':'▼ Show Reading Text'">▼ Show Reading Text</button><div class="passage-content">${q.passage}</div>`;
+      lastSec.appendChild(pb);
+    }
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id='card-'+i;
+    const L=['A','B','C','D'];
+    card.innerHTML=`<div class="q-meta">Q${i+1} of ${Q.length}</div>
+      <div class="q-text">${q.t}</div>
+      <div class="options" id="opts-${i}">
+        ${q.o.map((o,j)=>`<button class="opt-btn" id="opt-${i}-${j}" onclick="pick(${i},${j})"><span class="opt-letter">${L[j]}</span>${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-${i}"></div>`;
+    lastSec.appendChild(card);
+  });
+  document.getElementById('total-q').textContent=Q.length;
+}
+
+function pick(qi,oi){
+  if(userAnswers[qi]!==undefined)return;
+  userAnswers[qi]=oi;
+  answered++;
+  const q=Q[qi];
+  const ok=oi===q.a;
+  if(ok)correct++;else wrong++;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach(b=>b.disabled=true);
+  document.getElementById(`opt-${qi}-${q.a}`).classList.add('correct');
+  if(!ok)document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+  document.getElementById('card-'+qi).classList.add(ok?'answered-correct':'answered-wrong');
+  const fb=document.getElementById('fb-'+qi);
+  fb.classList.add('show');
+  if(ok){fb.classList.add('correct-fb');fb.textContent='✓ Correct!';}
+  else{fb.classList.add('wrong-fb');fb.textContent='✗ Wrong. Correct answer: "'+q.o[q.a]+'"';}
+  document.getElementById('answered-q').textContent=answered;
+  document.getElementById('correct-q').textContent=correct;
+  document.getElementById('wrong-q').textContent=wrong;
+  document.getElementById('progress-fill').style.width=Math.round(answered/Q.length*100)+'%';
+}
+
+function showFinalResult(){
+  const pct=Math.round(correct/Q.length*100);
+  let grade,color;
+  if(pct>=90){grade='A+';color='#2ecc71';}
+  else if(pct>=80){grade='A';color='#27ae60';}
+  else if(pct>=70){grade='B';color='#f0a500';}
+  else if(pct>=60){grade='C';color='#e67e22';}
+  else{grade='F';color='#e74c3c';}
+  const rp=document.getElementById('result-panel');
+  rp.classList.add('show');
+  document.getElementById('result-percent').textContent=pct+'%';
+  document.getElementById('result-percent').style.color=color;
+  document.getElementById('result-detail').innerHTML=`Grade: <strong style="color:${color}">${grade}</strong><br>Correct: <strong style="color:var(--correct)">${correct}</strong> / ${Q.length}<br>Wrong: <strong style="color:var(--wrong)">${wrong}</strong><br>Unanswered: <strong>${Q.length-answered}</strong>`;
+  rp.scrollIntoView({behavior:'smooth'});
+  document.getElementById('submit-btn').style.display='none';
+}
+
+function restartQuiz(){
+  answered=0;correct=0;wrong=0;
+  Object.keys(userAnswers).forEach(k=>delete userAnswers[k]);
+  ['answered-q','correct-q','wrong-q'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('submit-btn').style.display='block';
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildTabs();
+buildQuiz();
+</script>
+</body>
+</html>
