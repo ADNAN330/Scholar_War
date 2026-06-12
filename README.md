@@ -11,6 +11,9 @@
 
 ## English
 ### [English_Exam.6](/unit06_final_exam1.html)
+### [English_Exam.7](/unit07_final_exam.html)
+### [English_Exam.8](/unit08_final_exam-1.html)
+### [English_Exam.9](/unit09_final_exam1.html)
 
 <hr>
 
