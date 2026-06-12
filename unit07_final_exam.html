@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 07 — The Big Screen | Final Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--card:#161616;--border:#2a2a2a;--accent:#e85d3a;--accent2:#f0a500;--text:#e8e2d9;--muted:#888;--correct:#2ecc71;--wrong:#e74c3c;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-weight:300;min-height:100vh;padding-bottom:80px;}
+header{background:linear-gradient(135deg,#05101a 0%,#0d0d0d 60%);border-bottom:2px solid var(--accent);padding:44px 24px 32px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'07';position:absolute;font-family:'Playfair Display',serif;font-size:220px;font-weight:900;color:rgba(232,93,58,0.05);top:-50px;left:50%;transform:translateX(-50%);pointer-events:none;}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,52px);font-weight:900;letter-spacing:3px;color:#fff;position:relative;}
+header h1 span{color:var(--accent);}
+header p{margin-top:8px;color:var(--muted);font-size:13px;letter-spacing:4px;text-transform:uppercase;position:relative;}
+#scorebar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px 8px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-size:12px;letter-spacing:2px;text-transform:uppercase;position:sticky;top:0;z-index:100;}
+#scorebar span{color:var(--muted);}
+#scorebar strong{font-size:18px;}
+#progress-bar{width:100%;height:3px;background:var(--border);margin-top:8px;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease;width:0%;}
+.section{max-width:860px;margin:40px auto 0;padding:0 20px;}
+.section-title{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:12px;margin-bottom:22px;font-weight:600;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:16px;transition:border-color .3s;}
+.q-card.answered-correct{border-color:var(--correct);}
+.q-card.answered-wrong{border-color:var(--wrong);}
+.q-meta{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:15px;line-height:1.65;margin-bottom:16px;}
+.q-text em{font-style:italic;color:var(--accent2);}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt-btn{background:transparent;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:13px;text-align:left;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:11px;}
+.opt-btn:hover:not(:disabled){background:rgba(232,93,58,0.08);border-color:var(--accent);}
+.opt-letter{width:24px;height:24px;border-radius:50%;border:1px solid var(--muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;transition:all .2s;}
+.opt-btn.correct{background:rgba(46,204,113,0.12);border-color:var(--correct);color:var(--correct);}
+.opt-btn.correct .opt-letter{background:var(--correct);border-color:var(--correct);color:#000;}
+.opt-btn.wrong{background:rgba(231,76,60,0.12);border-color:var(--wrong);color:var(--wrong);}
+.opt-btn.wrong .opt-letter{background:var(--wrong);border-color:var(--wrong);color:#fff;}
+.opt-btn:disabled{cursor:default;}
+.feedback{display:none;margin-top:12px;padding:11px 14px;border-radius:4px;font-size:13px;line-height:1.6;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:rgba(46,204,113,0.1);border-left:3px solid var(--correct);color:#a8e6c3;}
+.feedback.wrong-fb{background:rgba(231,76,60,0.1);border-left:3px solid var(--wrong);color:#f0b0a8;}
+.passage-card{background:#0f1a24;border:1px solid #1e3a52;border-left:4px solid var(--accent2);border-radius:6px;padding:22px 24px;margin-bottom:8px;font-size:13.5px;line-height:1.8;color:#ccc;}
+.passage-card h3{font-family:'Playfair Display',serif;font-size:14px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;font-weight:700;}
+.passage-card h4{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:14px 0 6px;font-weight:600;}
+.passage-card p{margin-bottom:8px;}
+.passage-card blockquote{border-left:2px solid var(--accent2);margin:8px 0;padding-left:12px;color:#bbb;font-style:italic;}
+.passage-toggle{background:transparent;border:1px solid #1e3a52;border-radius:4px;padding:8px 16px;color:var(--accent2);font-family:'Source Sans 3',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:16px;transition:all .2s;}
+.passage-toggle:hover{background:rgba(240,165,0,0.08);border-color:var(--accent2);}
+.passage-body{display:none;}
+.passage-body.open{display:block;}
+#submit-btn{display:block;margin:50px auto 20px;background:var(--accent);color:#fff;border:none;padding:15px 56px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;transition:all .2s;}
+#submit-btn:hover{background:#c9441f;transform:translateY(-2px);}
+#result-panel{display:none;max-width:560px;margin:40px auto;padding:0 20px;text-align:center;}
+#result-panel.show{display:block;}
+.result-box{background:var(--card);border:2px solid var(--accent);border-radius:8px;padding:40px;}
+.result-grade{font-family:'Playfair Display',serif;font-size:80px;font-weight:900;line-height:1;}
+.result-label{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+.result-detail{margin-top:22px;font-size:15px;color:var(--muted);line-height:2;}
+#restart-btn{margin-top:26px;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:11px 36px;font-family:'Source Sans 3',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;}
+#restart-btn:hover{background:var(--accent);color:#fff;}
+.main-section-title{max-width:860px;margin:60px auto 0;padding:0 20px;font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:900;color:var(--accent2);border-bottom:2px solid var(--accent2);padding-bottom:14px;letter-spacing:4px;text-transform:uppercase;}
+#tab-bar{max-width:860px;margin:30px auto 0;padding:0 20px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.tab-btn{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 18px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:4px;transition:all .2s;}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent2);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.main-section-title{display:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>THE BIG <span>SCREEN</span></h1>
+  <p>Unit 07 &nbsp;·&nbsp; Final Exam &nbsp;·&nbsp; English</p>
+</header>
+<div id="scorebar">
+  <div><span>Questions: </span><strong id="total-q">0</strong></div>
+  <div><span>Answered: </span><strong id="answered-q">0</strong></div>
+  <div><span>Correct: </span><strong id="correct-q" style="color:var(--correct)">0</strong></div>
+  <div><span>Wrong: </span><strong id="wrong-q" style="color:var(--wrong)">0</strong></div>
+  <div style="width:100%"><div id="progress-bar"><div id="progress-fill"></div></div></div>
+</div>
+<div id="tab-bar"></div>
+<div id="quiz-container"></div>
+<button id="submit-btn" onclick="showFinalResult()">Show Final Result</button>
+<div id="result-panel">
+  <div class="result-box">
+    <div class="result-grade" id="result-percent"></div>
+    <div class="result-label">Final Score</div>
+    <div class="result-detail" id="result-detail"></div>
+    <button id="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+</div>
+<script>
+const Q=[
+
+  // ─── VOCABULARY ────────────────────────────────────────────────────────────
+
+  // Page 67 — -ed / -ing adjectives (Practice Ex. 1)
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'Did you see that documentary about corruption last night? It was really ______.' Choose the correct adjective.",o:["shocked","shocking","amazed","amazing"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'The Prime Minister said that he is very ______ with the country's economic progress.'",o:["pleased","pleasing","excited","exciting"],a:0},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'The instructions for this DVD player are really ______.' Choose the correct adjective.",o:["confused","confusing","frustrated","frustrating"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'I'm getting a bit ______ trying to follow them.' (about the DVD instructions)",o:["frustrating","frustrated","confusing","confused"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'I missed the film last night because my boss phoned. I was so ______.'",o:["annoying","annoyed","embarrassing","embarrassed"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'Most chat shows with celebrities are really ______. The interviewers ask too many personal questions.'",o:["embarrassed","embarrassing","annoyed","annoying"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'There was an ______ programme about elephants on TV last night – did you see it?'",o:["amazed","amazing","shocked","shocking"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'We stayed up late to watch the Angelina Jolie film, but we were a bit ______.'",o:["disappointing","disappointed","boring","bored"],a:1},
+  {s:"VOCABULARY — Page 67 — -ed / -ing Adjectives (Ex. 1)",t:"'I had a fantastic music teacher at school – we all found her really ______.'",o:["inspired","inspiring","interested","interesting"],a:1},
+
+  // Page 67 — Grammar: -ed vs -ing rule
+  {s:"VOCABULARY — Page 67 — Grammar: -ed vs -ing Rule",t:"We use a/an ______ adjective to describe HOW SOMEONE FEELS.",o:["-ing adjective","-ed adjective","both equally","neither"],a:1},
+  {s:"VOCABULARY — Page 67 — Grammar: -ed vs -ing Rule",t:"We use a/an ______ adjective to describe THE THING that makes someone feel that way.",o:["-ed adjective","-ing adjective","both equally","neither"],a:1},
+  {s:"VOCABULARY — Page 67 — Grammar: -ed vs -ing Rule",t:"Which sentence uses the adjective correctly?",o:["The film was terrified.","The children were terrifying.","The film was terrifying.","The children were terrifying the film."],a:2},
+  {s:"VOCABULARY — Page 67 — Grammar: -ed vs -ing Rule",t:"Which sentence uses the adjective correctly?",o:["The tennis match is excited.","The women are exciting.","The women are excited.","The match is excite."],a:2},
+
+  // Page 71 — Extreme adjectives (Ex. 1)
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 1)",t:"Match: <em>terrified</em> = ______",o:["very angry","very frightened","very happy","very surprised"],a:1},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 1)",t:"Match: <em>astonished</em> = ______",o:["very angry","very tired","very happy","very surprised"],a:3},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 1)",t:"Match: <em>delighted</em> = ______",o:["very angry","very tired","very happy","very surprised"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 1)",t:"Match: <em>exhausted</em> = ______",o:["very angry","very tired","very happy","very surprised"],a:1},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 1)",t:"Match: <em>furious</em> = ______",o:["very angry","very tired","very happy","very surprised"],a:0},
+
+  // Page 71 — Extreme adjectives (Ex. 2 — definitions)
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>hilarious</em> means ______",o:["very bad","very funny","very good","very cold"],a:1},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>excellent</em> means ______",o:["very bad","very funny","very good","very cold"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>terrible / awful</em> means ______",o:["very bad","very funny","very good","very cold"],a:0},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>freezing</em> means ______",o:["very bad","very funny","very hot","very cold"],a:3},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>boiling</em> means ______",o:["very cold","very funny","very hot","very bad"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 2)",t:"<em>fantastic</em> means ______",o:["very bad","very funny","very good","very cold"],a:2},
+
+  // Page 71 — Extreme adjectives (Ex. 3 — headlines)
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Prime Minister very angry at criticism' → Replace <em>very angry</em> with the correct extreme adjective.",o:["exhausted","furious","terrified","astonished"],a:1},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'I made a very bad mistake,' admits President → Replace <em>very bad</em>.",o:["hilarious","freezing","terrible / awful","fantastic"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Players very tired after a long season' → Replace <em>very tired</em>.",o:["furious","exhausted","terrified","delighted"],a:1},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Very cold weather causes problems on the roads' → Replace <em>very cold</em>.",o:["boiling","hilarious","freezing","exhausted"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Joey Spillane stars in very funny new comedy' → Replace <em>very funny</em>.",o:["hilarious","terrible","furious","freezing"],a:0},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Audiences very frightened by new horror movie' → Replace <em>very frightened</em>.",o:["astonished","delighted","terrified","furious"],a:2},
+  {s:"VOCABULARY — Page 71 — Extreme Adjectives (Ex. 3 — Headlines)",t:"'Film star very surprised at Oscar nomination' → Replace <em>very surprised</em>.",o:["exhausted","astonished","furious","terrified"],a:1},
+
+  // Pages 150–152 — Remember these words (Ex. 1 — odd one out)
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>travel news</em> | documentaries | soap operas | sitcoms",o:["travel news — the rest tell a story","documentaries — the rest are fiction","soap operas — the rest are short","sitcoms — the rest are serious"],a:0},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>a character</em> | a drama series | a sitcom | a chat show",o:["a character — the rest are types of show","a drama series — the rest are comedies","a sitcom — the rest are live","a chat show — the rest are fictional"],a:0},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>a drama series</em> | a reality show | a phone-in | a talent show",o:["a drama series — the rest involve the general public","a reality show — the rest are scripted","a phone-in — the rest are on TV","a talent show — the rest have no contestants"],a:0},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>the cast</em> | the audience | an actor | a presenter",o:["the cast — the rest aren't people","the audience — the rest perform","an actor — the rest appear on TV only","the cast — the rest are individuals, not groups"],a:3},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>an advert</em> | a documentary | a nature programme | a weather forecast",o:["an advert — the rest are programmes that give information","a documentary — the rest are short","a nature programme — the rest are daily","a weather forecast — the rest are long"],a:0},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 1 — Odd One Out)",t:"Which is the odd one out? <em>a comedy show</em> | a talent show | a music show | a pop video",o:["a comedy show — the rest involve music","a talent show — the rest are pre-recorded","a music show — the rest are funny","a pop video — the rest are live"],a:0},
+
+  // Pages 150–152 — Remember these words (Ex. 2 — extreme adjectives)
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very good → ______",o:["terrible","excellent","furious","ridiculous"],a:1},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very bad → ______",o:["excellent","hilarious","terrible","freezing"],a:2},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very happy → ______",o:["furious","delighted","exhausted","terrified"],a:1},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very angry → ______",o:["delighted","hilarious","furious","boiling"],a:2},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very silly → ______",o:["ridiculous","freezing","hilarious","exhausted"],a:0},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very funny → ______",o:["terrible","ridiculous","hilarious","furious"],a:2},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very cold → ______",o:["boiling","freezing","exhausted","delighted"],a:1},
+  {s:"VOCABULARY — Pages 150–152 — Remember These Words (Ex. 2 — Extreme Adjectives)",t:"Match: very hot → ______",o:["freezing","terrible","boiling","ridiculous"],a:2},
+
+  // ─── GRAMMAR ───────────────────────────────────────────────────────────────
+
+  // Page 69 — Passive Grammar (Ex. 1 — active vs passive)
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"'Daniel was chosen to play Harry Potter when he was 11.' This verb is ______.",o:["active","passive","present perfect","future"],a:1},
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"'The author, JK Rowling, chose Daniel herself.' This verb is ______.",o:["active","passive","present perfect passive","future passive"],a:0},
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"'More than 400 films of Shakespeare's plays have been made.' This verb is ______.",o:["active","present simple passive","present perfect passive","future passive"],a:2},
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"'A sequel is being filmed at the moment.' This verb is ______.",o:["past simple passive","present simple passive","present continuous passive","future passive"],a:2},
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"'A third film will be made next year.' This verb is ______.",o:["past simple passive","present perfect passive","present continuous passive","future passive"],a:3},
+  {s:"GRAMMAR — Page 69 — Active vs Passive (Ex. 1a)",t:"In sentence 1 ('Daniel was chosen…'), do we know WHO chose him?",o:["Yes, it was JK Rowling","No, the doer is not mentioned","Yes, it was the director","No, Daniel chose himself"],a:0},
+
+  // Page 69 — Passive forms identification (Ex. 2)
+  {s:"GRAMMAR — Page 69 — Passive Forms (Ex. 2)",t:"Which sentence contains a PRESENT SIMPLE passive?",o:["Avatar was directed by James Cameron.","A sequel is being filmed.","He is better known as Jackie Chan.","A third film will be made."],a:2},
+  {s:"GRAMMAR — Page 69 — Passive Forms (Ex. 2)",t:"Which sentence contains a PAST SIMPLE passive?",o:["He is better known as Jackie Chan.","Daniel was chosen to play Harry Potter.","More than 400 films have been made.","A third film will be made."],a:1},
+  {s:"GRAMMAR — Page 69 — Passive Forms (Ex. 2)",t:"Which sentence contains a PRESENT CONTINUOUS passive?",o:["Daniel was chosen when he was 11.","More than 400 films have been made.","A sequel is being filmed at the moment.","A third film will be made next year."],a:2},
+  {s:"GRAMMAR — Page 69 — Passive Forms (Ex. 2)",t:"Which sentence contains a PRESENT PERFECT passive?",o:["Avatar was directed by James Cameron.","A sequel is being filmed.","More than 400 films of Shakespeare's plays have been made.","A third film will be made."],a:2},
+  {s:"GRAMMAR — Page 69 — Passive Forms (Ex. 2)",t:"Which sentence contains a FUTURE passive?",o:["Daniel was chosen to play Harry Potter.","A sequel is being filmed at the moment.","More than 400 films have been made.","A third film will be made next year."],a:3},
+
+  // Page 69 — Passive Practice (Ex. 1)
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'Around 900 movies ______ (produce) in the USA every year.' Choose the correct passive form.",o:["produced","are produced","were produced","have been produced"],a:1},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'Over a thousand Bollywood films ______ (release) every year.'",o:["released","were released","are released","have been released"],a:2},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'The world's first 3D movie ______ (show) in Los Angeles on 27th September 1922.'",o:["is shown","was shown","has been shown","will be shown"],a:1},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'Unfortunately, since then the movie ______ (lose).'",o:["lost","was lost","is lost","has been lost"],a:3},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'Between 2002 and 2011, eight Harry Potter films ______ (make).'",o:["are made","were made","have been made","will be made"],a:1},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'In all eight films, the role of Harry ______ (play) by Daniel Radcliffe.'",o:["played","is played","was played","has been played"],a:2},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'No more Harry Potter movies ______ (release) in the future, because all of the books ______ (already make) into films.'",o:["will be released / have already been made","are released / were already made","were released / have been made","will release / have already made"],a:0},
+  {s:"GRAMMAR — Page 69 — Passive Practice (Ex. 1)",t:"'A sequel to Avatar ______ (film) at the moment.'",o:["films","was filmed","is being filmed","has been filmed"],a:2},
+
+  // Page 69 — Movie Winners text (Ex. 2)
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'Crouching Tiger, Hidden Dragon ______ in 2000.' Choose the correct form.",o:["released","was released","has released","had released"],a:1},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'It ______ the Academy Award for Best Foreign Language film.' Choose the correct form.",o:["was won","has won","won","is won"],a:2},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'Since then it ______ more than $200 million.' Choose the correct form.",o:["has made","has been made","made","was made"],a:0},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'It ______ as the most profitable foreign-language film in American movie history.' Choose the correct form.",o:["has described","has been described","described","describes"],a:1},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'Kevin O'Connell ______ the record for the most nominations without a win.'",o:["is held","has been held","holds","was held"],a:2},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'Since 1983 he ______ 20 times but never won!'",o:["has nominated","has been nominated","was nominated","had nominated"],a:1},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'The movie ______ from US cinemas after just a few weeks.'",o:["removed","was removed","has removed","is removed"],a:1},
+  {s:"GRAMMAR — Page 69 — Movie Winners Text (Ex. 2)",t:"'Overall, the movie ______ more than $100 million.'",o:["was lost","has been lost","lost","has lost"],a:2},
+
+  // Pages 150–152 — Practice 1 (Ex. 1)
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'The documentary was really ______.' (interest)",o:["interested","interesting","interest","interests"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'The results were ______.' (surprise)",o:["surprised","surprise","surprising","surprisingly"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'She felt ______ when she forgot his name.' (embarrass)",o:["embarrassing","embarrassed","embarrass","embarrassingly"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'His constant complaints were ______.' (annoy)",o:["annoyed","annoy","annoying","annoys"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'The lecture was really ______. I nearly fell asleep.' (bore)",o:["bored","boring","bore","bores"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'She was ______ with the news.' (please)",o:["pleasing","please","pleased","pleases"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'It's ______ that so many people can't read.' (worry)",o:["worried","worry","worrying","worries"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 1 — -ed / -ing)",t:"'I was ______ by the instructions — they weren't clear.' (confuse)",o:["confusing","confused","confuse","confusedly"],a:1},
+
+  // Pages 150–152 — Practice 1 (Ex. 2)
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'She was ______ when they cancelled the trip.' (disappoint)",o:["disappointing","disappoint","disappointed","disappoints"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'The map was really ______. We got completely lost.' (confuse)",o:["confused","confuse","confusing","confusingly"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'He felt ______ after losing his job.' (depress)",o:["depressing","depress","depressed","depressingly"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'I was ______ to hear the news.' (amaze)",o:["amazing","amaze","amazed","amazingly"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'The noise was really ______.' (annoy)",o:["annoyed","annoy","annoying","annoys"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 1 (Ex. 2 — -ed / -ing)",t:"'It was ______ that we couldn't get tickets.' (frustrate)",o:["frustrated","frustrate","frustrating","frustratingly"],a:2},
+
+  // Pages 150–152 — Practice 2 (Ex. 1 — passive rewrite)
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 1 — Passive Rewrite)",t:"'Many people are ______ in the accident.' (injure) Choose the correct passive.",o:["injuring","are injuring","are injured","injures"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 1 — Passive Rewrite)",t:"'The missing children ______ safe.' (find) → correct passive form",o:["found","were found","have been found","are found"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 1 — Passive Rewrite)",t:"'A new hospital ______ in the city centre.' (build) → correct present continuous passive",o:["is building","is been built","is being built","has been built"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 1 — Passive Rewrite)",t:"'My car ______ last night.' (steal) → correct past simple passive",o:["stole","was stolen","has been stolen","is stolen"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 1 — Passive Rewrite)",t:"'The new bridge ______ by the end of next year.' (complete) → correct future passive",o:["will complete","is completed","will be completed","has been completed"],a:2},
+
+  // Pages 150–152 — Practice 2 (Ex. 2 — full passive sentences)
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'Police arrested over 30 demonstrators.' → Correct passive:",o:["Over 30 demonstrators arrested.","Over 30 demonstrators were arrested.","Over 30 demonstrators have arrested.","Over 30 demonstrators are arrested."],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'The storm damaged a number of buildings.' → Correct passive:",o:["A number of buildings damaged.","A number of buildings have been damaged.","A number of buildings are damaged.","A number of buildings were being damaged."],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'People destroy thousands of trees every year.' → Correct passive:",o:["Thousands of trees are destroyed every year.","Thousands of trees were destroyed every year.","Thousands of trees destroy every year.","Thousands of trees have been destroyed every year."],a:0},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'The judge will sentence the man tomorrow.' → Correct passive:",o:["The man is sentenced tomorrow.","The man was sentenced tomorrow.","The man will be sentenced tomorrow.","The man has been sentenced tomorrow."],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'Someone had stolen my computer.' → Correct passive:",o:["My computer was stolen.","My computer has been stolen.","My computer had been stolen.","My computer is being stolen."],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Which passive question is CORRECT for: 'Are they looking after you?'",o:["Are you looked after?","Are you being looked after?","Have you been looked after?","Were you looked after?"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'They presented Sarah with a gold watch.' → One correct passive option is:",o:["Sarah was presenting with a gold watch.","Sarah was presented with a gold watch.","Sarah has presented with a gold watch.","Sarah is presented with a gold watch."],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 2 — Passive Sentences)",t:"Rewrite: 'They built the museum in 1874.' → Correct passive:",o:["The museum is built in 1874.","The museum has been built in 1874.","The museum was building in 1874.","The museum was built in 1874."],a:3},
+
+  // Pages 150–152 — Practice 2 (Ex. 3a — historical passage A)
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage A: '…she ______ (give) the title Princess of Wales when she married Prince Charles.' Choose the correct passive.",o:["gave","was giving","was given","has given"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage A: 'She ______ (land) on the world stage.' (became famous) Choose the correct form.",o:["was landed","landed","had been landed","has landed"],a:1},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage A: 'She ______ (know) for her charity work.' → correct passive in present perfect",o:["has been known","was known","is knowing","has known"],a:0},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage B: 'He ______ (murder) in 1968.' → correct passive form",o:["murdered","had murdered","was murdered","has been murdered"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage B: 'He ______ (elect) to Congress in 1960.' → correct passive form",o:["elected","was electing","had been elected","was elected"],a:3},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage C: 'The campaign ______ (launch) in the early 1960s.' → correct passive form",o:["has been launched","is launched","was launched","were launched"],a:2},
+  {s:"GRAMMAR — Pages 150–152 — Practice 2 (Ex. 3 — Historical Passages)",t:"Passage C: 'It ______ (name) after her.' → correct passive form",o:["named","has named","was named","is naming"],a:2},
+
+  // ─── READING ───────────────────────────────────────────────────────────────
+
+  // Page 70 — Match headlines (Ex. 3)
+  {s:"READING — Page 70 — News Headlines (Ex. 3)",t:"Which headline matches the story about the woman suing the cinema?",o:["A — German DJ breaks record","B — TV weather presenter gets on air proposal","C — Woman sues movie theatre","D — Who's watching the audience?"],a:2},
+  {s:"READING — Page 70 — News Headlines (Ex. 3)",t:"Which headline matches the story about technology that films cinema audiences?",o:["A — German DJ breaks record","B — TV weather presenter gets on air proposal","C — Woman sues movie theatre","D — Who's watching the audience?"],a:3},
+  {s:"READING — Page 70 — News Headlines (Ex. 3)",t:"Which headline matches the story about Dominik Schollmayer?",o:["A — German DJ breaks record","B — TV weather presenter gets on air proposal","C — Woman sues movie theatre","D — Who's watching the audience?"],a:0},
+  {s:"READING — Page 70 — News Headlines (Ex. 3)",t:"Which headline matches the story about Kim Perez and Marty Cunningham?",o:["A — German DJ breaks record","B — TV weather presenter gets on air proposal","C — Woman sues movie theatre","D — Who's watching the audience?"],a:1},
+
+  // Page 71 — Article summaries (Ex. 4)
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"The woman in Beijing is suing the movie theatre because ______.",o:["she didn't enjoy the film","the tickets were too expensive","she had to wait a long time to see the film","the cinema was too crowded"],a:2},
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"Dr Farooq is developing technology which will ______.",o:["ask the audience questions about the film","show pictures of the audience","capture the audience's attention and reactions","sell advertising to cinemas"],a:1},
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"The German DJ behaved strangely ______ his broadcast.",o:["after","before","towards the end of","at the beginning of"],a:2},
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"The DJ behaved strangely because ______.",o:["he wanted to break the record","he wanted people to notice him","he was extremely tired","he was very excited"],a:2},
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"Kim Perez was very ______ during the live proposal.",o:["worried","surprised / astonished","disappointed","bored"],a:1},
+  {s:"READING — Page 71 — Article Summaries (Ex. 4)",t:"Kim was surprised because ______.",o:["it was her first time on TV","she didn't want to get engaged","she didn't expect her boyfriend to propose","the studio was too crowded"],a:2},
+
+  // Page 71 — Vocabulary in context (Ex. 5)
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"An advertisement for a new TV programme or film is called ______. (Article 1)",o:["a broadcast","a trailer","a graphic","the set"],a:1},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"A film which tells a love story in an amusing way is called ______. (Article 2)",o:["a drama series","a soap opera","a romantic comedy","a sitcom"],a:2},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"The people watching a TV programme or film are called ______. (Article 2)",o:["the cast","the crew","the audience","the broadcast"],a:2},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"The transmission of a radio or TV programme is called ______. (Article 3)",o:["a broadcast","a trailer","a graphic","the set"],a:0},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"The place in a studio where a TV show is made is called ______. (Article 4)",o:["a broadcast","a trailer","the set","a graphic"],a:2},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"A computerised design on screen is called ______. (Article 4)",o:["a broadcast","a trailer","the set","a graphic"],a:3},
+  {s:"READING — Page 71 — Vocabulary in Context (Ex. 5)",t:"To clap your hands to show you enjoyed something is ______. (Article 4)",o:["to broadcast","to applaud","to release","to direct"],a:1},
+
+  // Page 74 — Wicked (Reviews Ex. 2 & 3)
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"Put the reviews in order from MOST to LEAST positive. Who is the MOST positive reviewer?",o:["Selma","Alejandro","Jozef","Miu"],a:1},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"Who is the LEAST positive reviewer?",o:["Selma","Alejandro","Miu","Jozef"],a:3},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"In Selma's review, which paragraph describes WHAT SHE LIKED AND DIDN'T LIKE?",o:["Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4"],a:2},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"In Selma's review, which paragraph recommends the show?",o:["Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4"],a:3},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"In Selma's review, which paragraph gives basic facts (what, where, when, who with)?",o:["Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4"],a:0},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"In Selma's review, which paragraph describes THE STORY?",o:["Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4"],a:1},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"What is Selma's main criticism of the show?",o:["The special effects were poor","The plot was boring","The British cast didn't sound convincingly American","The songs were not catchy"],a:2},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"What does Jozef say is disappointing?",o:["The acting","The scenery","The music","The costumes"],a:2},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"What does Miu say about the plot?",o:["It is very easy to follow","It is quite hard to follow at times","It is boring","It is too short"],a:1},
+  {s:"READING — Page 74 — Wicked Reviews (Ex. 2 & 3)",t:"Wicked is based on which two sources?",o:["A novel by Agatha Christie and a Shakespeare play","A novel by Gregory Maguire and the film The Wizard of Oz","A BBC drama and a Broadway musical","A novel by CS Lewis and a Disney film"],a:1}
+];
+
+// ── Reading Passages ──────────────────────────────────────────────────────────
+const PASSAGES = {
+  "READING — Page 70 — News Headlines (Ex. 3)": {
+    title: "📰 Reading Texts — Page 70 (News Articles)",
+    html: `
+      <h4>Article 1</h4>
+      <p>A Beijing woman is so furious with a local cinema that she is suing them for wasting her time. Chen Xiaomei is suing the cinema's owners because she was not warned about the 20 minutes of adverts and trailers before the main feature. She is demanding a full refund (35 yuan), compensation for emotional damage and a written apology. In addition, Xiaomei now says that the length of advertisements should be published on the website. In total, they should be less than five minutes, she believes.</p>
+      <h4>Article 2</h4>
+      <p>Terrified by the latest horror film? Or in tears at the latest romantic comedy? Soon advertisers will be able to see your reaction to a film, so that adverts can be changed to make them more effective. Technology is now being developed which can capture how the cinema audience reacts. "It will give film directors and advertisers useful information about what audiences enjoy and what captures their attention," says the inventor, Dr Abdul Farooq. The technology will also be used to find pirates who secretly record films and then sell them illegally.</p>
+      <h4>Article 3</h4>
+      <p>A German DJ has broken the record for the world's longest non-stop radio show. Dominik Schollmayer, 26, ran his show for 169 consecutive hours, beating the previous record by one hour. Schollmayer was observed by doctors all through his broadcast; they said that the DJ had gone "completely mad" and was performing "like a crazy man" in the last few hours. At the end, Schollmayer said he was "totally exhausted".</p>
+      <h4>Article 4</h4>
+      <p>Viewers of the Weather Channel thought they were watching a soap opera … but the drama they saw was 100 percent real. Kim Perez was presenting the weather forecast when her friend, Marty Cunningham, walked onto the set. "How are you?" Cunningham asked. Kim was astonished when Cunningham went down on one knee … and so were the viewing public when he said: "I love you and I want to spend the rest of my life with you. Will you please marry me?" Music began playing, and the weather map behind Kim was changed into a giant "Will You Marry Me?" graphic. "I will," said a delighted Perez. The people in the studio began to applaud and Kim started to cry when Marty put the engagement ring on her finger.</p>
+    `
+  },
+  "READING — Page 74 — Wicked Reviews (Ex. 2 & 3)": {
+    title: "🎭 Reading Texts — Page 74 (Wicked Reviews)",
+    html: `
+      <h4>Must-See Introduction</h4>
+      <p>Based on a novel by Gregory Maguire and characters from the film <em>The Wizard of Oz</em>, <em>Wicked</em> is the story of two inspiring women, and is the must-see musical of the decade! Now in its eighth year at the Apollo Victoria Theatre in London, <em>Wicked</em> has been seen by more than 20 million people worldwide, and it was recently voted "Best Musical of the Decade" by the magazine <em>Entertainment Weekly</em>.</p>
+      <h4>Selma (Argentina)</h4>
+      <p><strong>[Para 1]</strong> A few weeks ago my friend and I went to see <em>Wicked</em> at the Apollo Victoria Theatre in London. It is based on the classic film <em>The Wizard of Oz</em> and the novel <em>Wicked</em> by Gregory Maguire.</p>
+      <p><strong>[Para 2]</strong> <em>Wicked</em> is set in the imaginary land of Oz, and it tells the epic story of two girls who meet when they are studying to be witches. The main characters are Elphaba, who later becomes the Wicked Witch of the West, and her friend Glinda, who later becomes the Good Witch of the North. The story centres on their relationship and how they deal with the evil Wizard.</p>
+      <p><strong>[Para 3]</strong> There are plenty of catchy songs in <em>Wicked</em> and the special effects are really spectacular. The only thing I didn't like was that the British cast speak with American accents. I'm American myself and those accents didn't quite sound real to me. However, all the audience really enjoyed the show and everyone stood up and applauded at the end.</p>
+      <p><strong>[Para 4]</strong> I'd recommend it to anyone who enjoys good music and a good night out!</p>
+      <h4>Alejandro (Mexico)</h4>
+      <p>I saw <em>Wicked</em> at the Apollo last night. It was absolutely fantastic. The audience loved it! I'd give the show eleven out of ten.</p>
+      <h4>Jozef (Slovakia)</h4>
+      <p>The scenery is beautiful and the acting is great, but for me the music is a bit disappointing. I wasn't moved.</p>
+      <h4>Miu (Japan)</h4>
+      <p>The plot is quite hard to follow at times, but all in all, this musical is a triumph. I was hooked from beginning to end.</p>
+    `
+  }
+};
+
+let passageCounter = 0;
+
+function buildPassageCard(sectionKey) {
+  const p = PASSAGES[sectionKey];
+  if (!p) return null;
+  const id = 'passage-' + (passageCounter++);
+  const div = document.createElement('div');
+  div.className = 'section';
+  div.innerHTML = `
+    <div class="passage-card">
+      <h3>${p.title}</h3>
+      <button class="passage-toggle" onclick="togglePassage('${id}')">📖 Show / Hide Text</button>
+      <div class="passage-body" id="${id}">${p.html}</div>
+    </div>`;
+  return div;
+}
+
+function togglePassage(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+let answered=0,correct=0,wrong=0;
+const userAnswers={};
+
+const CATS=[...new Set(Q.map(q=>q.s.split(' — ')[0]))];
+let activeCat=CATS[0];
+
+function buildTabs(){
+  const tb=document.getElementById('tab-bar');
+  tb.innerHTML=CATS.map(c=>`<button class="tab-btn${c===activeCat?' active':''}" onclick="switchTab('${c}')">${c}</button>`).join('');
+}
+
+function switchTab(cat){
+  activeCat=cat;
+  buildTabs();
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  let sec='';
+  Q.forEach((q,i)=>{
+    const thisCat=q.s.split(' — ')[0];
+    if(thisCat!==activeCat)return;
+    if(q.s!==sec){
+      sec=q.s;
+      // Inject passage card above first question of a reading section
+      const passageCard = buildPassageCard(sec);
+      if(passageCard) c.appendChild(passageCard);
+      const sd=document.createElement('div');
+      sd.className='section';
+      sd.innerHTML=`<div class="section-title">${sec}</div>`;
+      c.appendChild(sd);
+    }
+    const lastSec=c.lastElementChild;
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id='card-'+i;
+    const L=['A','B','C','D'];
+    card.innerHTML=`<div class="q-meta">Q${i+1} of ${Q.length}</div>
+      <div class="q-text">${q.t}</div>
+      <div class="options" id="opts-${i}">
+        ${q.o.map((o,j)=>`<button class="opt-btn" id="opt-${i}-${j}" onclick="pick(${i},${j})"><span class="opt-letter">${L[j]}</span>${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-${i}"></div>`;
+    lastSec.appendChild(card);
+  });
+  document.getElementById('total-q').textContent=Q.length;
+}
+
+function pick(qi,oi){
+  if(userAnswers[qi]!==undefined)return;
+  userAnswers[qi]=oi;
+  answered++;
+  const q=Q[qi];
+  const ok=oi===q.a;
+  if(ok)correct++;else wrong++;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach(b=>b.disabled=true);
+  document.getElementById(`opt-${qi}-${q.a}`).classList.add('correct');
+  if(!ok)document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+  document.getElementById('card-'+qi).classList.add(ok?'answered-correct':'answered-wrong');
+  const fb=document.getElementById('fb-'+qi);
+  fb.classList.add('show');
+  if(ok){fb.classList.add('correct-fb');fb.textContent='✓ Correct!';}
+  else{fb.classList.add('wrong-fb');fb.textContent='✗ Wrong. Correct answer: "'+q.o[q.a]+'"';}
+  document.getElementById('answered-q').textContent=answered;
+  document.getElementById('correct-q').textContent=correct;
+  document.getElementById('wrong-q').textContent=wrong;
+  document.getElementById('progress-fill').style.width=Math.round(answered/Q.length*100)+'%';
+}
+
+function showFinalResult(){
+  const pct=Math.round(correct/Q.length*100);
+  let grade,color;
+  if(pct>=90){grade='A+';color='#2ecc71';}
+  else if(pct>=80){grade='A';color='#27ae60';}
+  else if(pct>=70){grade='B';color='#f0a500';}
+  else if(pct>=60){grade='C';color='#e67e22';}
+  else{grade='F';color='#e74c3c';}
+  const rp=document.getElementById('result-panel');
+  rp.classList.add('show');
+  document.getElementById('result-percent').textContent=pct+'%';
+  document.getElementById('result-percent').style.color=color;
+  document.getElementById('result-detail').innerHTML=`Grade: <strong style="color:${color}">${grade}</strong><br>Correct: <strong style="color:var(--correct)">${correct}</strong> / ${Q.length}<br>Wrong: <strong style="color:var(--wrong)">${wrong}</strong><br>Unanswered: <strong>${Q.length-answered}</strong>`;
+  rp.scrollIntoView({behavior:'smooth'});
+  document.getElementById('submit-btn').style.display='none';
+}
+
+function restartQuiz(){
+  answered=0;correct=0;wrong=0;
+  Object.keys(userAnswers).forEach(k=>delete userAnswers[k]);
+  ['answered-q','correct-q','wrong-q'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('submit-btn').style.display='block';
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildTabs();
+buildQuiz();
+</script>
+</body>
+</html>

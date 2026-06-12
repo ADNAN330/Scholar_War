@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 08 — My Big Night Out! | Final Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--card:#161616;--border:#2a2a2a;--accent:#e85d3a;--accent2:#f0a500;--text:#e8e2d9;--muted:#888;--correct:#2ecc71;--wrong:#e74c3c;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-weight:300;min-height:100vh;padding-bottom:80px;}
+header{background:linear-gradient(135deg,#0a0510 0%,#0d0d0d 60%);border-bottom:2px solid var(--accent);padding:44px 24px 32px;text-align:center;position:relative;overflow:hidden;}
+header::before{content:'08';position:absolute;font-family:'Playfair Display',serif;font-size:220px;font-weight:900;color:rgba(232,93,58,0.05);top:-50px;left:50%;transform:translateX(-50%);pointer-events:none;}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,52px);font-weight:900;letter-spacing:3px;color:#fff;position:relative;}
+header h1 span{color:var(--accent);}
+header p{margin-top:8px;color:var(--muted);font-size:13px;letter-spacing:4px;text-transform:uppercase;position:relative;}
+#scorebar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px 8px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-size:12px;letter-spacing:2px;text-transform:uppercase;position:sticky;top:0;z-index:100;}
+#scorebar span{color:var(--muted);}
+#scorebar strong{font-size:18px;}
+#progress-bar{width:100%;height:3px;background:var(--border);margin-top:8px;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease;width:0%;}
+.section{max-width:860px;margin:40px auto 0;padding:0 20px;}
+.section-title{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);border-left:3px solid var(--accent);padding-left:12px;margin-bottom:22px;font-weight:600;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:16px;transition:border-color .3s;}
+.q-card.answered-correct{border-color:var(--correct);}
+.q-card.answered-wrong{border-color:var(--wrong);}
+.q-meta{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:15px;line-height:1.65;margin-bottom:16px;}
+.q-text em{font-style:italic;color:var(--accent2);}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt-btn{background:transparent;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:13px;text-align:left;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:11px;}
+.opt-btn:hover:not(:disabled){background:rgba(232,93,58,0.08);border-color:var(--accent);}
+.opt-letter{width:24px;height:24px;border-radius:50%;border:1px solid var(--muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;transition:all .2s;}
+.opt-btn.correct{background:rgba(46,204,113,0.12);border-color:var(--correct);color:var(--correct);}
+.opt-btn.correct .opt-letter{background:var(--correct);border-color:var(--correct);color:#000;}
+.opt-btn.wrong{background:rgba(231,76,60,0.12);border-color:var(--wrong);color:var(--wrong);}
+.opt-btn.wrong .opt-letter{background:var(--wrong);border-color:var(--wrong);color:#fff;}
+.opt-btn:disabled{cursor:default;}
+.feedback{display:none;margin-top:12px;padding:11px 14px;border-radius:4px;font-size:13px;line-height:1.6;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:rgba(46,204,113,0.1);border-left:3px solid var(--correct);color:#a8e6c3;}
+.feedback.wrong-fb{background:rgba(231,76,60,0.1);border-left:3px solid var(--wrong);color:#f0b0a8;}
+.passage-card{background:#0f1a24;border:1px solid #1e3a52;border-left:4px solid var(--accent2);border-radius:6px;padding:22px 24px;margin-bottom:8px;font-size:13.5px;line-height:1.8;color:#ccc;}
+.passage-card h3{font-family:'Playfair Display',serif;font-size:14px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;font-weight:700;}
+.passage-card h4{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:14px 0 6px;font-weight:600;}
+.passage-card p{margin-bottom:8px;}
+.passage-card table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;}
+.passage-card td,.passage-card th{border:1px solid #2a4060;padding:8px 12px;text-align:left;}
+.passage-card th{background:#112030;color:var(--accent2);letter-spacing:1px;font-size:11px;text-transform:uppercase;}
+.passage-card tr:nth-child(even) td{background:rgba(255,255,255,0.03);}
+.passage-toggle{background:transparent;border:1px solid #1e3a52;border-radius:4px;padding:8px 16px;color:var(--accent2);font-family:'Source Sans 3',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:16px;transition:all .2s;}
+.passage-toggle:hover{background:rgba(240,165,0,0.08);border-color:var(--accent2);}
+.passage-body{display:none;}
+.passage-body.open{display:block;}
+#submit-btn{display:block;margin:50px auto 20px;background:var(--accent);color:#fff;border:none;padding:15px 56px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;transition:all .2s;}
+#submit-btn:hover{background:#c9441f;transform:translateY(-2px);}
+#result-panel{display:none;max-width:560px;margin:40px auto;padding:0 20px;text-align:center;}
+#result-panel.show{display:block;}
+.result-box{background:var(--card);border:2px solid var(--accent);border-radius:8px;padding:40px;}
+.result-grade{font-family:'Playfair Display',serif;font-size:80px;font-weight:900;line-height:1;}
+.result-label{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+.result-detail{margin-top:22px;font-size:15px;color:var(--muted);line-height:2;}
+#restart-btn{margin-top:26px;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:11px 36px;font-family:'Source Sans 3',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;}
+#restart-btn:hover{background:var(--accent);color:#fff;}
+#tab-bar{max-width:860px;margin:30px auto 0;padding:0 20px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.tab-btn{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 18px;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:4px;transition:all .2s;}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent2);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+</style>
+</head>
+<body>
+<header>
+  <h1>MY BIG <span>NIGHT OUT!</span></h1>
+  <p>Unit 08 &nbsp;·&nbsp; Final Exam &nbsp;·&nbsp; English</p>
+</header>
+<div id="scorebar">
+  <div><span>Questions: </span><strong id="total-q">0</strong></div>
+  <div><span>Answered: </span><strong id="answered-q">0</strong></div>
+  <div><span>Correct: </span><strong id="correct-q" style="color:var(--correct)">0</strong></div>
+  <div><span>Wrong: </span><strong id="wrong-q" style="color:var(--wrong)">0</strong></div>
+  <div style="width:100%"><div id="progress-bar"><div id="progress-fill"></div></div></div>
+</div>
+<div id="tab-bar"></div>
+<div id="quiz-container"></div>
+<button id="submit-btn" onclick="showFinalResult()">Show Final Result</button>
+<div id="result-panel">
+  <div class="result-box">
+    <div class="result-grade" id="result-percent"></div>
+    <div class="result-label">Final Score</div>
+    <div class="result-detail" id="result-detail"></div>
+    <button id="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+</div>
+<script>
+const Q=[
+
+  // ─── VOCABULARY — Page 76-77 — Reading: Night Out ───
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"Where does Jiao Wu usually meet her friends?",o:["At the Bling club","Around midnight in Chaoyang Park district","At Ghost Street restaurants","At an all-night karaoke bar"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"What is 'BPT' in the reading text?",o:["British Party Time","Beijing Party Time","Beijing Public Transport","Beijing Prime Time"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"What is special about the DJ at the Bling club?",o:["He plays live music","He sits in a Bentley car in the middle of the floor","He plays from midnight to sunrise","He is famous worldwide"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"In the past, what did young people in Beijing usually do instead of clubbing?",o:["They went driving around town","They stayed home","They had a long dinner and then went to an all-night karaoke bar","They went to community halls"],a:2},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"What do Hassan and his friends write on pieces of paper?",o:["Their names and addresses","Their mobile numbers","Their car registration plates","A joke or poem"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"Why was Hassan's friend's classmate furious?",o:["She didn't like the car","She realised they were trying to give her their numbers","She knew Hassan personally","She was in a hurry"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"How many inhabitants are there on the Isle of Eigg?",o:["700","17","70","170"],a:2},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"On Saturday nights on Eigg, what time do people head to the community hall?",o:["Around 9 o'clock","Around midnight","Around 10 o'clock","Around 7 o'clock"],a:0},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"According to Ewen, what is Saturday night on the Isle of Eigg a bit like?",o:["Going to a disco with strangers","Going clubbing with your parents","Watching a live band in a big city","Having dinner in a restaurant"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"According to the Fact! box, where did the first discos take place?",o:["London","New York","Paris","Beijing"],a:2},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"Why was live music banned (leading to the first discos)?",o:["It was too expensive","It was during the Second World War","The government didn't like it","Clubs were too small"],a:1},
+  {s:"VOCABULARY — Pages 76-77 — Reading Comprehension",t:"According to the Fact! box, in which century did restaurants exist in Kaifeng, China?",o:["9th century","10th century","11th century","12th century"],a:2},
+
+  // ─── VOCABULARY — Page 80-81 — Social Behaviour ───
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to offer' → ______",o:["a on both cheeks","b each other","c to pay","k hands"],a:2},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to shake' → ______",o:["c to pay","d paying","k hands","g home"],a:2},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to go out on' → ______",o:["a on both cheeks","e a date","f the bill","h an invitation"],a:1},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to kiss someone' → ______",o:["e a date","a on both cheeks","k hands","g home"],a:1},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to insist on' → ______",o:["h an invitation","c to pay","d paying","f the bill"],a:2},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to refuse' → ______",o:["g home","d paying","h an invitation","i to your house"],a:2},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to pick someone up' → ______",o:["j someone up","k hands","b each other","f the bill"],a:0},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to invite someone' → ______",o:["h an invitation","g home","i to your house","e a date"],a:2},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to share' → ______",o:["b each other","f the bill","c to pay","a on both cheeks"],a:1},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to take someone' → ______",o:["g home","i to your house","e a date","h an invitation"],a:0},
+  {s:"VOCABULARY — Pages 80-81 — Social Behaviour (Ex. 2a)",t:"Match: 'to hug' → ______",o:["f the bill","b each other","a on both cheeks","k hands"],a:1},
+
+  // ─── VOCABULARY — Page 81 — Norms & Customs phrases ───
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"Which phrase is used to say something is GOOD MANNERS / acceptable?",o:["It's considered rude to...","It's unacceptable to...","It's good manners to...","It isn't usual to..."],a:2},
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"Which phrase is used to say something is BAD MANNERS / unacceptable?",o:["It's perfectly normal to...","It's good manners to...","It's considered rude to...","It's important to..."],a:2},
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"Which phrase is used to make a GENERALISATION?",o:["It's unacceptable to...","It isn't usual to...","It's good manners to...","It's considered rude to..."],a:1},
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"According to the British customs tips, what is it 'considered rude' to do?",o:["Use first names","Say 'excuse me'","Jump queues","Call people 'love' or 'dear'"],a:2},
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"According to the British customs tips, what is it 'unacceptable' to ask people about?",o:["Their age","How much they earn","Their family","Their religion"],a:1},
+  {s:"VOCABULARY — Page 81 — Norms & Customs Phrases",t:"According to the British customs tips, when do people generally shake hands?",o:["Every time they meet","Only at formal events","When introduced for the first time","At parties only"],a:2},
+
+  // ─── VOCABULARY — Page 86 — Definitions ───
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'a reward'?",o:["Something you buy for yourself","Something you get because you have done something good or worked hard","A quick solution to a problem","Not having much free time"],a:1},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'a purchase'?",o:["Something you earn","Something you deserve","Something you buy","Something you find"],a:2},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'to deserve'?",o:["To try to get something","To buy something expensive","To have earned something by good actions or behaviour","To seek a quick solution"],a:2},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'time-poor'?",o:["Not having enough money","Not having much free time because of work commitments","Lacking good choices","Being homeless"],a:1},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'a quick-fix solution'?",o:["A solution that is permanent and effective","A solution that is expensive","A solution that is quick but not good or permanent","A solution that requires a lot of work"],a:2},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'to seek'?",o:["To buy something","To try to get something","To deserve something","To lack something"],a:1},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'lack of choice'?",o:["Having too many options","Not having too many things to choose between","Having a permanent solution","Being time-poor"],a:1},
+  {s:"VOCABULARY — Page 86 — Definitions (Ex. 4)",t:"What is the meaning of 'homeless'?",o:["Without a job","Without a family","Without a home","Without enough money"],a:2},
+
+  // ─── GRAMMAR — Page 78 — Polite Requests ───
+  {s:"GRAMMAR — Page 78 — Polite Requests (Ex. 2b)",t:"Complete: 'A: ______ have the bill, please?' (polite request for yourself)",o:["Would you","Could you","Can I","Do you mind if I"],a:2},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Ex. 2b)",t:"Complete: 'A: ______ pass me the water, please?' (asking someone else to do something)",o:["Can I","Shall I","Could you","Do you mind"],a:2},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Ex. 2b)",t:"Complete: 'A: Is it alright ______ sit here?' (asking permission)",o:["if I","to I","that I","for I"],a:0},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Ex. 2b)",t:"To ask if YOU can do something, which phrase do you use?",o:["Would you mind...","Could you possibly...","Can I... / Do you mind if I...","Shall I..."],a:2},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Ex. 2b)",t:"To ask SOMEONE ELSE to do something, which phrase do you use?",o:["Can I...","Is it alright if I...","Do you mind if I...","Would you mind... / Could you..."],a:3},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Practice 1 — p.150)",t:"Which is the correct polite form of: 'Pass me my coat.'?",o:["Would you pass me my coat?","Could you possibly pass my coat?","Can I pass me my coat?","Shall you pass me my coat?"],a:1},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Practice 1 — p.150)",t:"Which is the correct polite form of: 'I want to use your pen.'?",o:["Would you mind passing my bag?","Could I use your pen, please?","Shall I use your pen?","Would you use your pen?"],a:1},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Practice 1 — p.150)",t:"Which sentence is a correct polite request from the answer key?",o:["Would you mind passing my bag?","Will you to take me into town?","Do you think I can possibly borrow?","Could you possible leave early?"],a:0},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Practice 1 — p.150)",t:"'Do you think you could cook dinner this evening?' is asking ______.",o:["for permission to do something yourself","someone else to do something for you","if you can borrow something","to make a suggestion"],a:1},
+  {s:"GRAMMAR — Page 78 — Polite Requests (Practice 1 — p.150)",t:"'Do you think I could borrow $10 until tomorrow?' is asking ______.",o:["someone else to lend you money","for permission for yourself","for an offer","for a suggestion"],a:1},
+
+  // ─── GRAMMAR — Page 79 — Future Forms (shall/will/going to) ───
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"In Conversation A: 'Shall we ____ on the roller coaster?' Which is correct?",o:["will go","go","going to go","shall going"],a:1},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"'I'll go on the big wheel with you.' — This is an example of a ______.",o:["suggestion","offer made on the spot","pre-planned decision","question"],a:1},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"'I'm going to try and go to the gym tomorrow morning.' — The speaker has ______.",o:["decided as they speak","made a suggestion","already decided before speaking","made an offer"],a:2},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"'Shall I help you?' is an example of ______.",o:["a suggestion","an offer","a pre-planned decision","a polite request to someone else"],a:1},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"'Shall we have a quick coffee?' is an example of ______.",o:["an offer","a pre-planned decision","a suggestion","a polite refusal"],a:2},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"'I'm going to do some shopping on the way home.' — Which verb form is used?",o:["will + infinitive","shall + infinitive","be going to + infinitive","present simple"],a:2},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"When a speaker decides WHAT TO DO as they are speaking, which form do they use?",o:["be going to","shall we","will ('ll)","present continuous"],a:2},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"From the answer key (Practice p.150): 'A: 1______ go round and see him this afternoon?' — What is the correct form?",o:["I'm going to","Shall we","I'll","Will I"],a:1},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"From the answer key: 'B: 2______ do some revision this afternoon.' — What fits?",o:["Shall I","I'll","I'm going to","Shall we"],a:2},
+  {s:"GRAMMAR — Page 79 — Future Forms: shall / will / going to",t:"From the answer key: 'B: 4______ go round this afternoon on my own.' — What fits?",o:["Shall I","I'm going to","I'll","Shall we"],a:2},
+
+  // ─── GRAMMAR — Page 88 — Relative Clauses ───
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'It's a virtual shop ______ sells applications for phones.' — Which relative pronoun is correct?",o:["who","where","whose","which/that"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'It's a machine ______ gives you directions when you are driving.' — Which relative pronoun?",o:["where","whose","that/which","who"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'It's a public area ______ people can connect their phones to the internet.' — Which relative pronoun?",o:["which","who","whose","where"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'It's a person ______ life is dominated by the internet.' — Which relative pronoun?",o:["who","which","whose","where"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'It's a person ______ writes a kind of online diary for others to read.' — Which relative pronoun?",o:["which","where","whose","who/that"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'A cooker is a machine ______ cooks food.' — Which relative pronoun?",o:["who","where","whose","that/which"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'A decorator is a person ______ job is to paint houses.' — Which relative pronoun?",o:["who","which","whose","where"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Ex. 1a & 1b)",t:"'A dry cleaner's is a shop ______ they clean your clothes for you.' — Which relative pronoun?",o:["which","who","whose","where"],a:3},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Practice 1 — p.156)",t:"From the answer key — Complete: 'He's going out with a woman ______.' ",o:["which is a lot older than him","where is a lot older than him","that's/who's a lot older than him","whose a lot older than him"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Practice 1 — p.156)",t:"From the answer key — Complete: 'She's wearing the ring ______.'",o:["whose her boyfriend gave her","where her boyfriend gave her","that/which her boyfriend gave her","who her boyfriend gave her"],a:2},
+  {s:"GRAMMAR — Page 88 — Relative Clauses (Practice 1 — p.156)",t:"From the answer key — Complete: 'She's the woman ______ children I look after.'",o:["who","which","that","whose"],a:3},
+
+  // ─── GRAMMAR — Page 90 — Quantifiers ───
+  {s:"GRAMMAR — Page 90 — Quantifiers (Grammar 2 & 3)",t:"Which quantifiers are used ONLY with countable nouns?",o:["a bit of, too much","plenty of, enough","a couple of, several, too many, a few","a lot of, some"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Grammar 2 & 3)",t:"Which quantifiers are used ONLY with uncountable nouns?",o:["a couple of, a few","a bit of, too much","plenty of, enough","several, too many"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Grammar 2 & 3)",t:"Which quantifiers can be used with BOTH countable and uncountable nouns?",o:["a couple of, several","a bit of, too much","a few, too many","plenty of, enough, some, a lot of"],a:3},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Grammar 2 & 3)",t:"What is the difference between 'too much' and 'a lot of'?",o:["'too much' is positive; 'a lot of' is negative","'too much' has a negative meaning (more than needed); 'a lot of' just means a large quantity","They mean exactly the same thing","'too much' is for uncountable; 'a lot of' is for countable only"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Grammar 2 & 3)",t:"What is the difference between 'enough' and 'plenty of'?",o:["They are the same","'enough' means you have exactly what you need; 'plenty of' means more than enough (abundance)","'plenty of' means exactly what you need; 'enough' means abundance","'enough' is uncountable; 'plenty of' is countable"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice — p.158)",t:"From the answer key: 'We tell people to bring ______ packs of wet wipes.'",o:["a bit of","too much","a couple of","several"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice — p.158)",t:"From the answer key: 'We bring ______ water with us.'",o:["a couple of","plenty of","several","a few"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice — p.158)",t:"From the answer key: 'You need a torch with ______ spare batteries.'",o:["plenty of","a bit of","too many","a few"],a:3},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice — p.158)",t:"From the answer key: 'I always advise people to take ______ insect repellent and ______ food.'",o:["plenty of / plenty of","some / a bit of","a few / several","a couple of / a couple of"],a:1},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice 2 — p.158)",t:"From the answer key — Choose the correct word: '1 ______ furniture do you have?'",o:["Many","Several","Much","A few"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice 2 — p.158)",t:"From the answer key — '5 Have you got ______ money for the bus?'",o:["plenty","several","enough","too much"],a:2},
+  {s:"GRAMMAR — Page 90 — Quantifiers (Practice 2 — p.158)",t:"From the answer key — '7 I've invited ______ people to my party.'",o:["a bit of","much","too much","several"],a:3},
+
+  // ─── READING — Page 88 — Modern Vocabulary ───
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is 'an app store'?",o:["A physical shop that sells phones","A virtual shop which sells applications for phones","A place where programmers work","A store that sells computers"],a:1},
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is 'sat-nav'?",o:["A social networking site","A type of energy drink","A machine that gives you directions when you are driving","A device that tracks your exercise"],a:2},
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is 'guyliner'?",o:["A type of energy drink","A male fashion blogger","Eyeliner worn by men","A gaming app"],a:2},
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is a 'wi-fi hotspot'?",o:["A person whose life is dominated by the internet","A public area where people can connect their phones and computers to the internet","A secret word used to access computers","A section of a social networking profile"],a:1},
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is an 'internet addict'?",o:["A person who writes an online diary","A public area with free internet","A person whose life is dominated by the internet","A machine that gives directions"],a:2},
+  {s:"READING — Page 88 — Modern Vocabulary (Ex. 2)",t:"What is a 'Facebook wall'?",o:["A privacy setting on Facebook","A section of your social networking profile where people can leave messages for you","A type of password","A wi-fi connection"],a:1},
+
+  // ─── READING — Page 84 — World Culture: Gaming Addiction ───
+  {s:"READING — Page 84 — World Culture: Gaming Addiction",t:"What happened when Chris's mother took his copy of 'World of Warcraft'?",o:["He went to school calmly","He cried for hours","He reacted violently","He started a new game"],a:2},
+  {s:"READING — Page 84 — World Culture: Gaming Addiction",t:"In South Korea, what proportion of boys are seriously addicted to gaming?",o:["A majority","Almost all","A small minority (two percent)","About half"],a:2},
+  {s:"READING — Page 84 — World Culture: Gaming Addiction",t:"What does the presenter believe parents should do?",o:["Stop children playing video games completely","Encourage children to play games","Not ignore their children when they are playing games","Buy more video games"],a:2},
+
+  // ─── READING — Page 91 — Camping Vocabulary ───
+  {s:"READING — Page 91 — Camping & Trips Vocabulary (Ex. 2a)",t:"What is a 'compass' used for?",o:["Lighting your way in the dark","Finding your direction","Protecting you from insects","Keeping you warm"],a:1},
+  {s:"READING — Page 91 — Camping & Trips Vocabulary (Ex. 2a)",t:"What is 'insect repellent'?",o:["A type of torch","Something that protects you from the sun","Something that keeps insects away","A type of sleeping bag"],a:2},
+  {s:"READING — Page 91 — Camping & Trips Vocabulary (Ex. 2a)",t:"What is a 'torch' used for?",o:["Keeping warm at night","Lighting your way in the dark","Repelling insects","Finding direction"],a:1},
+  {s:"READING — Page 91 — Camping & Trips Vocabulary (Ex. 2a)",t:"What are 'wet wipes' useful for on a camping trip?",o:["Lighting fires","Cleaning yourself when water is unavailable","Keeping food fresh","Repelling insects"],a:1}
+
+];
+
+// ── Reading Passages ──────────────────────────────────────────────────────────
+const PASSAGES = {
+  "READING — Page 88 — Modern Vocabulary (Ex. 2)": {
+    title: "💻 Reading Text — Page 88 (Modern Vocabulary)",
+    html: `
+      <p>Match each modern word or phrase with its definition:</p>
+      <table>
+        <tr><th>Word / Phrase</th><th>Definition</th></tr>
+        <tr><td><strong>an app store</strong></td><td>A virtual shop which sells applications for phones</td></tr>
+        <tr><td><strong>sat-nav</strong></td><td>A machine that gives you directions when you are driving</td></tr>
+        <tr><td><strong>guyliner</strong></td><td>Eyeliner worn by men</td></tr>
+        <tr><td><strong>a wi-fi hotspot</strong></td><td>A public area where people can connect their phones and computers to the internet</td></tr>
+        <tr><td><strong>an internet addict</strong></td><td>A person whose life is dominated by the internet</td></tr>
+        <tr><td><strong>a Facebook wall</strong></td><td>A section of your social networking profile where people can leave messages for you</td></tr>
+        <tr><td><strong>a blogger</strong></td><td>A person who writes a kind of online diary for others to read</td></tr>
+      </table>
+    `
+  },
+  "READING — Page 84 — World Culture: Gaming Addiction": {
+    title: "🎮 Reading Text — Page 84 (World Culture: Gaming Addiction)",
+    html: `
+      <h4>Text summary</h4>
+      <p>The text discusses video game addiction. It opens with the story of <strong>Chris</strong>, a teenage boy who became so addicted to the game <em>World of Warcraft</em> that when his mother took his copy away, <strong>he reacted violently</strong>.</p>
+      <p>The text then looks at the situation in <strong>South Korea</strong>, where gaming is extremely popular. Despite the high level of interest in gaming, only <strong>two percent</strong> of boys are considered seriously addicted — a small minority.</p>
+      <p>The presenter concludes by addressing parents, arguing that they <strong>should not ignore their children</strong> while they are playing games. Parental involvement and awareness is presented as key to preventing addiction.</p>
+      <h4>Key facts</h4>
+      <table>
+        <tr><th>Topic</th><th>Detail</th></tr>
+        <tr><td>Chris's reaction</td><td>Reacted violently when his mother took World of Warcraft</td></tr>
+        <tr><td>South Korea addiction rate</td><td>Two percent of boys (a small minority)</td></tr>
+        <tr><td>Presenter's advice for parents</td><td>Don't ignore children when they are playing games</td></tr>
+      </table>
+    `
+  },
+  "READING — Page 91 — Camping & Trips Vocabulary (Ex. 2a)": {
+    title: "🏕️ Reading Text — Page 91 (Camping & Trips Vocabulary)",
+    html: `
+      <p>Match each camping item with its use:</p>
+      <table>
+        <tr><th>Item</th><th>What it's used for</th></tr>
+        <tr><td><strong>a compass</strong></td><td>Finding your direction</td></tr>
+        <tr><td><strong>insect repellent</strong></td><td>Keeping insects away from you</td></tr>
+        <tr><td><strong>a torch</strong></td><td>Lighting your way in the dark</td></tr>
+        <tr><td><strong>wet wipes</strong></td><td>Cleaning yourself when water is unavailable</td></tr>
+        <tr><td><strong>a sleeping bag</strong></td><td>Keeping warm while sleeping outdoors</td></tr>
+        <tr><td><strong>a first-aid kit</strong></td><td>Treating minor injuries</td></tr>
+        <tr><td><strong>sunscreen</strong></td><td>Protecting your skin from the sun</td></tr>
+      </table>
+    `
+  }
+};
+
+let passageCounter = 0;
+
+function buildPassageCard(sectionKey) {
+  const p = PASSAGES[sectionKey];
+  if (!p) return null;
+  const id = 'passage-' + (passageCounter++);
+  const div = document.createElement('div');
+  div.className = 'section';
+  div.innerHTML = `
+    <div class="passage-card">
+      <h3>${p.title}</h3>
+      <button class="passage-toggle" onclick="togglePassage('${id}')">📖 Show / Hide Text</button>
+      <div class="passage-body" id="${id}">${p.html}</div>
+    </div>`;
+  return div;
+}
+
+function togglePassage(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+let answered=0,correct=0,wrong=0;
+const userAnswers={};
+
+const CATS=[...new Set(Q.map(q=>q.s.split(' — ')[0]))];
+let activeCat=CATS[0];
+
+function buildTabs(){
+  const tb=document.getElementById('tab-bar');
+  tb.innerHTML=CATS.map(c=>`<button class="tab-btn${c===activeCat?' active':''}" onclick="switchTab('${c}')">${c}</button>`).join('');
+}
+
+function switchTab(cat){
+  activeCat=cat;
+  buildTabs();
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  let sec='';
+  Q.forEach((q,i)=>{
+    const thisCat=q.s.split(' — ')[0];
+    if(thisCat!==activeCat)return;
+    if(q.s!==sec){
+      sec=q.s;
+      const passageCard = buildPassageCard(sec);
+      if(passageCard) c.appendChild(passageCard);
+      const sd=document.createElement('div');
+      sd.className='section';
+      sd.innerHTML=`<div class="section-title">${sec}</div>`;
+      c.appendChild(sd);
+    }
+    const lastSec=c.lastElementChild;
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id='card-'+i;
+    const L=['A','B','C','D'];
+    card.innerHTML=`<div class="q-meta">Q${i+1} of ${Q.length}</div>
+      <div class="q-text">${q.t}</div>
+      <div class="options" id="opts-${i}">
+        ${q.o.map((o,j)=>`<button class="opt-btn" id="opt-${i}-${j}" onclick="pick(${i},${j})"><span class="opt-letter">${L[j]}</span>${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-${i}"></div>`;
+    lastSec.appendChild(card);
+  });
+  document.getElementById('total-q').textContent=Q.length;
+}
+
+function pick(qi,oi){
+  if(userAnswers[qi]!==undefined)return;
+  userAnswers[qi]=oi;
+  answered++;
+  const q=Q[qi];
+  const ok=oi===q.a;
+  if(ok)correct++;else wrong++;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach(b=>b.disabled=true);
+  document.getElementById(`opt-${qi}-${q.a}`).classList.add('correct');
+  if(!ok)document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+  document.getElementById('card-'+qi).classList.add(ok?'answered-correct':'answered-wrong');
+  const fb=document.getElementById('fb-'+qi);
+  fb.classList.add('show');
+  if(ok){fb.classList.add('correct-fb');fb.textContent='✓ Correct!';}
+  else{fb.classList.add('wrong-fb');fb.textContent='✗ Wrong. Correct answer: "'+q.o[q.a]+'"';}
+  document.getElementById('answered-q').textContent=answered;
+  document.getElementById('correct-q').textContent=correct;
+  document.getElementById('wrong-q').textContent=wrong;
+  document.getElementById('progress-fill').style.width=Math.round(answered/Q.length*100)+'%';
+}
+
+function showFinalResult(){
+  const pct=Math.round(correct/Q.length*100);
+  let grade,color;
+  if(pct>=90){grade='A+';color='#2ecc71';}
+  else if(pct>=80){grade='A';color='#27ae60';}
+  else if(pct>=70){grade='B';color='#f0a500';}
+  else if(pct>=60){grade='C';color='#e67e22';}
+  else{grade='F';color='#e74c3c';}
+  const rp=document.getElementById('result-panel');
+  rp.classList.add('show');
+  document.getElementById('result-percent').textContent=pct+'%';
+  document.getElementById('result-percent').style.color=color;
+  document.getElementById('result-detail').innerHTML=`Grade: <strong style="color:${color}">${grade}</strong><br>Correct: <strong style="color:var(--correct)">${correct}</strong> / ${Q.length}<br>Wrong: <strong style="color:var(--wrong)">${wrong}</strong><br>Unanswered: <strong>${Q.length-answered}</strong>`;
+  rp.scrollIntoView({behavior:'smooth'});
+  document.getElementById('submit-btn').style.display='none';
+}
+
+function restartQuiz(){
+  answered=0;correct=0;wrong=0;
+  Object.keys(userAnswers).forEach(k=>delete userAnswers[k]);
+  ['answered-q','correct-q','wrong-q'].forEach(id=>document.getElementById(id).textContent=0);
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('result-panel').classList.remove('show');
+  document.getElementById('submit-btn').style.display='block';
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildTabs();
+buildQuiz();
+</script>
+</body>
+</html>
